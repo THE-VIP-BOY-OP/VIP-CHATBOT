@@ -118,7 +118,7 @@ DEV_OP = [
         InlineKeyboardButton(text="🚀 ʜᴇʟᴘ & ᴄᴍᴅs 🚀", callback_data="HELP"),
     ],
     [
-        InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ❄️", url=f"https://github.com/Devarora0981/Demv-Vimk"),
+        InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ❄️", url=f"https://github.com/noob-mukesh/powerfulchatbot"),
         InlineKeyboardButton(text="☁️ ᴜᴘᴅᴀᴛᴇs ☁️", url=f"https://t.me/{UPDATE_CHNL}"),
     ],
 ]
@@ -135,7 +135,7 @@ PNG_BTN = [
          ),
      ],
 ]
-HELP_READ = "**ᴜsᴀɢᴇ ☟︎︎︎**\n**➻ ᴜsᴇ** `/chatbot on` **ᴛᴏ ᴇɴᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**\n**➻ ᴜsᴇ** `/chatbot off` **ᴛᴏ ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n**๏ ɴᴏᴛᴇ ➻ ʙᴏᴛʜ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ ᴄʜᴀᴛ-ʙᴏᴛ ᴏɴ/ᴏғғ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!**\n\n**➻ ᴜsᴇ** `/ping` **ᴛᴏ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴘɪɴɢ ᴏғ ᴛʜᴇ ʙᴏᴛ.**\n**©️ @Dev_Arora_0981**"
+HELP_READ = "**ᴜsᴀɢᴇ ☟︎︎︎**\n**➻ ᴜsᴇ** `/chatbot on` **ᴛᴏ ᴇɴᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**\n**➻ ᴜsᴇ** `/chatbot off` **ᴛᴏ ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n**๏ ɴᴏᴛᴇ ➻ ʙᴏᴛʜ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ ᴄʜᴀᴛ-ʙᴏᴛ ᴏɴ/ᴏғғ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!**\n\n**➻ ᴜsᴇ** `/ping` **ᴛᴏ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴘɪɴɢ ᴏғ ᴛʜᴇ ʙᴏᴛ.**\n**©️ @mr_sukkun**"
 HELP_BACK = [
      [
            InlineKeyboardButton(text="✨ ʙᴀᴄᴋ ✨", callback_data="HELP_BACK"),
@@ -148,8 +148,6 @@ async def restart(client, m: Message):
     )
     await asyncio.sleep(1)
     await accha.edit("__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg..__")
-    await asyncio.sleep(0.2)
-    await accha.edit("__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__")
     await asyncio.sleep(0.2)
     await accha.edit("__ᴅιиg ᴅσиg ꨄ︎ sтαятιиg..__")
     await asyncio.sleep(0.2)
@@ -190,15 +188,13 @@ async def ping(client, message: Message):
         txxt = await message.reply(t)
         await asyncio.sleep(0.25)
         await txxt.edit_text("__ριиgιиg.....__")
-        await asyncio.sleep(0.25)
-        await txxt.edit_text("__ριиgιиg...__")
         await asyncio.sleep(0.35)
         await txxt.delete()
         end = datetime.now()
         ms = (end-start).microseconds / 1000
         await message.reply_photo(
                              photo=START_IMG1,
-                             caption=f"нey вαву!!\n**[{BOT_NAME}](t.me/{BOT_USERNAME})** ιѕ alιve 🥀 αnd worĸιng ғιne wιтн a pιng oғ\n➥ `{ms}` ms\n\n**мαdє ωιтн ❣️ ву [Ꭰev🎋](https://t.me/Dev_Arora_0981)**",
+                             caption=f"нey вαву!!\n**[{BOT_NAME}](t.me/{BOT_USERNAME})** ιѕ alιve 🥀 αnd worĸιng ғιne wιтн a pιng oғ\n➥ `{ms}` ms\n\n**мαdє ωιтн ❣️ ву [ᴍᴜᴋᴇsʜ](https://t.me/itz_mst_boi)**",
                              reply_markup=InlineKeyboardMarkup(PNG_BTN),
        )
 
