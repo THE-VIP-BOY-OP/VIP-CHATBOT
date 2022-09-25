@@ -102,7 +102,7 @@
         "START_IMG4": {
             "description": "Start Image For Bot.",
             "required": false
-            "value": "https://telegra.ph/file/4e2134f8d621359cc32fe.jpg
+            "value": "https://telegra.ph/file/4e2134f8d621359cc32fe.jpg"
         },
         "START_IMG5": {
             "description": "Start Image For Bot.",
