@@ -179,7 +179,7 @@ async def restart(client, message):
                         reply_markup= InlineKeyboardMarkup(HELP_BACK),
        )
 
-@bot.on_message(filters.command("ping","alive", prefixes=["+", "/", "-", "?", "$", "&"]))
+@bot.on_message(filters.command(["ping","alive"], prefixes=["+", "/", "-", "?", "$", "&"]))
 async def ping(client, message: Message):
         start = datetime.now()
         t = "__ριиgιиg...__"
