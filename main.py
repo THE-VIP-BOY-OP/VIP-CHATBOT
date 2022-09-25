@@ -155,12 +155,12 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await accha.delete()
     umm = await m.reply_sticker(
-              sticker = random.choice(STICKER),
+              sticker = STKR,
     )
     await asyncio.sleep(2)
     await umm.delete()
     await m.reply_photo(
-        photo = random.choice(PHOTO),
+        photo = START_IMG1,
         caption=f"""**๏ ʜᴇʏ, ɪ ᴀᴍ [{BOT_NAME}](t.me/{BOT_USERNAME})**\n**➻ ᴀɴ ᴀɪ-ʙᴀsᴇᴅ ᴄʜᴀᴛʙᴏᴛ.**\n**──────────────────**\n**➻ ᴜsᴀɢᴇ /chatbot [on/off]**\n**๏ ᴛᴏ ɢᴇᴛ ʜᴇʟᴘ ᴜsᴇ /help**""",
         reply_markup=InlineKeyboardMarkup(DEV_OP),
     )
@@ -197,7 +197,7 @@ async def ping(client, message: Message):
         end = datetime.now()
         ms = (end-start).microseconds / 1000
         await message.reply_photo(
-                             photo=random.choice(PHOTO),
+                             photo=START_IMG1,
                              caption=f"нey вαву!!\n**[{BOT_NAME}](t.me/{BOT_USERNAME})** ιѕ alιve 🥀 αnd worĸιng ғιne wιтн a pιng oғ\n➥ `{ms}` ms\n\n**мαdє ωιтн ❣️ ву [Ꭰev🎋](https://t.me/Dev_Arora_0981)**",
                              reply_markup=InlineKeyboardMarkup(PNG_BTN),
        )
