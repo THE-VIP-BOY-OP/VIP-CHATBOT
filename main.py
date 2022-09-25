@@ -1,5 +1,3 @@
-#Don't remove This Line From Here. @Dev_Arora_0981 | @DevArora0981
-#Github :- Devarora0981 | Devarora0987
 from pyrogram import Client, filters
 from pyrogram.types import *
 from pymongo import MongoClient
