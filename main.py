@@ -139,7 +139,6 @@ async def restart(client, m: Message):
     )
     await asyncio.sleep(2)
     await umm.delete()
-    await m.reply_photo(
        
 @bot.on_message(
     filters.command(["chatbot off", f"chatbot@{BOT_USERNAME} off"], prefixes=["/", ".", "?", "-"])
