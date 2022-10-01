@@ -1,5 +1,5 @@
 {
-    "name": "Dev-Vick",    
+    "name": "chatbot",    
     "env": {
         "BOT_TOKEN": {
             "description": "telegram bot token here",
