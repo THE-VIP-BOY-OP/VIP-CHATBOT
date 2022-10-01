@@ -138,7 +138,6 @@ async def restart(client, m: Message):
               sticker = STKR,
     )
     await asyncio.sleep(1)
-    await umm.delete()
     await accha.edit("🔥CHAL AAJA @VIP_DUNIA ME ROMANCE KRTE HAIN💋")
        
 @bot.on_message(
