@@ -1,5 +1,5 @@
 {
-    "name": "Mukhushichatbot",    
+    "name": "Dev-Vick",    
     "env": {
         "BOT_TOKEN": {
             "description": "telegram bot token here",
@@ -12,137 +12,110 @@
         "BOT_USERNAME": {
             "description": "telegram bot username here without @",
             "required": true
-            "value": ""
         },
         "OWNER_USERNAME": {
             "description": "Owner Username without @",
             "required": true
-            "value": "itz_mst_boi"
         },
         "BOT_NAME": {
             "description": "Simple Bot-name. Do not use Modified Text..",
             "required": true
-            "value": "Powerful chat bot"
         },
         "UPDATE_CHNL": {
             "description": "Your Updates Channel without @",
             "required": true
-            "value": "mr_sukkun"
         },
         "SUPPORT_GRP": {
             "description": "Your Support Group without @",
             "required": true
-            "value": "the_support_chat"
         },
         "STKR": {
             "description": "Sticker for start ",
             "required": true
-            "value": "CAACAgQAAx0CYCc3GwABBOXmYy9DfnY75AWBD6A5cGGhcjJ16wYAAikSAAIyxEhQAAHdzGsFSKrnKQQ"
         },
         "STKR1": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAx0CYCc3GwABBOYhYy9FZjy6nKRx1Wu7nUxEGKZYs4EAApMDAAKfZZFUD09kWdzZVqApBA"
+            "required": true
         },
         "STKR2": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAx0CYCc3GwABBOYrYy9FiI2gxeJvBg9Q4WKZvfi_GwEAApQEAAIV2qFVNk2afNTBl4gpBA"
+            "required": true
         },
         "STKR3": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJzYWMu3AkoLDNqD9N9u9-wUz233sEvAAK7BQACzxpZVuufspMvu91aKQQ"
+            "required": true
         },
         "STKR4": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJzf2MvRgixpqFoo_2-Q_m3D3l09g1iAAKPBwACrgABYVe7r7gwpP0I2CkE"
+            "required": true
         },
         "STKR5": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJzgmMvRk1XHS1_Cp62VH3Dp4_5FdqcAALxAwACkGOJVMBmHEHHukdGKQQ"
+            "required": true
         },
         "STKR6": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJzhWMvRm--l1p5tG1BYXBgMveAjZ7xAAIBBgACQpnwVGL8huph6UZVKQQ"
+            "required": true
         },
         "STKR7": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJziGMvRsrZoCUjHgABfP1Z1o8l8MJoagAC6AUAAhFVCVU3etDOeqSLNykE"
+            "required": true
         },
        "STKR8": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgQAAxkBAAJzm2MvSNoavrbngfdKkk1JdYK09jsmAALoCgAC8T75Uy-z9IR8yYm9KQQ"
+            "required": true
         },
         "STKR9": {
             "description": "Sticker for start ",
-            "required": false
-            "value": "CAACAgUAAxkBAAJznmMvSP_dyA1AJ6kjWmPFkPvOejFkAAKABQAClfqAV0OerLFjw56rKQQ"
+            "required": true
         },
         "START_IMG1": {
             "description": "Start Image For Bot.",
             "required": true
-            "value": "https://telegra.ph/file/6f49164bcff680fd40713.jpg"
         },
         "START_IMG2": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/5ab23f6c280423bcf4afb.jpg"
+            "required": true
         },
         "START_IMG3": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/5852b0ce803ea4fe69177.jpg"
+            "required": true
         },
         "START_IMG4": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/4e2134f8d621359cc32fe.jpg"
+            "required": true
         },
         "START_IMG5": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/b6d9d910e30a6d62e4030.jpg"
+            "required": true
         },
         "START_IMG6": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/ea1ceb7e6736356ef8a23.jpg"
+            "required": true
         },
         "START_IMG7": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/15346fd20ee805018163f.jpg"
+            "required": true
         },
         "START_IMG8": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/41d44fe3bfbe28aa54744.jpg"
+            "required": true
         },
         "START_IMG9": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/6247770e0bc47ed08f595.jpg"
+            "required": true
         },
         "START_IMG10": {
             "description": "Start Image For Bot.",
-            "required": false
-            "value": "https://telegra.ph/file/85fb85fc79469dbe245a0.jpg"
+            "required": true
         },
         "API_ID": {
             "description": "telegram api id here",
             "required": true
-            "value": ""
         },
         "API_HASH": {
             "description": "telegram api hash here",
             "required": true
-            "value": ""
         }
     },
     "addons": [
