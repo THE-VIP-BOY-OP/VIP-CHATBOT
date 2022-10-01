@@ -133,7 +133,6 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.2)
     await accha.edit("🥱")
     await asyncio.sleep(0.2)
-    await accha.delete()
     await accha.edit("🔥CHAL AAJA @VIP_DUNIA ME ROMANCE KRTE HAIN💋")
        
 @bot.on_message(
