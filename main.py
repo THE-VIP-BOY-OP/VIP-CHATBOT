@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import *
 from pymongo import MongoClient
+from pyrogram.types import Message
 import requests
 import random
 import os
