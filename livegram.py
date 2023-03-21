@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from pyrogram.types import *
+
 
 from Vick import OWNER_ID
-from Vick import pbot as bot
+from Vick import as bot
 
 
 @bot.on_message(filters.private & filters.incoming)
