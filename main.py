@@ -156,8 +156,7 @@ async def vickai(client: Client, message: Message):
        vickdb = MongoClient(MONGO_URL)
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})
-       
-           K = []  
+        
            is_chat = chatai.find({"word": message.text})  
            k = chatai.find_one({"word": message.text})      
            if k:               
