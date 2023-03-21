@@ -1,8 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-import OWNER_ID
-import bot
+import main.py OWNER_ID
+import main.py bot
 
 
 @bot.on_message(filters.private & filters.incoming)
