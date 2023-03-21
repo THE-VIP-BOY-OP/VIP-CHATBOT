@@ -9,10 +9,6 @@
             "description": "mongo db url here",
             "required": true
         },
-        "OWNER_ID": {
-            "description": "fill here bot owner id",
-            "required": true
-        },
         "API_ID": {
             "description": "telegram api id here",
             "required": true
