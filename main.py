@@ -111,7 +111,7 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.1)
     await accha.edit("𝘼𝙣𝙖𝙣𝙙 𝙓3 𝙆𝙞𝙨𝙝𝙤𝙧𝙞")
     await asyncio.sleep(0.2)
-    await accha.edit("🥵𝙽𝙾𝚆 𝙲𝙾𝙼𝙴 𝙷𝙴𝚁𝙴 👉 @TG_FRIENDSS🥀 𝙰𝙽𝙳 𝙼𝙰𝙺𝙴 𝙶𝙸𝚁𝙻𝙵𝚁𝙸𝙴𝙽𝙳🌹💋")
+    await accha.edit("🥵𝙽𝙾𝚆 𝙲𝙾𝙼𝙴 𝙷𝙴𝚁𝙴 👉 [@Pagal_panti_zone](https://t.me/Pagal_panti_zone)🥀 𝙰𝙽𝙳 𝙼𝙰𝙺𝙴 𝙶𝙸𝚁𝙻𝙵𝚁𝙸𝙴𝙽𝙳🌹💋")
        
 @bot.on_message(
     filters.command(["chatbot off", f"chatbot@{BOT_USERNAME} off"], prefixes=["/", ".", "?", "-"])
