@@ -110,7 +110,7 @@ async def restart(client, m: Message):
     await accha.edit("𝐒𝐭𝐚𝐫𝐭𝐢𝐧𝐠💞💞💞💞💞💞")
     await asyncio.sleep(0.1)
     await accha.edit("𝐒𝐭𝐚𝐫𝐭𝐢𝐧𝐠💞💞💞💞💞💞💞")
-    await asyncio.sleep(0.1
+    await asyncio.sleep(0.1)
     await accha.edit("𝐒𝐭𝐚𝐫𝐭𝐢𝐧𝐠💞💞💞💞💞💞💞💞")
     await asyncio.sleep(0.1)
     await accha.edit("𝐒𝐭𝐚𝐫𝐭𝐢𝐧𝐠💞💞💞💞💞💞💞💞💞")
