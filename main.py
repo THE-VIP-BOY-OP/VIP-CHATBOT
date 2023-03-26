@@ -380,5 +380,5 @@ async def vickprivatesticker(client: Client, message: Message):
            if not Yo == "text":
                await message.reply_sticker(f"{hey}")
 
-print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
+print(f"{ꗝؖؖؖؖؖؖؖؖؖؖؖ ༎꯭ࠫᜊ𝆺꯭𝅥🇯𝖆𝖎𝖓𝖎𝆺꯭𝅥🔥༎ࠫ⏤‌} ɪs ᴀʟɪᴠᴇ!")      
 bot.run()
