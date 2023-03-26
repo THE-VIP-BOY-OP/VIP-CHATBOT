@@ -93,7 +93,7 @@ START = f"""
 **๏ Hie Baby🐒 ๏**
 """
 
-@bot.on_message(filters.command(["start", "aistart", f"start@{BOT_USERNAME}"]))
+@bot.on_message(filters.command(["start", "aistart", f"start@{jaini_powerfull_bot}"]))
 async def restart(client, m: Message):
     accha = await m.reply_text(
                 text = random.choice(EMOJIOS),
@@ -107,10 +107,10 @@ async def restart(client, m: Message):
     await asyncio.sleep(0.1)
     await accha.edit("𝐒𝐭𝐚𝐫𝐭𝐞𝐝.✓")
     await asyncio.sleep(0.2)
-    await accha.edit("🥵𝙽𝙾𝚆 𝙲𝙾𝙼𝙴 𝙷𝙴𝚁𝙴 👉 @TG_FRIENDSS🥀 𝙰𝙽𝙳 𝙼𝙰𝙺𝙴 𝙶𝙸𝚁𝙻𝙵𝚁𝙸𝙴𝙽𝙳🌹💋")
+    await accha.edit("🥵𝙽𝙾𝚆 𝙲𝙾𝙼𝙴 𝙷𝙴𝚁𝙴 👉 @TheLove2Forever🥀 𝙰𝙽𝙳 𝙼𝙰𝙺𝙴 𝙶𝙸𝚁𝙻𝙵𝚁𝙸𝙴𝙽𝙳🌹💋")
        
 @bot.on_message(
-    filters.command(["chatbot off", f"chatbot@{BOT_USERNAME} off"], prefixes=["/", ".", "?", "-"])
+    filters.command(["chatbot off", f"chatbot@{jaini_powerfull_bot} off"], prefixes=["/", ".", "?", "-"])
     & ~filters.private)
 async def chatbotofd(client, message):
     vickdb = MongoClient(MONGO_URL)    
@@ -133,7 +133,7 @@ async def chatbotofd(client, message):
     
 
 @bot.on_message(
-    filters.command(["chatbot on", f"chatbot@{BOT_USERNAME} on"] ,prefixes=["/", ".", "?", "-"])
+    filters.command(["chatbot on", f"chatbot@{jaini_powerfull_bot} on"] ,prefixes=["/", ".", "?", "-"])
     & ~filters.private)
 async def chatboton(client, message):
     vickdb = MongoClient(MONGO_URL)    
@@ -156,7 +156,7 @@ async def chatboton(client, message):
     
 
 @bot.on_message(
-    filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"], prefixes=["/", ".", "?", "-"])
+    filters.command(["chatbot", f"chatbot@{jaini_powerfull_bot}"], prefixes=["/", ".", "?", "-"])
     & ~filters.private)
 async def chatbot(client, message):
     await message.reply_text(f"**ᴜsᴀɢᴇ:**\n/**chatbot [on/off]**\n**ᴄʜᴀᴛ-ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅ(s) ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!**")
