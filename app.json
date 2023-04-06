@@ -8,10 +8,6 @@
         "MONGO_URL": {
             "description": "mongo db url here",
             "required": false
-        },
-        "API_HASH": {
-            "description": "telegram api hash here",
-            "required": true
         }
     },
     "addons": [
