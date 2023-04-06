@@ -7,7 +7,7 @@
         },        
         "MONGO_URL": {
             "description": "mongo db url here",
-            "required": true
+            "required": False
         },
         "API_ID": {
             "description": "telegram api id here",
