@@ -3,7 +3,7 @@
     "env": {
         "BOT_TOKEN": {
             "description": "telegram bot token here",
-            "required": true
+            "required": false
         },        
         "MONGO_URL": {
             "description": "mongo db url here",
