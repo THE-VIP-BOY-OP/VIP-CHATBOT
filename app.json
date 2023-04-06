@@ -2,21 +2,13 @@
     "name": "chatbot",    
     "env": {
         "BOT_TOKEN": {
-            "description": "telegram bot token here",
+            "description": "𝗙𝗜𝗟𝗟 𝗛𝗘𝗥𝗘 𝗬𝗢𝗨𝗥 𝗕𝗢𝗧 𝗧𝗢𝗞𝗘𝗡",
             "required": true
         },        
         "MONGO_URL": {
-            "description": "mongo db url here",
+            "description": "𝗜𝗙 𝗬𝗢𝗨 𝗛𝗔𝗩𝗘 𝗠𝗢𝗡𝗚𝗢 𝗧𝗛𝗘𝗡 𝗙𝗜𝗟𝗟 𝗛𝗘𝗥𝗘 𝗢𝗧𝗛𝗘𝗥𝗪𝗜𝗦𝗘 𝗟𝗘𝗔𝗩𝗘 𝗜𝗧 𝗕𝗟𝗔𝗡𝗞, 𝗕𝗢𝗧 𝗪𝗜𝗟𝗟 𝗨𝗦𝗘 𝗢𝗪𝗡 𝗠𝗢𝗡𝗚𝗢",
             "required": true
         },
-        "API_ID": {
-            "description": "telegram api id here",
-            "required": true
-        },
-        "API_HASH": {
-            "description": "telegram api hash here",
-            "required": true
-        }
     },
     "addons": [
         {
