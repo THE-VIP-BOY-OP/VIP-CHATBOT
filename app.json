@@ -4,12 +4,8 @@
         "BOT_TOKEN": {
             "description": "telegram bot token here",
             "required": true
-        },        
-        "MONGO_URL": {
-            "description": "mongo db url here",
-            "required": false
-        }
-    },
+        },               
+    }
     "addons": [
         {
             "plan": "heroku-postgresql"
