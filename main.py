@@ -10,37 +10,13 @@ import time
 from datetime import datetime
 #from database.users_chats_db import db
 
-API_ID = os.environ.get("API_ID", "14050586") 
-API_HASH = os.environ.get("API_HASH", "42a60d9c657b106370c79bb0a8ac560c") 
+API_ID = "14050586"
+API_HASH = "42a60d9c657b106370c79bb0a8ac560c"
 BOT_TOKEN = os.environ.get("BOT_TOKEN", None) 
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://hnyx:wywyw2@cluster0.9dxlslv.mongodb.net/?retryWrites=true&w=majority")
+MONGO_URL = "mongodb+srv://hnyx:wywyw2@cluster0.9dxlslv.mongodb.net/?retryWrites=true&w=majority"
 DATABASE_NAME = os.environ.get("DATABASE_NAME") 
-BOT_USERNAME = os.environ.get("BOT_USERNAME") 
-UPDATE_CHNL = os.environ.get("UPDATE_CHNL")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME")
-SUPPORT_GRP = os.environ.get("SUPPORT_GRP")
 BOT_NAME = os.environ.get("BOT_NAME")
 ADMINS = os.environ.get("ADMINS")
-START_IMG1 = os.environ.get("START_IMG1")
-START_IMG2 = os.environ.get("START_IMG2", None)
-START_IMG3 = os.environ.get("START_IMG3", None)
-START_IMG4 = os.environ.get("START_IMG4", None)
-START_IMG5 = os.environ.get("START_IMG5", None)
-START_IMG6 = os.environ.get("START_IMG6", None)
-START_IMG7 = os.environ.get("START_IMG7", None)
-START_IMG8 = os.environ.get("START_IMG8", None)
-START_IMG9 = os.environ.get("START_IMG9", None)
-START_IMG10 = os.environ.get("START_IMG10", None)
-STKR = os.environ.get("STKR")
-STKR1 = os.environ.get("STKR1", None)
-STKR2 = os.environ.get("STKR2", None)
-STKR3 = os.environ.get("STKR3", None)
-STKR4 = os.environ.get("STKR4", None)
-STKR5 = os.environ.get("STKR5", None)
-STKR6 = os.environ.get("STKR6", None)
-STKR7 = os.environ.get("STKR7", None)
-STKR8 = os.environ.get("STKR8", None)
-STKR9 = os.environ.get("STKR9", None)
 
 bot = Client(
     "VickBot" ,
@@ -59,36 +35,11 @@ async def is_admins(chat_id: int):
     ]
 
 
-PHOTO = [
-    START_IMG1,
-    START_IMG2,
-    START_IMG3,
-    START_IMG4,
-    START_IMG5,
-    START_IMG6,
-    START_IMG7,
-    START_IMG8,
-    START_IMG9,
-    START_IMG10,
-]
-
 EMOJIOS = [ 
       "⚡",
       "⚡",
 ]
       
-STICKER = [
-      STKR,
-      STKR1,
-      STKR2,
-      STKR3,
-      STKR4,
-      STKR5,
-      STKR6,
-      STKR7,
-      STKR8,
-      STKR9,
-]
 START = f"""
 **๏ Hie Baby🐒 ๏**
 """
@@ -380,5 +331,5 @@ async def vickprivatesticker(client: Client, message: Message):
            if not Yo == "text":
                await message.reply_sticker(f"{hey}")
 
-print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
+print(f"🎄𝗩𝗜𝗣 𝗖𝗛𝗔𝗧𝗕𝗢𝗧 𝗜𝗦 𝗦𝗧𝗔𝗥𝗧𝗘𝗗 𝗚𝗢 𝗔𝗡𝗗 𝗙𝗨𝗖𝗞🎄 ")      
 bot.run()
