@@ -8,7 +8,6 @@
         "MONGO_URL": {
             "description": "𝐅𝐞𝐞𝐥 𝐇𝐞𝐫𝐞 𝐀 𝐍𝐞𝐰 𝐌𝐨𝐧𝐠𝐨 𝐅𝐨𝐫 𝐅𝐚𝐬𝐭 𝐖𝐨𝐫𝐤𝐢𝐧𝐠.",
             "required": true
-            "value": "mongodb+srv://hnyx:wywyw2@cluster0.9dxlslv.mongodb.net/?retryWrites=true&w=majority"
         }
     },
     "addons": [
