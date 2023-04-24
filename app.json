@@ -6,7 +6,7 @@
             "required": true
         },
         "MONGO_URL": {
-            "description": "𝐅𝐞𝐞𝐥 𝐇𝐞𝐫𝐞 𝐀 𝐍𝐞𝐰 𝐌𝐨𝐧𝐠𝐨 𝐅𝐨𝐫 𝐅𝐚𝐬𝐭 𝐖𝐨𝐫𝐤𝐢𝐧𝐠.",
+            "description": "Fill A New Mongo",
             "required": true
         }
     },
