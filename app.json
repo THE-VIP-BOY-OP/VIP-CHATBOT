@@ -4,7 +4,7 @@
         "BOT_TOKEN": {
             "description": "𝐅𝐢𝐥𝐥 𝐘𝐨𝐮𝐫 𝐁𝐨𝐭 𝐓𝐨𝐤𝐞𝐧 𝐎𝐧𝐥𝐲",
             "required": true
-        }              
+        },              
         "MONGO_URL": {
             "description": "𝐅𝐄𝐄𝐋 𝐇𝐄𝐑𝐄 𝐀 𝐍𝐄𝐖 𝐌𝐎𝐍𝐆𝐎 𝐅𝐎𝐑 𝐅𝐀𝐒𝐓 𝐖𝐎𝐑𝐊 𝐁𝐎𝐓",
             "required": true
