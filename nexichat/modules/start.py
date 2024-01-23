@@ -97,7 +97,7 @@ async def start(_, m: Message):
         await asyncio.sleep(2)
         await umm.delete()
         await m.reply_text(
-            text=f"""**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.name}**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?"""
+            text=f"""**๏ ʜᴇʏ..**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?**"""
         )
         await add_served_user(m.from_user.id)
     else:
