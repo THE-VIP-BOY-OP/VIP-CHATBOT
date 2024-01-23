@@ -59,10 +59,6 @@ async def ping(_, message: Message):
         photo=random.choice(IMG),
         caption="ᴘɪɴɢɪɴɢ...",
     )
-    try:
-        await message.delete()
-    except:
-        pass
 
     ms = (datetime.now() - start).microseconds / 1000
     await loda.edit_text(
