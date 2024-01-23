@@ -2,11 +2,7 @@ from config import OWNER_USERNAME, SUPPORT_GRP
 from nexichat import nexichat
 
 START = f"""
-**๏ ʜᴇʏ, ɪ ᴀᴍ [{nexichat.name}](t.me/{nexichat.username})**
-**➻ ᴀɴ ᴀɪ ʙᴀsᴇᴅ ᴄʜᴀᴛʙᴏᴛ**
-**──────────────**
-**➻ ᴜsᴀɢᴇ /chatbot [ᴏɴ/ᴏғғ]**
-<b>||๏ ʜɪᴛ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ʜᴇʟᴘ.||</b>
+**๏ ʜᴇʏ,\n\n ɪ ᴀᴍ sɪᴋʜᴀ💞\n🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ...??
 """
 
 HELP_READ = f"""
