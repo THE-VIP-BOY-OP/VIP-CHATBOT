@@ -1,0 +1,27 @@
+{
+  "name": "nexichat",
+  "description": "A telegram bot",
+  "logo": "https://graph.org/file/0d3f394ebbf5e8488cb1d.jpg",
+  "keywords": [
+    "Chatbot",
+    "mongodb",
+    "python",
+    "pyrogram"
+  ],
+    "buildpacks": [{
+    "url": "heroku/python"
+  }],
+  "repository": "https://github.com/DAXXTEAM/DAXXCHATBOT",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "A Bot token from @BotFather",
+      "required": true,
+      "value": ""
+    },
+    "MONGO_URL": {
+      "description": "Get a mongodb url from https://cloud.mongodb.com.",
+      "required": true,
+      "value": ""
+    }
+  }
+}
