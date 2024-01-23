@@ -96,10 +96,8 @@ async def start(_, m: Message):
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
         await asyncio.sleep(2)
         await umm.delete()
-        await m.reply_photo(
-            photo=random.choice(IMG),
-            caption=f"""**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.name}**\n**➻ ᴀɴ ᴀɪ ʙᴀsᴇᴅ ᴄʜᴀᴛʙᴏᴛ.**\n**──────────────**\n**➻ ᴜsᴀɢᴇ /chatbot [ᴏɴ/ᴏғғ]**\n<b>||๏ ʜɪᴛ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ʜᴇʟᴘ||</b>""",
-            reply_markup=InlineKeyboardMarkup(DEV_OP),
+        await m.reply_text(
+            text=f"""**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.name}**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?"""
         )
         await add_served_user(m.from_user.id)
     else:
@@ -129,7 +127,7 @@ async def help(client: nexichat, m: Message):
         await add_served_chat(m.chat.id)
 
 
-@nexichat.on_cmd("repo")
+@nexichat.on_cmd("crepo")
 async def repo(_, m: Message):
     await m.reply_text(
         text=SOURCE_READ,
