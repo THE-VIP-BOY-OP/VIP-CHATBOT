@@ -42,7 +42,7 @@ async def chatbot_text(client: Client, message: Message):
 
     if not message.reply_to_message:
         DAXXdb = MongoClient(MONGO_URL)
-        DAXX = DAXXdb["DAXXDb"]["DAXX"]
+        DAXX = DAXXdb["VIPDb"]["VIP"]
         is_DAXX = DAXX.find_one({"chat_id": message.chat.id})
         if not is_DAXX:
             await client.send_chat_action(message.chat.id, ChatAction.TYPING)
@@ -62,7 +62,7 @@ async def chatbot_text(client: Client, message: Message):
 
     if message.reply_to_message:
         DAXXdb = MongoClient(MONGO_URL)
-        DAXX = DAXXdb["DAXXDb"]["DAXX"]
+        DAXX = DAXXdb["VIPDb"]["VIP"]
         is_DAXX = DAXX.find_one({"chat_id": message.chat.id})
         if message.reply_to_message.from_user.id == client.id:
             if not is_DAXX:
@@ -131,7 +131,7 @@ async def chatbot_sticker(client: Client, message: Message):
 
     if not message.reply_to_message:
         DAXXdb = MongoClient(MONGO_URL)
-        DAXX = DAXXdb["DAXXDb"]["DAXX"]
+        DAXX = DAXXdb["VIPDb"]["VIP"]
         is_DAXX = DAXX.find_one({"chat_id": message.chat.id})
         if not is_DAXX:
             await client.send_chat_action(message.chat.id, ChatAction.TYPING)
@@ -151,7 +151,7 @@ async def chatbot_sticker(client: Client, message: Message):
 
     if message.reply_to_message:
         DAXXdb = MongoClient(MONGO_URL)
-        DAXX = DAXXdb["DAXXDb"]["DAXX"]
+        DAXX = DAXXdb["VIPDb"]["VIP"]
         is_DAXX = DAXX.find_one({"chat_id": message.chat.id})
         if message.reply_to_message.from_user.id == Client.id:
             if not is_DAXX:
