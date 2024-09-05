@@ -57,17 +57,17 @@ async def chatbot_toggle(client, message):
     
     if status == "enable":
         chatbot.update_one({"chat_id": message.chat.id}, {"$set": {"enabled": True}}, upsert=True)
-        # No reply, just silently enabling the chatbot
+        await message.reply_text("**Chatbot enabled!**")
     
     elif status == "disable":
         chatbot.update_one({"chat_id": message.chat.id}, {"$set": {"enabled": False}}, upsert=True)
-        # No reply, just silently disabling the chatbot
+        await message.reply_text("**Chatbot disabled!**")
     
     else:
         await message.reply_text("**Usage:** /chatbot [enable|disable]")
 
-# Chatbot handler for both AI and MongoDB replies, ignoring the /chatbot command
-@nexichat.on_message((filters.text | filters.sticker | filters.group) & ~filters.private & ~filters.bot & ~filters.command(["chatbot"]), group=4)
+# Chatbot handler for both AI and MongoDB replies in groups
+@nexichat.on_message((filters.text | filters.sticker | filters.group) & ~filters.private & ~filters.bot, group=4)
 async def chatbot_text_group(client: Client, message: Message):
     chatdb = MongoClient(MONGO_URL)
     chatai = chatdb["Word"]["WordDb"]
@@ -111,12 +111,12 @@ async def chatbot_text_group(client: Client, message: Message):
                 else:
                     await message.reply_text(hey, quote=True)
 
-# DM handler for AI replies
+# Chatbot handler for private messages (DMs)
 @nexichat.on_message(filters.private & filters.text)
 async def chatbot_text_private(client: Client, message: Message):
     await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-
-    # Handling text messages with AI-based replies in private chat (DM)
+    
+    # Handling text messages with AI-based replies in private chats
     if message.text:
         try:
             response = api.gemini(message.text)
