@@ -112,6 +112,13 @@ async def chatbot_text(client: Client, message: Message):
 # Chatbot handler for private messages (DMs)
 @nexichat.on_message(filters.private & filters.text)
 async def chatbot_text_private(client: Client, message: Message):
+    chatdb = MongoClient(MONGO_URL)
+    processed_messages = chatdb["ProcessedMessages"]
+
+    # Check if message has already been processed
+    if processed_messages.find_one({"message_id": message.message_id}):
+        return
+
     await client.send_chat_action(message.chat.id, ChatAction.TYPING)
     
     # Handling text messages with AI-based replies in private chats
@@ -126,3 +133,6 @@ async def chatbot_text_private(client: Client, message: Message):
                 await message.reply_text(to_small_caps("sᴏʀʀʏ! ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ"), quote=True)
         except requests.exceptions.RequestException:
             pass
+    
+    # Mark message as processed
+    processed_messages.insert_one({"message_id": message.message_id})
