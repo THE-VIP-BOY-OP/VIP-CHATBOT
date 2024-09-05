@@ -15,115 +15,112 @@ from pyrogram import filters, Client
 from pyrogram.enums import ChatAction
 
 from pymongo import MongoClient
+from Abg.chat_status import adminsOnly
 
+from pymongo import MongoClient
+from pyrogram import Client, filters
+from pyrogram.enums import ChatAction
+from pyrogram.types import InlineKeyboardMarkup, Message
 
-# MongoDB setup
+from config import MONGO_URL
+from nexichat import nexichat
+from nexichat.modules.helpers import CHATBOT_ON, is_admins
+
+# MongoDB connection
 client = MongoClient(MONGO_URL)
-db = client["ChatBot"]
-chatai = db["chat_responses"]
-bot_control = db["BotControl"]
+db = client["NexiDB"]
+chatai = db["chats"]
 
-# Function to get chatbot status for a group
-def is_chatbot_on(chat_id):
-    chat_status = bot_control.find_one({"chat_id": chat_id})
-    if chat_status:
-        return chat_status.get("status", "on") == "on"
-    return True  # Default to 'on' if no record exists
+# AI-based API response function
+from MukeshAPI import api
 
-# Function to set chatbot status in a group
-def set_chatbot_status(chat_id, status):
-    bot_control.update_one({"chat_id": chat_id}, {"$set": {"status": status}}, upsert=True)
-
-# Handler to turn chatbot on
-@nexichat.on_message(filters.command("chatboton") & filters.group)
-@adminsOnly  # Only admins can use this command
-async def chatbot_on(client, message):
-    set_chatbot_status(message.chat.id, "on")
-    await message.reply_text("Chatbot has been turned ON!")
-
-# Handler to turn chatbot off
-@nexichat.on_message(filters.command("chatbotoff") & filters.group)
-@adminsOnly  # Only admins can use this command
-async def chatbot_off(client, message):
-    set_chatbot_status(message.chat.id, "off")
-    await message.reply_text("Chatbot has been turned OFF!")
-
-# AI-based function for text handling
-async def handle_ai_response(client, message):
-    user_input = message.text
+async def ai_response(user_input):
     try:
         response = api.gemini(user_input)
         x = response.get("results")
         image_url = response.get("image_url")
+
         if x:
-            formatted_response = truncate_text(x)
-            if image_url:
-                await message.reply_photo(image_url, caption=formatted_response, quote=True)
-            else:
-                await message.reply_text(formatted_response, quote=True)
+            return x, image_url
         else:
-            await message.reply_text(to_small_caps("Sorry, please try again."), quote=True)
-    except requests.exceptions.RequestException:
-        pass
+            return "Sorry! Please try again.", None
+    except Exception as e:
+        return str(e), None
 
-# Function to truncate text
-def truncate_text(text, max_words=50):
-    words = text.split()
-    if len(words) > max_words:
-        return ' '.join(words[:max_words]) + "..."
-    return text
+# Function to handle media (stickers, images, videos, etc.)
+async def handle_media_response(message: Message):
+    K = []
+    media_id = message.sticker.file_unique_id if message.sticker else message.photo[0].file_unique_id
+    
+    # Fetch responses from MongoDB for the given media
+    is_media = chatai.find({"word": media_id})
+    for x in is_media:
+        K.append(x["text"])
 
-# Function to convert text to small caps (optional)
-def to_small_caps(text):
-    small_caps = {
-        'a': 'ᴀ', 'b': 'ʙ', 'c': 'ᴄ', 'd': 'ᴅ', 'e': 'ᴇ', 'f': 'ғ', 'g': 'ɢ', 'h': 'ʜ',
-        'i': 'ɪ', 'j': 'ᴊ', 'k': 'ᴋ', 'l': 'ʟ', 'm': 'ᴍ', 'n': 'ɴ', 'o': 'ᴏ', 'p': 'ᴘ',
-        'q': 'ǫ', 'r': 'ʀ', 's': 's', 't': 'ᴛ', 'u': 'ᴜ', 'v': 'ᴠ', 'w': 'ᴡ', 'x': 'x',
-        'y': 'ʏ', 'z': 'ᴢ'
-    }
-    return ''.join(small_caps.get(char, char) for char in text.lower())
+    if K:
+        response = random.choice(K)
+        is_text = chatai.find_one({"text": response})
+        media_type = is_text["check"]
+        
+        # Reply based on media type
+        if media_type == "text":
+            await message.reply_text(response)
+        elif media_type == "sticker":
+            await message.reply_sticker(response)
+    else:
+        # If no response is found
+        await message.reply_text("I don't have a response for this sticker or media yet.")
 
-# Main handler for group messages
-@nexichat.on_message(filters.group & ~filters.service)
-async def group_message_handler(client, message):
+# Function to handle text responses with AI for non-reply messages
+async def handle_text_response(client, message):
+    user_input = message.text.strip()
+    response, image_url = await ai_response(user_input)
+
+    if image_url:
+        await message.reply_photo(image_url, caption=response, quote=True)
+    else:
+        await message.reply_text(response, quote=True)
+
+# Chatbot On/Off handler
+@app.on_message(filters.command("chatbot on") & filters.group)
+@adminsOnly
+async def chatbot_on(_, message: Message):
+    if not CHATBOT_ON(message.chat.id):
+        CHATBOT_ON[message.chat.id] = True
+        await message.reply_text("Chatbot has been turned ON!")
+
+@app.on_message(filters.command("chatbot off") & filters.group)
+@adminsOnly
+async def chatbot_off(_, message: Message):
+    if CHATBOT_ON(message.chat.id):
+        del CHATBOT_ON[message.chat.id]
+        await message.reply_text("Chatbot has been turned OFF!")
+
+# Main message handler for group messages
+@app.on_message(filters.group)
+async def group_message_handler(client: Client, message: Message):
+    # Check if chatbot is off for the group
+    if message.chat.id not in CHATBOT_ON:
+        return
+
+    # Get bot's username
     bot_username = (await client.get_me()).username
 
-    # Check if chatbot is off for the group
-    if not is_chatbot_on(message.chat.id):
-        return
+    # Respond to text messages if not replying to other users
+    if message.text and not message.reply_to_message:
+        await handle_text_response(client, message)
 
-    # Skip if message is a reply to someone else (ignore replies to other users)
-    if message.reply_to_message and message.reply_to_message.from_user.username != bot_username:
-        return
+    # Handle non-text media (stickers, photos, videos)
+    elif message.sticker or message.photo or message.video:
+        await handle_media_response(message)
 
-    # MongoDB-based media handling for stickers or other non-text media
-    if message.sticker or message.photo or message.video:
-        K = []
-        media_id = message.sticker.file_unique_id if message.sticker else message.photo[0].file_unique_id
-        is_media = chatai.find({"word": media_id})
-        if is_media:
-            for x in is_media:
-                K.append(x["text"])
-            response = random.choice(K)
-            is_text = chatai.find_one({"text": response})
-            media_type = is_text["check"]
-            if media_type == "text":
-                await message.reply_text(response)
-            elif media_type == "sticker":
-                await message.reply_sticker(response)
-        return
-
-    # AI-based text handling
+# Direct message handler for private chats
+@app.on_message(filters.private & ~filters.service)
+async def private_message_handler(client, message: Message):
+    # Handle text messages
     if message.text:
-        if message.reply_to_message:  # If replying to bot's message
-            if message.reply_to_message.from_user.username == bot_username:
-                await handle_ai_response(client, message)
-        elif f"@{bot_username}" in message.text:  # If bot is mentioned
-            await handle_ai_response(client, message)
-        else:  # Any other general text
-            await handle_ai_response(client, message)
+        await handle_text_response(client, message)
 
-# Private chat handler for AI-based responses
-@nexichat.on_message(filters.private & ~filters.service)
-async def private_message_handler(client, message):
-    await handle_ai_response(client, message)
+    # Handle media (stickers, photos, etc.)
+    elif message.sticker or message.photo or message.video:
+        await handle_media_response(message)
