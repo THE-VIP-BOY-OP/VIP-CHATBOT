@@ -7,3 +7,5 @@ dnspython
 tgcrypto==1.2.2
 asyncio
 python-dotenv
+lexica-api
+MukeshAPI
