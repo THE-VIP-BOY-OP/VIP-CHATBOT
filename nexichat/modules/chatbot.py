@@ -1,5 +1,4 @@
 import random
-import re
 import requests
 from pymongo import MongoClient
 from pyrogram import Client, filters
@@ -11,11 +10,11 @@ from MukeshAPI import api
 
 # Emoji List for Reactions
 EMOJI_LIST = [
-    "👍", "👎", "❤️", "🔥", "🥳", "👏", "😁", "😂", "😲", "😱", 
-    "😢", "😭", "🎉", "😇", "😍", "😅", "💩", "🙏", "🤝", "🍓", 
-    "🎃", "👀", "💯", "😎", "🤖", "🐵", "👻", "🎄", "🥂", "🎅", 
-    "❄️", "✍️", "🎁", "🤔", "💔", "🥰", "😢", "🥺", "🙈", "🤡", 
-    "😋", "🎊", "🍾", "🌟", "👶", "🦄", "💤", "😷", "👨‍💻", "🍌", 
+    "👍", "👎", "❤️", "🔥", "🥳", "👏", "😁", "😂", "😲", "😱",
+    "😢", "😭", "🎉", "😇", "😍", "😅", "💩", "🙏", "🤝", "🍓",
+    "🎃", "👀", "💯", "😎", "🤖", "🐵", "👻", "🎄", "🥂", "🎅",
+    "❄️", "✍️", "🎁", "🤔", "💔", "🥰", "😢", "🥺", "🙈", "🤡",
+    "😋", "🎊", "🍾", "🌟", "👶", "🦄", "💤", "😷", "👨‍💻", "🍌",
     "🍓", "💀", "👨‍🏫", "🤝", "☠️", "🎯", "🍕", "🦾", "🔥", "💃"
 ]
 
@@ -66,9 +65,9 @@ async def chatbot_toggle(client, message):
     else:
         await message.reply_text("**Usage:** /chatbot [enable|disable]")
 
-# Chatbot handler for both AI and MongoDB replies in groups
-@nexichat.on_message((filters.text | filters.sticker | filters.group) & ~filters.private & ~filters.bot, group=4)
-async def chatbot_text_group(client: Client, message: Message):
+# Chatbot handler for messages (both replies and non-replies)
+@nexichat.on_message(filters.text | filters.sticker | filters.group, group=4)
+async def chatbot_text(client: Client, message: Message):
     chatdb = MongoClient(MONGO_URL)
     chatai = chatdb["Word"]["WordDb"]
     chatbot = chatdb["Chatbot"]["ChatbotDb"]
@@ -79,37 +78,36 @@ async def chatbot_text_group(client: Client, message: Message):
     if is_chatbot_enabled and not is_chatbot_enabled.get("enabled", True):
         return
     
-    if not message.reply_to_message:
-        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+    await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        # Handling text messages with AI-based replies
-        if message.text:
-            try:
-                response = api.gemini(message.text)
-                x = response.get("results")
-                if x:
-                    formatted_response = to_small_caps(truncate_text(x))
-                    await message.reply_text(formatted_response, quote=True)
-                else:
-                    await message.reply_text(to_small_caps("sᴏʀʀʏ! ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ"), quote=True)
-            except requests.exceptions.RequestException:
-                pass
-        else:
-            # Handling stickers or non-text media using MongoDB-based replies
-            K = []
-            is_chat = chatai.find({"word": message.text})
-            k = chatai.find_one({"word": message.text})
+    # Handling text messages with AI-based replies
+    if message.text:
+        try:
+            response = api.gemini(message.text)
+            x = response.get("results")
+            if x:
+                formatted_response = to_small_caps(truncate_text(x))
+                await message.reply_text(formatted_response, quote=True)
+            else:
+                await message.reply_text(to_small_caps("sᴏʀʀʏ! ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ"), quote=True)
+        except requests.exceptions.RequestException:
+            pass
+    else:
+        # Handling stickers or non-text media using MongoDB-based replies
+        K = []
+        is_chat = chatai.find({"word": message.text})
+        k = chatai.find_one({"word": message.text})
 
-            if k:
-                for x in is_chat:
-                    K.append(x["text"])
-                hey = random.choice(K)
-                is_text = chatai.find_one({"text": hey})
-                Yo = is_text["check"]
-                if Yo == "sticker":
-                    await message.reply_sticker(f"{hey}")
-                else:
-                    await message.reply_text(hey, quote=True)
+        if k:
+            for x in is_chat:
+                K.append(x["text"])
+            hey = random.choice(K)
+            is_text = chatai.find_one({"text": hey})
+            Yo = is_text["check"]
+            if Yo == "sticker":
+                await message.reply_sticker(f"{hey}")
+            else:
+                await message.reply_text(hey, quote=True)
 
 # Chatbot handler for private messages (DMs)
 @nexichat.on_message(filters.private & filters.text)
