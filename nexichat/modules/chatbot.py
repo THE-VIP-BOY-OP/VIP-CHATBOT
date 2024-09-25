@@ -44,7 +44,7 @@ def truncate_text(text, max_words=50):
     return ' '.join(words[:max_words]) + "..." if len(words) > max_words else text
 
 # Chatbot enable/disable command for group chats
-@nexichat.on_message(filters.command(["chatbot"]) & filters.user(123456789) & ~filters.private)
+@nexichat.on_message(filters.command(["chatbot"]))
 async def chatbot_toggle(client, message):
     chatdb = MongoClient(MONGO_URL)
     chatbot = chatdb["Chatbot"]["ChatbotDb"]
