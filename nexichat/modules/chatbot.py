@@ -5,7 +5,7 @@ from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, Message
 from config import MONGO_URL
-from nexichat import app
+from nexichat import nexichat as app
 
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
@@ -45,7 +45,7 @@ async def chatbot_response(client: Client, message: Message):
         return
 
     
-    if message.reply_to_message and message.reply_to_message.from_user.id == client.me.id:
+    if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
         reply_data = await get_reply(message.text)
         if reply_data:
