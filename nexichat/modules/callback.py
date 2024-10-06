@@ -2,9 +2,9 @@ from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 
 from config import OWNER_USERNAME, SUPPORT_GRP
-
+import config
 from nexichat import nexichat
-from nexichat.database import DAXX
+
 from nexichat.modules.helpers import (
     ABOUT_BTN,
     ABOUT_READ,
@@ -20,6 +20,9 @@ from nexichat.modules.helpers import (
     START,
     TOOLS_DATA_READ,
 )
+
+DAXXdb = MongoClient(config.MONGO_URL)
+DAXX = DAXXdb["DAXXDb"]["DAXX"]
 
 
 @nexichat.on_callback_query()
