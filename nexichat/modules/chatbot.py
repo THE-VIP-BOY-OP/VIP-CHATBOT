@@ -11,6 +11,13 @@ from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON, is_admins
 
+CHATBOT_ON = [
+    [
+        InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data=f"addchat"),
+        InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data=f"rmchat"),
+    ],
+]
+
 
 @nexichat.on_cmd("chatbot", group_only=True)
 @adminsOnly("can_delete_messages")
