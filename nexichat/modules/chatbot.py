@@ -1,6 +1,7 @@
 import random
 from Abg.chat_status import adminsOnly
-
+from nexichat.database.chats import add_served_chats
+from nexichat.database.users import add_served_users
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
@@ -125,6 +126,7 @@ async def chatbot_text(client: Client, message: Message):
     (filters.sticker | filters.group | filters.text) & ~filters.private & ~filters.bot, group=4
 )
 async def chatbot_sticker(client: Client, message: Message):
+    await add_served_chats(message.chat.id)
     try:
         if (
             message.text.startswith("!")
@@ -216,6 +218,7 @@ async def chatbot_sticker(client: Client, message: Message):
     (filters.text | filters.sticker | filters.group) & ~filters.private & ~filters.bot, group=4
 )
 async def chatbot_pvt(client: Client, message: Message):
+    await add_served_chats(message.chat.id)
     try:
         if (
             message.text.startswith("!")
