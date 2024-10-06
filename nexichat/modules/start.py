@@ -1,5 +1,4 @@
-from nexichat.database.chats import add_served_chats
-from nexichat.database.users import add_served_users
+
 
 import asyncio
 import random
