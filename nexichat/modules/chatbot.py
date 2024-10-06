@@ -1,7 +1,7 @@
 import random
 from Abg.chat_status import adminsOnly
-from nexichat.database.chats import add_served_chats
-from nexichat.database.users import add_served_users
+from nexichat.database.chats import add_served_chat as add_served_chats
+from nexichat.database.users import add_served_user as add_served_users
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
