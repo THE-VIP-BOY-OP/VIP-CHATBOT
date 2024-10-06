@@ -1,6 +1,9 @@
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-
+import random
+from motor.motor_asyncio import AsyncIOMotorClient as _mongo_client_
+from pymongo import MongoClient
+from pyrogram import Client, filters
 from config import OWNER_USERNAME, SUPPORT_GRP
 import config
 from nexichat import nexichat
