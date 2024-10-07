@@ -116,3 +116,23 @@ async def cb_handler(_, query: CallbackQuery):
                 )
             if is_DAXX:
                 await query.edit_message_text("**ᴄʜᴀᴛ-ʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ.**")
+
+@app.on_callback_query(filters.regex("enable_chatbot|disable_chatbot"))
+async def callback_handler(client: Client, callback_query: CallbackQuery):
+    action = callback_query.data
+
+    if callback_query.message.chat.type in ["group", "supergroup"]:
+        if not await adminsOnly("can_delete_messages")(client, callback_query.message):
+            await callback_query.answer("Only admins can enable or disable the chatbot!", show_alert=True)
+            return
+
+    status_db.update_one(
+        {"chat_id": callback_query.message.chat.id},
+        {"$set": {"status": "enabled" if action == "enable_chatbot" else "disabled"}},
+        upsert=True
+    )
+
+    await callback_query.answer(f"Chatbot has been {'enabled' if action == 'enable_chatbot' else 'disabled'}!")
+    await callback_query.message.edit_text(
+        f"ᴄʜᴀᴛ: {callback_query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
+    )
