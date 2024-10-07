@@ -7,17 +7,10 @@ from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, Message
 from config import MONGO_URL
 from nexichat import nexichat as app
-
+from nexichat.modules.helpers import CHATBOT_ON
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
-
-CHATBOT_ON = [
-    [
-        InlineKeyboardButton(text="ᴇɴᴀʙʟᴇ", callback_data="enable_chatbot"),
-        InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data="disable_chatbot"),
-    ],
-]
 
 @app.on_message(filters.command("chatbot"))
 async def chaton(client: Client, message: Message):
