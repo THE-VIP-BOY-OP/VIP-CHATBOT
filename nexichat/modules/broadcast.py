@@ -29,7 +29,7 @@ IS_BROADCASTING = False
 
 
 
-@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(OWNER_ID))
+@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID)))
 async def braodcast_message(client, message, _):
     global IS_BROADCASTING
     if message.reply_to_message:
