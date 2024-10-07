@@ -30,6 +30,7 @@ DAXX = DAXXdb["DAXXDb"]["DAXX"]
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
+    print(query.data)
     if query.data == "HELP":
         await query.message.edit_text(
             text=HELP_READ,
