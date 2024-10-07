@@ -48,7 +48,7 @@ async def braodcast_message(client, message, _):
         if "-user" in query:
             query = query.replace("-user", "")
         if query == "":
-            return await message.reply_text("broad_6")
+            return await message.reply_text("Please provide me a flag : -pin, -nobot, -pinloud, -user")
 
     IS_BROADCASTING = True
     ok = await message.reply_text("**Started broadcasting...**")
