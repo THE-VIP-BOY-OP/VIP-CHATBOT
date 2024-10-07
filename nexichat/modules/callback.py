@@ -4,7 +4,7 @@ from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 
 import config
-from nexichat import nexichat
+from nexichat import nexichat, LOGGER
 from nexichat.modules.helpers import (
     ABOUT_BTN,
     ABOUT_READ,
@@ -27,7 +27,7 @@ DAXX = DAXXdb["DAXXDb"]["DAXX"]
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
-    print(query.data)
+    LOGGER.info(query.data)
     if query.data == "HELP":
         await query.message.edit_text(
             text=HELP_READ,
