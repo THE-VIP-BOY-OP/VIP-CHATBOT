@@ -151,7 +151,6 @@ async def get_reply(word: str):
     return None
 
 
-
 from pymongo import MongoClient
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
