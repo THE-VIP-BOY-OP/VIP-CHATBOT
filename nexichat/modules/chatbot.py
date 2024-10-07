@@ -18,7 +18,7 @@ CHATBOT_ON = [
     ],
 ]
 
-@app.on_message(filters.command("chatbot") & filters.group)
+@app.on_message(filters.command("chatbot")
 async def chaton(client: Client, message: Message):
     await message.reply_text(
         f"ᴄʜᴀᴛ: {message.chat.title}\n**ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴘᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**",
@@ -38,7 +38,7 @@ async def callback_handler(client: Client, callback_query: CallbackQuery):
         f"ᴄʜᴀᴛ: {callback_query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
     )
 
-@app.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio) & filters.group)
+@app.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
@@ -60,7 +60,7 @@ async def chatbot_response(client: Client, message: Message):
             else:
                 await message.reply_text(reply_data['text'])
         else:
-            await message.reply_text("I don't know how to respond yet.")
+            await message.reply_text("**what??*")
 
     
     if message.reply_to_message:
@@ -100,16 +100,4 @@ async def get_reply(word: str):
         random_reply = random.choice(is_chat)
         return random_reply
     return None
-
-
-
-__MODULE__ = "ᴄʜᴀᴛʙᴏᴛ"
-__HELP__ = """
-ʜᴇʏ ᴛʜɪs ɪs ᴄʜᴀᴛʙᴏᴛ.
-
- Usᴇ ɪɴ Gʀᴏᴜᴘ:-
-/chatbot On
-/chatbot Off
-
-ᴍᴀᴅᴇ ʙʏ: @THE_VIP_BOY
-"""
+    
