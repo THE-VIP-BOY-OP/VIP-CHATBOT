@@ -117,7 +117,7 @@ async def cb_handler(_, query: CallbackQuery):
     elif query.data == "enable_chatbot" or "":
         if callback_query.message.chat.type in ["group", "supergroup"]:
             if not await adminsOnly("can_delete_messages")(client, callback_query.message):
-                await callback_query.answer(
+                await query.answer(
                     "Only admins can enable or disable the chatbot!", show_alert=True
                 )
                 return
@@ -126,9 +126,9 @@ async def cb_handler(_, query: CallbackQuery):
             {"$set": {"status": "enabled" if action == "enable_chatbot" else "disabled"}},
             upsert=True,
         )
-        await callback_query.answer(
+        await query.answer(
             f"Chatbot has been {'enabled' if action == 'enable_chatbot' else 'disabled'}!"
         )
-        await callback_query.message.edit_text(
+        await query.message.edit_text(
             f"ᴄʜᴀᴛ: {callback_query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
         )
