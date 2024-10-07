@@ -92,7 +92,7 @@ async def start(_, m: Message):
         await asyncio.sleep(2)
         await umm.delete()
         await m.reply_text(text=f"""**๏ ʜᴇʏ..**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?**""")
-        await add_served_user(m.from_user.id)
+        await add_served_user(m.chat.id)
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
@@ -110,7 +110,7 @@ async def help(client: nexichat, m: Message):
             caption=HELP_READ,
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
-        await add_served_user(m.from_user.id)
+        
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
