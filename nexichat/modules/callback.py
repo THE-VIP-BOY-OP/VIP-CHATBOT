@@ -117,7 +117,7 @@ async def cb_handler(_, query: CallbackQuery):
             if is_DAXX:
                 await query.edit_message_text("**ᴄʜᴀᴛ-ʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ.**")
 
-@nexichat.on_callback_query(filters.regex("enable_chatbot|disable_chatbot"))
+@nexichat.on_callback_query(filters.regex(r"enable_chatbot|disable_chatbot"))
 async def callback_handler(client: Client, callback_query: CallbackQuery):
     action = callback_query.data
 
