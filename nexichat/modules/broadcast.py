@@ -13,7 +13,8 @@ import config
 from config import OWNER_ID
 
 from nexichat import nexichat
-from 
+from nexichat.database.chats import get_served_chats
+from nexichat.database.users import get_served_users 
 
 AUTO_SLEEP = 5
 IS_BROADCASTING = False
