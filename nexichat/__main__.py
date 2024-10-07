@@ -16,7 +16,8 @@ async def anony_boot():
 
     for all_module in ALL_MODULES:
         importlib.import_module("nexichat.modules." + all_module)
-
+        LOGGER.info(f"Successfully imported : {all_module}")
+        
     LOGGER.info(f"@{nexichat.username} Started.")
     await idle()
 
