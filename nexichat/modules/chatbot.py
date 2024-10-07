@@ -53,19 +53,15 @@ async def chatbot_response(client: Client, message: Message):
     if chat_status and chat_status.get("status") == "disabled":
         return
 
-    if (
-        message.text.startswith("!")
-        or message.text.startswith("/")
-        or message.text.startswith(".")
-        or message.text.startswith("?")
-        or message.text.startswith("@")
-        or message.text.startswith("#")
-    ):
-        return
-        
+    if message.text:
+        if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
+            return
+    
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-        reply_data = await get_reply(message.text)
+
+        reply_data = await get_reply(message.text if message.text else "")
+
         if reply_data:
             if reply_data['check'] == 'sticker':
                 await message.reply_sticker(reply_data['text'])
@@ -78,8 +74,7 @@ async def chatbot_response(client: Client, message: Message):
             else:
                 await message.reply_text(reply_data['text'])
         else:
-            await message.reply_text("**what??*")
-
+            await message.reply_text("**what??**")
     
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
