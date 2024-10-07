@@ -60,7 +60,7 @@ async def broadcast_message(client, message):
             await message.reply_text("**Started broadcasting...**")
             
             # Broadcast to chats
-            if not flags.get("nobot", False):
+            if not flags.get("-nobot", False):
                 sent = 0
                 pin_count = 0
                 chats = await get_served_chats()
@@ -77,7 +77,7 @@ async def broadcast_message(client, message):
                         sent += 1
                         
                         # Handle pinning
-                        if flags.get("pin", False) or flags.get("pinloud", False):
+                        if flags.get("-pin", False) or flags.get("-pinloud", False):
                             try:
                                 await m.pin(disable_notification=flags.get("pin", False))
                                 pin_count += 1
@@ -100,7 +100,7 @@ async def broadcast_message(client, message):
                 )
             
             # Broadcast to users
-            if flags.get("user", False):
+            if flags.get("-user", False):
                 susr = 0
                 users = await get_served_users()
                 
