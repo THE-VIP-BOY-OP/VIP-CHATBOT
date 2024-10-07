@@ -38,10 +38,10 @@ async def broadcast_message(client, message):
                 
                 # Extract flags
                 flags = {
-                    "pin": "-pin" in query,
-                    "pinloud": "-pinloud" in query,
-                    "nobot": "-nobot" in query,
-                    "user": "-user" in query
+                    "-pin": "-pin" in query,
+                    "-pinloud": "-pinloud" in query,
+                    "-nobot": "-nobot" in query,
+                    "-user": "-user" in query
                 }
                 
                 # Remove flags from the query
