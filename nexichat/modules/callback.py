@@ -122,7 +122,7 @@ async def cb_handler(_, query: CallbackQuery):
                     "Only admins can enable or disable the chatbot!", show_alert=True
                 )
                 return
-        status_db.update_one(
+        DAXX.update_one(
             {"chat_id": query.message.chat.id},
             {"$set": {"status": "enabled" if action == "enable_chatbot" else "disabled"}},
             upsert=True,
