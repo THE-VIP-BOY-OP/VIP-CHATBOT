@@ -79,7 +79,7 @@ async def broadcast_message(client, message):
                         # Handle pinning
                         if flags.get("-pin", False) or flags.get("-pinloud", False):
                             try:
-                                await m.pin(disable_notification=flags.get("pin", False))
+                                await m.pin(disable_notification=flags.get("-pin", False))
                                 pin_count += 1
                             except Exception as e:
                                 logger.error(f"Failed to pin message in chat {chat_id}: {e}")
