@@ -1,10 +1,9 @@
 from pymongo import MongoClient
-from pyrogram import Client, filters
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 
 import config
-from nexichat import nexichat, LOGGER
+from nexichat import LOGGER, nexichat
 from nexichat.modules.helpers import (
     ABOUT_BTN,
     ABOUT_READ,
@@ -24,6 +23,7 @@ from nexichat.modules.helpers import (
 DAXXdb = MongoClient(config.MONGO_URL)
 DAXX = DAXXdb["DAXXDb"]["DAXX"]
 status_db = DAXXdb["ChatBotStatusDb"]["StatusCollection"]
+
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
@@ -124,7 +124,11 @@ async def cb_handler(_, query: CallbackQuery):
                 return
         status_db.update_one(
             {"chat_id": query.message.chat.id},
-            {"$set": {"status": "enabled" if action == "enable_chatbot" else "disabled"}},
+            {
+                "$set": {
+                    "status": "enabled" if action == "enable_chatbot" else "disabled"
+                }
+            },
             upsert=True,
         )
         await query.answer(

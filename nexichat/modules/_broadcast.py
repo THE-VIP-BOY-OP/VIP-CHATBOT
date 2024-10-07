@@ -1,32 +1,14 @@
-from pyrogram import filters, Client
-from pyrogram.types import Message
-
-from nexichat import OWNER, nexichat
-from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users
-from config import OWNER_ID
-
-
 import asyncio
-from datetime import datetime, timedelta
 
 from pyrogram import filters
-from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
-from pyrogram.raw import types
-
-import config
-from config import OWNER_ID
 
 from nexichat import nexichat
 from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users 
+from nexichat.database.users import get_served_users
 
 AUTO_SLEEP = 5
 IS_BROADCASTING = False
-
-
-
 
 
 @nexichat.on_message(filters.command(["broadcast", "gcast"]))
@@ -37,7 +19,9 @@ async def braodcast_message(client, message):
         y = message.chat.id
     else:
         if len(message.command) < 2:
-            return await message.reply_text("**Please Provide Me A Text After Command Or Reply To Any Messgae For Broadcast**")
+            return await message.reply_text(
+                "**Please Provide Me A Text After Command Or Reply To Any Messgae For Broadcast**"
+            )
         query = message.text.split(None, 1)[1]
         if "-pin" in query:
             query = query.replace("-pin", "")
@@ -48,11 +32,13 @@ async def braodcast_message(client, message):
         if "-user" in query:
             query = query.replace("-user", "")
         if query == "":
-            return await message.reply_text("Please provide me a flag : -pin, -nobot, -pinloud, -user")
+            return await message.reply_text(
+                "Please provide me a flag : -pin, -nobot, -pinloud, -user"
+            )
 
     IS_BROADCASTING = True
     ok = await message.reply_text("**Started broadcasting...**")
-    
+
     if "-nobot" not in message.text:
         sent = 0
         pin = 0
@@ -91,12 +77,13 @@ async def braodcast_message(client, message):
                 continue
         try:
             await ok.delete()
-            await message.reply_text(f"**Successfully Broadcasted Message In {sent} Chats And Pinned In {pin} Chats.**")
-            
+            await message.reply_text(
+                f"**Successfully Broadcasted Message In {sent} Chats And Pinned In {pin} Chats.**"
+            )
+
         except:
             pass
 
-    
     if "-user" in message.text:
         susr = 0
         served_users = []
@@ -119,10 +106,11 @@ async def braodcast_message(client, message):
             except Exception:
                 pass
         try:
-            await message.reply_text(f"**Successfully Broadcasted Message To {susr} Users**")
-            
+            await message.reply_text(
+                f"**Successfully Broadcasted Message To {susr} Users**"
+            )
+
         except:
             pass
 
-    
     IS_BROADCASTING = False
