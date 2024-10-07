@@ -44,7 +44,15 @@ async def chatbot_response(client: Client, message: Message):
     if chat_status and chat_status.get("status") == "disabled":
         return
 
-    
+    if (
+        message.text.startswith("!")
+        or message.text.startswith("/")
+        or message.text.startswith("?")
+        or message.text.startswith("@")
+        or message.text.startswith("#")
+    ):
+        return
+        
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
         reply_data = await get_reply(message.text)
