@@ -1,3 +1,4 @@
+from Abg.chat_status import adminsOnly
 import random
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_client_
 from pymongo import MongoClient
@@ -18,7 +19,7 @@ CHATBOT_ON = [
     ],
 ]
 
-@app.on_message(filters.command("chatbot")
+@app.on_message(filters.command("chatbot"))
 async def chaton(client: Client, message: Message):
     await message.reply_text(
         f"ᴄʜᴀᴛ: {message.chat.title}\n**ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴘᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**",
@@ -26,6 +27,7 @@ async def chaton(client: Client, message: Message):
     )
 
 @app.on_callback_query(filters.regex("enable_chatbot|disable_chatbot"))
+@adminsOnly("can_delete_messages")
 async def callback_handler(client: Client, callback_query: CallbackQuery):
     action = callback_query.data
     status_db.update_one(
