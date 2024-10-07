@@ -23,7 +23,7 @@ from nexichat.modules.helpers import (
 
 DAXXdb = MongoClient(config.MONGO_URL)
 DAXX = DAXXdb["DAXXDb"]["DAXX"]
-
+status_db = DAXXdb["ChatBotStatusDb"]["StatusCollection"]
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
