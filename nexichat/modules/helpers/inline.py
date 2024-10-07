@@ -1,8 +1,7 @@
 from pyrogram.types import InlineKeyboardButton
 
 from config import SUPPORT_GRP, UPDATE_CHNL
-from nexichat import OWNER
-from nexichat import nexichat
+from nexichat import OWNER, nexichat
 
 DEV_OP = [
     [
@@ -19,7 +18,7 @@ DEV_OP = [
         InlineKeyboardButton(text="« ʜᴇʟᴘ »", callback_data="HELP"),
     ],
     [
-       # InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ❄️", callback_data="SOURCE"),
+        # InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ❄️", callback_data="SOURCE"),
         InlineKeyboardButton(text="☁️ ᴀʙᴏᴜᴛ ☁️", callback_data="ABOUT"),
     ],
 ]
@@ -53,7 +52,6 @@ HELP_BTN = [
         InlineKeyboardButton(text="🎄 ᴛᴏᴏʟs 🎄", callback_data="TOOLS_DATA"),
     ],
     [
-       
         InlineKeyboardButton(text="⦿ ᴄʟᴏsᴇ ⦿", callback_data="CLOSE"),
     ],
 ]
@@ -72,7 +70,6 @@ CHATBOT_ON = [
         InlineKeyboardButton(text="ᴅɪsᴀʙʟᴇ", callback_data="disable_chatbot"),
     ],
 ]
-
 
 
 MUSIC_BACK_BTN = [
@@ -122,7 +119,7 @@ ABOUT_BTN = [
     ],
     [
         InlineKeyboardButton(text="🍾 ᴏᴡɴᴇʀ 🍾", user_id=OWNER),
-     #   InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ❄️", callback_data="SOURCE"),
+        #   InlineKeyboardButton(text="❄️ sᴏᴜʀᴄᴇ ❄️", callback_data="SOURCE"),
     ],
     [
         InlineKeyboardButton(text="🐳 ᴜᴘᴅᴀᴛᴇs 🐳", url=f"https://t.me/{UPDATE_CHNL}"),

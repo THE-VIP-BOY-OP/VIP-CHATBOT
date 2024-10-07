@@ -1,5 +1,3 @@
-
-
 import asyncio
 import random
 
@@ -7,13 +5,11 @@ from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, Message
 
-
 from nexichat import nexichat
 from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
 from nexichat.modules.helpers import (
     CLOSE_BTN,
-    DEV_OP,
     HELP_BTN,
     HELP_BUTN,
     HELP_READ,
@@ -22,9 +18,7 @@ from nexichat.modules.helpers import (
     START,
 )
 
-
-#----------------IMG-------------#
-
+# ----------------IMG-------------#
 
 
 # Random Start Images
@@ -46,10 +40,10 @@ IMG = [
 ]
 
 
-#----------------IMG-------------#
+# ----------------IMG-------------#
 
 
-#---------------STICKERS---------------#
+# ---------------STICKERS---------------#
 
 # Random Stickers
 STICKER = [
@@ -58,10 +52,10 @@ STICKER = [
     "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
 ]
 
-#---------------STICKERS---------------#
+# ---------------STICKERS---------------#
 
 
-#---------------EMOJIOS---------------#
+# ---------------EMOJIOS---------------#
 
 EMOJIOS = [
     "💣",
@@ -77,7 +71,8 @@ EMOJIOS = [
 ]
 
 
-#---------------EMOJIOS---------------#
+# ---------------EMOJIOS---------------#
+
 
 @nexichat.on_cmd(["start", "aistart"])
 async def start(_, m: Message):
@@ -96,9 +91,7 @@ async def start(_, m: Message):
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
         await asyncio.sleep(2)
         await umm.delete()
-        await m.reply_text(
-            text=f"""**๏ ʜᴇʏ..**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?**"""
-        )
+        await m.reply_text(text=f"""**๏ ʜᴇʏ..**\n\n**🥀ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ ʙᴀʙʏ...?**""")
         await add_served_user(m.from_user.id)
     else:
         await m.reply_photo(

@@ -1,4 +1,3 @@
-from pyrogram import filters
 from pyrogram.enums import ParseMode
 
 from nexichat import nexichat

@@ -1,9 +1,6 @@
-
-
 import random
 from datetime import datetime
 
-from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, Message
 
@@ -13,9 +10,7 @@ from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
 from nexichat.modules.helpers import PNG_BTN
 
-
-#----------------IMG-------------#
-
+# ----------------IMG-------------#
 
 
 # Random Start Images
@@ -37,9 +32,9 @@ IMG = [
 ]
 
 
-#----------------IMG-------------#
+# ----------------IMG-------------#
 
-#---------------STICKERS---------------#
+# ---------------STICKERS---------------#
 
 # Random Stickers
 STICKER = [
@@ -48,8 +43,7 @@ STICKER = [
     "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
 ]
 
-#---------------STICKERS---------------#
-
+# ---------------STICKERS---------------#
 
 
 @nexichat.on_cmd("ping")

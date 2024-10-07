@@ -1,13 +1,10 @@
-from pyrogram.enums import ChatMemberStatus as CMS
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-import random
-from motor.motor_asyncio import AsyncIOMotorClient as _mongo_client_
 from pymongo import MongoClient
 from pyrogram import Client, filters
-from config import OWNER_USERNAME, SUPPORT_GRP
+from pyrogram.enums import ChatMemberStatus as CMS
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
+
 import config
 from nexichat import nexichat
-
 from nexichat.modules.helpers import (
     ABOUT_BTN,
     ABOUT_READ,
@@ -118,22 +115,27 @@ async def cb_handler(_, query: CallbackQuery):
             if is_DAXX:
                 await query.edit_message_text("**ᴄʜᴀᴛ-ʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ.**")
 
+
 @nexichat.on_callback_query(filters.regex(r"enable_chatbot|disable_chatbot"))
 async def callback_handler(client: Client, callback_query: CallbackQuery):
     action = callback_query.data
 
     if callback_query.message.chat.type in ["group", "supergroup"]:
         if not await adminsOnly("can_delete_messages")(client, callback_query.message):
-            await callback_query.answer("Only admins can enable or disable the chatbot!", show_alert=True)
+            await callback_query.answer(
+                "Only admins can enable or disable the chatbot!", show_alert=True
+            )
             return
 
     status_db.update_one(
         {"chat_id": callback_query.message.chat.id},
         {"$set": {"status": "enabled" if action == "enable_chatbot" else "disabled"}},
-        upsert=True
+        upsert=True,
     )
 
-    await callback_query.answer(f"Chatbot has been {'enabled' if action == 'enable_chatbot' else 'disabled'}!")
+    await callback_query.answer(
+        f"Chatbot has been {'enabled' if action == 'enable_chatbot' else 'disabled'}!"
+    )
     await callback_query.message.edit_text(
         f"ᴄʜᴀᴛ: {callback_query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
     )
