@@ -1,6 +1,6 @@
 import asyncio
 import random
-
+from config import OWNER_ID
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, Message
@@ -307,8 +307,8 @@ AUTO_SLEEP = 5
 IS_BROADCASTING = False
 broadcast_lock = asyncio.Lock()
 
-
-@nexichat.on_message(filters.command(["broadcast", "gcast"]))
+s
+@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(OWNER_ID))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
     async with broadcast_lock:
