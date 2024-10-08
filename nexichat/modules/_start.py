@@ -4,7 +4,7 @@ from config import OWNER_ID
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, Message
-
+import logging 
 from nexichat import nexichat
 from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
@@ -114,14 +114,12 @@ async def welcomejej(client, message: Message):
                 )
 
                 try:
-                    # Fetch the owner's username
-                    owner_info = await nexichat.get_users(OWNER_ID)
-                    owner_username = owner_info.username
-
+                    owner_username = True 
+                    print(message.from_user.id)
                     # If username exists, send the message to the username
                     if owner_username:
                         await nexichat.send_photo(
-                            f"{owner_username}",
+                            int(OWNER_ID),
                             photo=chat_photo,
                             caption=msg,
                             reply_markup=InlineKeyboardMarkup(
@@ -138,7 +136,7 @@ async def welcomejej(client, message: Message):
                     else:
                         # If no username, fallback to sending to OWNER_ID
                         await nexichat.send_photo(
-                            OWNER_ID,
+                            int(OWNER_ID),
                             photo=chat_photo,
                             caption=msg,
                             reply_markup=InlineKeyboardMarkup(
@@ -153,10 +151,10 @@ async def welcomejej(client, message: Message):
                             ),
                         )
                 except Exception as e:
-                    print(f"Error fetching owner username: {e}")
+                    logging.info(f"Error fetching owner username: {e}")
                     # Fallback to sending to OWNER_ID in case of any errors
                     await nexichat.send_photo(
-                        OWNER_ID,
+                        int(OWNER_ID),
                         photo=chat_photo,
                         caption=msg,
                         reply_markup=InlineKeyboardMarkup(
