@@ -32,4 +32,4 @@ jobs:
                   repository: .
                   commit_user_name: TG-LEGEND
                   commit_user_email: 141105268+TG-LEGEND@users.noreply.github.com
-                  commit_author: TG-LEGEND <141105268+TG-LEGEND@users.noreply.github.com
+                  commit_author: TG-LEGEND <141105268+TG-LEGEND@users.noreply.github.com>
