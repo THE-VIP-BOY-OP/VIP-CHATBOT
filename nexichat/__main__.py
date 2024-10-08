@@ -22,7 +22,7 @@ async def anony_boot():
     try:
         await nexichat.send_message(int(OWNER_ID), f"{nexichat.mention} has started")
     except Exception as ex:
-        LOGGER.info(f"@{nexichat.mention} Started please start the bot from owner id.")
+        LOGGER.info(f"@{nexichat.first_name} Started, please start the bot from owner id.")
     await idle()
 
 
