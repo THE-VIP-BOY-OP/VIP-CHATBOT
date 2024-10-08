@@ -81,11 +81,10 @@ from config import OWNER_ID
 from nexichat import nexichat
 
 
-@nexichat.on_message(filters.new_chat_members, group=-10)
+@nexichat.on_message(filters.new_chat_members)
 async def join_watcher(_, message):
     await add_served_chat(message.chat.id)
     try:
-        
         chat = message.chat
         for member in message.new_chat_members:
             if member.id == nexichat.id:
@@ -94,9 +93,9 @@ async def join_watcher(_, message):
                     groups_photo = await app.download_media(
                         chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
                     )
-                    chat_photo = groups_photo if groups_photo else "assets/nodp.png"
+                    chat_photo = groups_photo if groups_photo else "https://envs.sh/IL_.jpg"
                 except AttributeError:
-                    chat_photo = "assets/nodp.png"
+                    chat_photo = "https://envs.sh/IL_.jpg"
 
                 count = await app.get_chat_members_count(chat.id)
                 username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
@@ -110,23 +109,63 @@ async def join_watcher(_, message):
                     f"**🤔𝐀ᴅᴅᴇᴅ 𝐁ʏ:** {message.from_user.mention}"
                 )
 
-                await nexichat.send_photo(
-                    OWNER_ID,
-                    photo=chat_photo,
-                    caption=msg,
-                    reply_markup=InlineKeyboardMarkup(
-                        [
+                try:
+                    # Fetch the owner's username
+                    owner_info = await nexichat.get_users(OWNER_ID)
+                    owner_username = owner_info.username
+
+                    # If username exists, send the message to the username
+                    if owner_username:
+                        await nexichat.send_photo(
+                            f"{owner_username}",
+                            photo=chat_photo,
+                            caption=msg,
+                            reply_markup=InlineKeyboardMarkup(
+                                [
+                                    [
+                                        InlineKeyboardButton(
+                                            f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
+                                            url=f"tg://openmessage?user_id={message.from_user.id}",
+                                        )
+                                    ]
+                                ]
+                            ),
+                        )
+                    else:
+                        # If no username, fallback to sending to OWNER_ID
+                        await nexichat.send_photo(
+                            OWNER_ID,
+                            photo=chat_photo,
+                            caption=msg,
+                            reply_markup=InlineKeyboardMarkup(
+                                [
+                                    [
+                                        InlineKeyboardButton(
+                                            f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
+                                            url=f"tg://openmessage?user_id={message.from_user.id}",
+                                        )
+                                    ]
+                                ]
+                            ),
+                        )
+                except Exception as e:
+                    print(f"Error fetching owner username: {e}")
+                    # Fallback to sending to OWNER_ID in case of any errors
+                    await nexichat.send_photo(
+                        OWNER_ID,
+                        photo=chat_photo,
+                        caption=msg,
+                        reply_markup=InlineKeyboardMarkup(
                             [
-                                InlineKeyboardButton(
-                                    f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
-                                    url=f"tg://openmessage?user_id={message.from_user.id}",
-                                )
+                                [
+                                    InlineKeyboardButton(
+                                        f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
+                                        url=f"tg://openmessage?user_id={message.from_user.id}",
+                                    )
+                                ]
                             ]
-                        ]
-                    ),
-                )
-                
-                
+                        ),
+                    )
 
     except Exception as e:
         print(f"Error: {e}")
