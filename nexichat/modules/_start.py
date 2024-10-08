@@ -1,10 +1,12 @@
 import asyncio
+import logging
 import random
-from config import OWNER_ID
+
 from pyrogram import filters
 from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardMarkup, Message
-import logging 
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+
+from config import OWNER_ID
 from nexichat import nexichat
 from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
@@ -18,12 +20,6 @@ from nexichat.modules.helpers import (
     START,
 )
 
-import random
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import ChatAdminRequired
-from config import OWNER_ID
-from nexichat import nexichat
 # ----------------IMG-------------#
 
 
@@ -80,11 +76,9 @@ EMOJIOS = [
 # ---------------EMOJIOS---------------#
 
 
-
-
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
-    print('hejjeje')
+    print("hejjeje")
     for member in message.new_chat_members:
         await message.reply_photo(photo=random.choice(IMG), caption=START)
     await add_served_chat(message.chat.id)
@@ -97,7 +91,9 @@ async def welcomejej(client, message: Message):
                     groups_photo = await nexichat.download_media(
                         chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
                     )
-                    chat_photo = groups_photo if groups_photo else "https://envs.sh/IL_.jpg"
+                    chat_photo = (
+                        groups_photo if groups_photo else "https://envs.sh/IL_.jpg"
+                    )
                 except AttributeError:
                     chat_photo = "https://envs.sh/IL_.jpg"
 
@@ -114,7 +110,7 @@ async def welcomejej(client, message: Message):
                 )
 
                 try:
-                    owner_username = True 
+                    owner_username = True
                     print(message.from_user.id)
                     # If username exists, send the message to the username
                     if owner_username:
@@ -171,7 +167,8 @@ async def welcomejej(client, message: Message):
 
     except Exception as e:
         print(f"Error: {e}")
-        
+
+
 @nexichat.on_cmd(["start", "aistart"])
 async def start(_, m: Message):
     if m.chat.type == ChatType.PRIVATE:
@@ -369,18 +366,6 @@ async def getid(client, message):
     )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 import asyncio
 import logging
 
@@ -400,7 +385,9 @@ IS_BROADCASTING = False
 broadcast_lock = asyncio.Lock()
 
 
-@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID)))
+@nexichat.on_message(
+    filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID))
+)
 async def broadcast_message(client, message):
     global IS_BROADCASTING
     async with broadcast_lock:
@@ -538,8 +525,6 @@ async def broadcast_message(client, message):
         finally:
             IS_BROADCASTING = False
 
-
-        
 
 """
 @nexichat.on_message(filters.command(["gcast", "broadcast"]) & filters.user(OWNER_ID))
