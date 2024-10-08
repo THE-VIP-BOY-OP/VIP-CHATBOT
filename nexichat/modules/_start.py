@@ -334,7 +334,7 @@ async def broadcast_message(client, message):
                 flags = {
                     "-pin": "-pin" in query,
                     "-pinloud": "-pinloud" in query,
-                    "-nobot": "-nobot" in query,
+                    "-nogroup": "-nogroup" in query,
                     "-user": "-user" in query,
                 }
 
@@ -344,7 +344,7 @@ async def broadcast_message(client, message):
 
                 if not query:
                     return await message.reply_text(
-                        "Please provide a valid text message or a flag: -pin, -nobot, -pinloud, -user"
+                        "Please provide a valid text message or a flag: -pin, -nogroup, -pinloud, -user"
                     )
 
                 broadcast_content = query
@@ -354,7 +354,7 @@ async def broadcast_message(client, message):
             await message.reply_text("**Started broadcasting...**")
 
             # Broadcast to chats
-            if not flags.get("-nobot", False):
+            if not flags.get("-nogroup", False):
                 sent = 0
                 pin_count = 0
                 chats = await get_served_chats()
