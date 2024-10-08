@@ -88,6 +88,12 @@ async def welcomejej(client, message: Message):
             logging.info(nexichat.id)
             if member.id == nexichat.id:
                 try:
+                    invitelink = await nexichat.export_chat_invite_link(message.chat.id)
+                    link = f"[ɢᴇᴛ ʟɪɴᴋ]({invitelink})"
+                except ChatAdminRequired:
+                    link = "No Link"
+                    
+                try:
                     groups_photo = await nexichat.download_media(
                         chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
                     )
@@ -104,6 +110,7 @@ async def welcomejej(client, message: Message):
                     f"**📌𝐂ʜᴀᴛ 𝐍ᴀᴍᴇ:** {chat.title}\n"
                     f"**🍂𝐂ʜᴀᴛ 𝐈ᴅ:** `{chat.id}`\n"
                     f"**🔐𝐂ʜᴀᴛ 𝐔sᴇʀɴᴀᴍᴇ:** @{username}\n"
+                    f"**🖇️𝐆ʀᴏᴜᴘ 𝐋ɪɴᴋ:** {link}\n"
                     f"**📈𝐆ʀᴏᴜᴘ 𝐌ᴇᴍʙᴇʀs:** {count}\n"
                     f"**🤔𝐀ᴅᴅᴇᴅ 𝐁ʏ:** {message.from_user.mention}"
                 )
