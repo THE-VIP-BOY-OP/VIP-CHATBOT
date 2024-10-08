@@ -90,14 +90,14 @@ async def join_watcher(_, message):
             if member.id == nexichat.id:
 
                 try:
-                    groups_photo = await app.download_media(
+                    groups_photo = await nexichat.download_media(
                         chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
                     )
                     chat_photo = groups_photo if groups_photo else "https://envs.sh/IL_.jpg"
                 except AttributeError:
                     chat_photo = "https://envs.sh/IL_.jpg"
 
-                count = await app.get_chat_members_count(chat.id)
+                count = await nexichat.get_chat_members_count(chat.id)
                 username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
                 msg = (
                     f"**📝𝐌ᴜsɪᴄ 𝐁ᴏᴛ 𝐀ᴅᴅᴇᴅ 𝐈ɴ 𝐀 #𝐍ᴇᴡ_𝐆ʀᴏᴜᴘ**\n\n"
