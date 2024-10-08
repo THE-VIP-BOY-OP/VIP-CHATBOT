@@ -308,7 +308,7 @@ IS_BROADCASTING = False
 broadcast_lock = asyncio.Lock()
 
 
-@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(OWNER_ID))
+@nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID)))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
     async with broadcast_lock:
