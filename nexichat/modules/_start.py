@@ -402,7 +402,10 @@ async def broadcast_message(client, message):
             )
 
         IS_BROADCASTING = True
+    
         try:
+            query = message.text.split(None, 1)[1].strip()
+
             # Determine broadcast content
             if message.reply_to_message:
                 broadcast_content = message.reply_to_message
@@ -418,8 +421,7 @@ async def broadcast_message(client, message):
                     return await message.reply_text(
                         "**Please provide text after the command or reply to a message for broadcasting.**"
                     )
-                query = message.text.split(None, 1)[1].strip()
-
+                
                 flags = {
                     "-pin": "-pin" in query,
                     "-pinloud": "-pinloud" in query,
