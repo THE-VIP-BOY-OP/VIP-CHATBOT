@@ -504,6 +504,9 @@ async def broadcast_message(client, message):
             IS_BROADCASTING = False
 """
 
+        
+
+
 @nexichat.on_message(filters.command(["gcast", "broadcast"]) & filters.user(OWNER_ID))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
@@ -611,46 +614,4 @@ async def broadcast_message(client, message):
         try:
             await message.reply_text(f"**Broadcasted to {susr} users.**")
         except:
-            pass            except FloodWait as e:
-                flood_time = int(e.value)
-                if flood_time > 200:
-                    continue
-                await asyncio.sleep(flood_time)
-            except Exception:
-                continue
-        try:
-            await ok.delete()
-            await message.reply_text(
-                    f"**Broadcasted to {sent} chats and pinned in {pin} chats.**"
-                )
-        except:
             pass
-
-      if "-user" in message.text:
-        susr = 0
-        served_users = []
-        susers = await get_served_users()
-        for user in susers:
-            served_users.append(int(user["user_id"]))
-        for i in served_users:
-            try:
-                m = (
-                    await nexichat.forward_messages(i, y, x)
-                    if message.reply_to_message
-                    else await nexichat.send_message(i, text=query)
-                )
-                susr += 1
-            except FloodWait as e:
-                flood_time = int(e.value)
-                if flood_time > 200:
-                    continue
-                await asyncio.sleep(flood_time)
-            except Exception:
-                pass
-        try:
-            await message.reply_text(f"**Broadcasted to {susr} users.**")
-            
-        except:
-            pass
-
-
