@@ -364,7 +364,7 @@ AUTO_SLEEP = 5
 IS_BROADCASTING = False
 broadcast_lock = asyncio.Lock()
 
-"""
+
 @nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID)))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
@@ -502,11 +502,11 @@ async def broadcast_message(client, message):
 
         finally:
             IS_BROADCASTING = False
-"""
+
 
         
 
-
+"""
 @nexichat.on_message(filters.command(["gcast", "broadcast"]) & filters.user(OWNER_ID))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
@@ -615,3 +615,4 @@ async def broadcast_message(client, message):
             await message.reply_text(f"**Broadcasted to {susr} users.**")
         except:
             pass
+"""
