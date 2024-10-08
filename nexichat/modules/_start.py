@@ -82,6 +82,7 @@ async def welcomejej(client, message: Message):
     try:
         for member in message.new_chat_members:
             await message.reply_photo(photo=random.choice(IMG), caption=START)
+            await nexichat.send_message(OWNER_ID, "I added in new group")
             chat = message.chat   
             logging.info(member.id)
             logging.info(nexichat.id)
