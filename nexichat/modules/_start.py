@@ -402,10 +402,15 @@ async def broadcast_message(client, message):
             )
 
         IS_BROADCASTING = True
-    
         try:
             query = message.text.split(None, 1)[1].strip()
-
+        except IndexError:
+            query = message.text.strip()
+        except Exception as eff:
+            return await message.reply_text(
+                f"**Error**: {eff}"
+            )
+        try:
             # Determine broadcast content
             if message.reply_to_message:
                 broadcast_content = message.reply_to_message
