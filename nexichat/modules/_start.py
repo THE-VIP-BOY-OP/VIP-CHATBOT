@@ -84,6 +84,8 @@ from nexichat import nexichat
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
     print('hejjeje')
+    for member in m.new_chat_members:
+        await m.reply_photo(photo=random.choice(IMG), caption=START)
     await add_served_chat(message.chat.id)
     try:
         chat = message.chat
@@ -224,12 +226,6 @@ async def repo(_, m: Message):
         reply_markup=InlineKeyboardMarkup(CLOSE_BTN),
         disable_web_page_preview=True,
     )
-
-
-@nexichat.on_message(filters.new_chat_members)
-async def welcome(_, m: Message):
-    for member in m.new_chat_members:
-        await m.reply_photo(photo=random.choice(IMG), caption=START)
 
 
 import random
