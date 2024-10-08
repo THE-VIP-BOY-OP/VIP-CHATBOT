@@ -78,15 +78,14 @@ EMOJIOS = [
 
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
-    logging.info("hejjeje")
-    for member in message.new_chat_members:
-        await message.reply_photo(photo=random.choice(IMG), caption=START)
     await add_served_chat(message.chat.id)
     try:
-        chat = message.chat
         for member in message.new_chat_members:
+            await message.reply_photo(photo=random.choice(IMG), caption=START)
+            chat = message.chat   
+            logging.info(member.id)
+            logging.info(nexichat.id)
             if member.id == nexichat.id:
-
                 try:
                     groups_photo = await nexichat.download_media(
                         chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
