@@ -505,7 +505,7 @@ async def broadcast_message(client, message):
 """
 
 @nexichat.on_message(filters.command(["gcast", "broadcast"]) & filters.user(OWNER_ID))
-async def braodcast_message(client, message, _):
+async def broadcast_message(client, message):
     global IS_BROADCASTING
     if message.reply_to_message:
         x = message.reply_to_message.id
@@ -513,25 +513,29 @@ async def braodcast_message(client, message, _):
     else:
         if len(message.command) < 2:
             return await message.reply_text(
-                        "**Please provide text after the command or reply to a message for broadcasting.**"
-                    )
+                "**Please provide text after the command or reply to a message for broadcasting.**"
+            )
         query = message.text.split(None, 1)[1]
+        
+        # Process flags
         if "-pin" in query:
             query = query.replace("-pin", "")
         if "-nogroup" in query:
             query = query.replace("-nogroup", "")
         if "-pinloud" in query:
             query = query.replace("-pinloud", "")
-        
         if "-user" in query:
             query = query.replace("-user", "")
-        if query == "":
+        
+        if query.strip() == "":
             return await message.reply_text(
-                        "Please provide a valid text message or a flag: -pin, -nogroup, -pinloud, -user"
-                    )
+                "**Please provide a valid text message or a flag: -pin, -nogroup, -pinloud, -user**"
+            )
+
     IS_BROADCASTING = True
     ok = await message.reply_text("**Started broadcasting...**")
 
+    # Broadcasting to chats
     if "-nogroup" not in message.text:
         sent = 0
         pin = 0
@@ -539,6 +543,7 @@ async def braodcast_message(client, message, _):
         schats = await get_served_chats()
         for chat in schats:
             chats.append(int(chat["chat_id"]))
+        
         for i in chats:
             if i == message.chat.id:
                 continue
@@ -549,6 +554,8 @@ async def braodcast_message(client, message, _):
                     else await nexichat.send_message(i, text=query)
                 )
                 sent += 1
+                
+                # Pin message if the flag is set
                 if "-pin" in message.text:
                     try:
                         await m.pin(disable_notification=True)
@@ -562,6 +569,49 @@ async def braodcast_message(client, message, _):
                     except Exception:
                         pass
             except FloodWait as e:
+                flood_time = int(e.value)
+                if flood_time > 200:
+                    continue
+                await asyncio.sleep(flood_time)
+            except Exception:
+                continue
+
+        try:
+            await ok.delete()
+            await message.reply_text(
+                f"**Broadcasted to {sent} chats and pinned in {pin} chats.**"
+            )
+        except:
+            pass
+
+    # Broadcasting to users
+    if "-user" in message.text:
+        susr = 0
+        served_users = []
+        susers = await get_served_users()
+        for user in susers:
+            served_users.append(int(user["user_id"]))
+        
+        for i in served_users:
+            try:
+                m = (
+                    await nexichat.forward_messages(i, y, x)
+                    if message.reply_to_message
+                    else await nexichat.send_message(i, text=query)
+                )
+                susr += 1
+            except FloodWait as e:
+                flood_time = int(e.value)
+                if flood_time > 200:
+                    continue
+                await asyncio.sleep(flood_time)
+            except Exception:
+                pass
+        
+        try:
+            await message.reply_text(f"**Broadcasted to {susr} users.**")
+        except:
+            pass            except FloodWait as e:
                 flood_time = int(e.value)
                 if flood_time > 200:
                     continue
