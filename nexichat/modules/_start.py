@@ -434,7 +434,7 @@ async def broadcast_message(client, message):
                 broadcast_content = query
                 broadcast_type = "text"
 
-            # Start broadcasting
+            
             await message.reply_text("**Started broadcasting...**")
 
             # Broadcast to chats
@@ -450,7 +450,7 @@ async def broadcast_message(client, message):
                     try:
                         if broadcast_type == "reply":
                             m = await nexichat.forward_messages(
-                                chat_id, message.chat.id, broadcast_content.id
+                                chat_id, broadcast_content.id
                             )
                         else:
                             m = await nexichat.send_message(
@@ -499,7 +499,7 @@ async def broadcast_message(client, message):
                     try:
                         if broadcast_type == "reply":
                             m = await nexichat.forward_messages(
-                                user_id, message.chat.id, broadcast_content.id
+                                user_id, broadcast_content.id
                             )
                         else:
                             m = await nexichat.send_message(
