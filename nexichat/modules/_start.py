@@ -86,7 +86,7 @@ EMOJIOS = [
 async def welcomejej(client, message: Message):
     print('hejjeje')
     for member in message.new_chat_members:
-        await m.reply_photo(photo=random.choice(IMG), caption=START)
+        await message.reply_photo(photo=random.choice(IMG), caption=START)
     await add_served_chat(message.chat.id)
     try:
         chat = message.chat
