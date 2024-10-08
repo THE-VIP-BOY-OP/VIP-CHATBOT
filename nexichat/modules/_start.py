@@ -81,7 +81,7 @@ from config import OWNER_ID
 from nexichat import nexichat
 
 
-@app.on_message(filters.new_chat_members, group=3)
+@nexichat.on_message(filters.new_chat_members, group=3)
 async def welcome(client, message: Message):
     await add_served_chat(message.chat.id)
     try:
