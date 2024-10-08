@@ -407,6 +407,12 @@ async def broadcast_message(client, message):
             if message.reply_to_message:
                 broadcast_content = message.reply_to_message
                 broadcast_type = "reply"
+                flags = {
+                    "-pin": "-pin" in query,
+                    "-pinloud": "-pinloud" in query,
+                    "-nogroup": "-nogroup" in query,
+                    "-user": "-user" in query,
+                }
             else:
                 if len(message.command) < 2:
                     return await message.reply_text(
@@ -414,7 +420,6 @@ async def broadcast_message(client, message):
                     )
                 query = message.text.split(None, 1)[1].strip()
 
-                # Extract flags
                 flags = {
                     "-pin": "-pin" in query,
                     "-pinloud": "-pinloud" in query,
@@ -431,8 +436,10 @@ async def broadcast_message(client, message):
                         "Please provide a valid text message or a flag: -pin, -nogroup, -pinloud, -user"
                     )
 
+                
                 broadcast_content = query
                 broadcast_type = "text"
+            
 
             await message.reply_text("**Started broadcasting...**")
 
