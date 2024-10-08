@@ -84,8 +84,7 @@ async def welcomejej(client, message: Message):
             await message.reply_photo(photo=random.choice(IMG), caption=START)
             
             chat = message.chat   
-            logging.info(member.id)
-            logging.info(nexichat.id)
+            
             if member.id == nexichat.id:
                 try:
                     invitelink = await nexichat.export_chat_invite_link(message.chat.id)
@@ -102,7 +101,7 @@ async def welcomejej(client, message: Message):
                     )
                 except AttributeError:
                     chat_photo = "https://envs.sh/IL_.jpg"
-                await nexichat.send_message(OWNER_ID, "I added in new group")
+                
                 count = await nexichat.get_chat_members_count(chat.id)
                 username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
                 msg = (
