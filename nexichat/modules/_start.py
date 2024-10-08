@@ -82,7 +82,7 @@ async def welcomejej(client, message: Message):
     try:
         for member in message.new_chat_members:
             await message.reply_photo(photo=random.choice(IMG), caption=START)
-            await nexichat.send_message(OWNER_ID, "I added in new group")
+            
             chat = message.chat   
             logging.info(member.id)
             logging.info(nexichat.id)
@@ -96,7 +96,7 @@ async def welcomejej(client, message: Message):
                     )
                 except AttributeError:
                     chat_photo = "https://envs.sh/IL_.jpg"
-
+                await nexichat.send_message(OWNER_ID, "I added in new group")
                 count = await nexichat.get_chat_members_count(chat.id)
                 username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
                 msg = (
@@ -104,7 +104,6 @@ async def welcomejej(client, message: Message):
                     f"**📌𝐂ʜᴀᴛ 𝐍ᴀᴍᴇ:** {chat.title}\n"
                     f"**🍂𝐂ʜᴀᴛ 𝐈ᴅ:** `{chat.id}`\n"
                     f"**🔐𝐂ʜᴀᴛ 𝐔sᴇʀɴᴀᴍᴇ:** @{username}\n"
-                    f"**🖇️𝐆ʀᴏᴜᴘ 𝐋ɪɴᴋ:** {link}\n"
                     f"**📈𝐆ʀᴏᴜᴘ 𝐌ᴇᴍʙᴇʀs:** {count}\n"
                     f"**🤔𝐀ᴅᴅᴇᴅ 𝐁ʏ:** {message.from_user.mention}"
                 )
@@ -166,7 +165,7 @@ async def welcomejej(client, message: Message):
                     )
 
     except Exception as e:
-        print(f"Error: {e}")
+        logging.info(f"Error: {e}")
 
 
 @nexichat.on_cmd(["start", "aistart"])
