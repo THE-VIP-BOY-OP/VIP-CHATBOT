@@ -364,7 +364,7 @@ AUTO_SLEEP = 5
 IS_BROADCASTING = False
 broadcast_lock = asyncio.Lock()
 
-
+"""
 @nexichat.on_message(filters.command(["broadcast", "gcast"]) & filters.user(int(OWNER_ID)))
 async def broadcast_message(client, message):
     global IS_BROADCASTING
@@ -502,3 +502,105 @@ async def broadcast_message(client, message):
 
         finally:
             IS_BROADCASTING = False
+"""
+
+@nexichat.on_message(filters.command(["gcast", "broadcast"]) & filters.user(OWNER_ID))
+async def braodcast_message(client, message, _):
+    global IS_BROADCASTING
+    if message.reply_to_message:
+        x = message.reply_to_message.id
+        y = message.chat.id
+    else:
+        if len(message.command) < 2:
+            return await message.reply_text(
+                        "**Please provide text after the command or reply to a message for broadcasting.**"
+                    )
+        query = message.text.split(None, 1)[1]
+        if "-pin" in query:
+            query = query.replace("-pin", "")
+        if "-nogroup" in query:
+            query = query.replace("-nogroup", "")
+        if "-pinloud" in query:
+            query = query.replace("-pinloud", "")
+        
+        if "-user" in query:
+            query = query.replace("-user", "")
+        if query == "":
+            return await message.reply_text(
+                        "Please provide a valid text message or a flag: -pin, -nogroup, -pinloud, -user"
+                    )
+    IS_BROADCASTING = True
+    ok = await message.reply_text("**Started broadcasting...**")
+
+    if "-nogroup" not in message.text:
+        sent = 0
+        pin = 0
+        chats = []
+        schats = await get_served_chats()
+        for chat in schats:
+            chats.append(int(chat["chat_id"]))
+        for i in chats:
+            if i == message.chat.id:
+                continue
+            try:
+                m = (
+                    await nexichat.forward_messages(i, y, x)
+                    if message.reply_to_message
+                    else await nexichat.send_message(i, text=query)
+                )
+                sent += 1
+                if "-pin" in message.text:
+                    try:
+                        await m.pin(disable_notification=True)
+                        pin += 1
+                    except Exception:
+                        pass
+                elif "-pinloud" in message.text:
+                    try:
+                        await m.pin(disable_notification=False)
+                        pin += 1
+                    except Exception:
+                        pass
+            except FloodWait as e:
+                flood_time = int(e.value)
+                if flood_time > 200:
+                    continue
+                await asyncio.sleep(flood_time)
+            except Exception:
+                continue
+        try:
+            await ok.delete()
+            await message.reply_text(
+                    f"**Broadcasted to {sent} chats and pinned in {pin} chats.**"
+                )
+        except:
+            pass
+
+      if "-user" in message.text:
+        susr = 0
+        served_users = []
+        susers = await get_served_users()
+        for user in susers:
+            served_users.append(int(user["user_id"]))
+        for i in served_users:
+            try:
+                m = (
+                    await nexichat.forward_messages(i, y, x)
+                    if message.reply_to_message
+                    else await nexichat.send_message(i, text=query)
+                )
+                susr += 1
+            except FloodWait as e:
+                flood_time = int(e.value)
+                if flood_time > 200:
+                    continue
+                await asyncio.sleep(flood_time)
+            except Exception:
+                pass
+        try:
+            await message.reply_text(f"**Broadcasted to {susr} users.**")
+            
+        except:
+            pass
+
+
