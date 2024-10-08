@@ -18,6 +18,12 @@ from nexichat.modules.helpers import (
     START,
 )
 
+import random
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import ChatAdminRequired
+from config import OWNER_ID
+from nexichat import nexichat
 # ----------------IMG-------------#
 
 
@@ -73,18 +79,13 @@ EMOJIOS = [
 
 # ---------------EMOJIOS---------------#
 
-import random
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import ChatAdminRequired
-from config import OWNER_ID
-from nexichat import nexichat
+
 
 
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
     print('hejjeje')
-    for member in m.new_chat_members:
+    for member in message.new_chat_members:
         await m.reply_photo(photo=random.choice(IMG), caption=START)
     await add_served_chat(message.chat.id)
     try:
