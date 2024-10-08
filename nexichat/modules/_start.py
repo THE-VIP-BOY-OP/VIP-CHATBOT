@@ -111,7 +111,7 @@ async def welcomejej(client, message: Message):
 
                 try:
                     owner_username = True
-                    print(message.from_user.id)
+                    loggin.info(message.from_user.id)
                     # If username exists, send the message to the username
                     if owner_username:
                         await nexichat.send_photo(
