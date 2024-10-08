@@ -73,7 +73,64 @@ EMOJIOS = [
 
 # ---------------EMOJIOS---------------#
 
+import random
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import ChatAdminRequired
+from config import OWNER_ID
+from nexichat import nexichat
 
+
+@nexichat.on_message(filters.new_chat_members, group=-10)
+async def join_watcher(_, message):
+    await add_served_chat(message.chat.id)
+    try:
+        
+        chat = message.chat
+        for member in message.new_chat_members:
+            if member.id == nexichat.id:
+
+                try:
+                    groups_photo = await app.download_media(
+                        chat.photo.big_file_id, file_name=f"chatpp{chat.id}.png"
+                    )
+                    chat_photo = groups_photo if groups_photo else "assets/nodp.png"
+                except AttributeError:
+                    chat_photo = "assets/nodp.png"
+
+                count = await app.get_chat_members_count(chat.id)
+                username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
+                msg = (
+                    f"**📝𝐌ᴜsɪᴄ 𝐁ᴏᴛ 𝐀ᴅᴅᴇᴅ 𝐈ɴ 𝐀 #𝐍ᴇᴡ_𝐆ʀᴏᴜᴘ**\n\n"
+                    f"**📌𝐂ʜᴀᴛ 𝐍ᴀᴍᴇ:** {chat.title}\n"
+                    f"**🍂𝐂ʜᴀᴛ 𝐈ᴅ:** `{chat.id}`\n"
+                    f"**🔐𝐂ʜᴀᴛ 𝐔sᴇʀɴᴀᴍᴇ:** @{username}\n"
+                    f"**🖇️𝐆ʀᴏᴜᴘ 𝐋ɪɴᴋ:** {link}\n"
+                    f"**📈𝐆ʀᴏᴜᴘ 𝐌ᴇᴍʙᴇʀs:** {count}\n"
+                    f"**🤔𝐀ᴅᴅᴇᴅ 𝐁ʏ:** {message.from_user.mention}"
+                )
+
+                await nexichat.send_photo(
+                    OWNER_ID,
+                    photo=chat_photo,
+                    caption=msg,
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
+                                    url=f"tg://openmessage?user_id={message.from_user.id}",
+                                )
+                            ]
+                        ]
+                    ),
+                )
+                
+                
+
+    except Exception as e:
+        print(f"Error: {e}")
+        
 @nexichat.on_cmd(["start", "aistart"])
 async def start(_, m: Message):
     if m.chat.type == ChatType.PRIVATE:
