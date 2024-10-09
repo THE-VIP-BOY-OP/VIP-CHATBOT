@@ -37,9 +37,9 @@ lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
 languages = {
     # Top 20 languages used on Telegram
-    'english': 'en', 'hindi': 'hi', 'russian': 'ru', 'spanish': 'es', 'portuguese': 'pt', 
+    'english': 'en', 'hindi': 'hi', 'Myanmar': 'my', 'russian': 'ru', 'spanish': 'es', 
     'arabic': 'ar', 'turkish': 'tr', 'german': 'de', 'french': 'fr', 
-    'italian': 'it', 'persian': 'fa', 'indonesian': 'id', 
+    'italian': 'it', 'persian': 'fa', 'indonesian': 'id', 'portuguese': 'pt',
     'ukrainian': 'uk', 'filipino': 'tl', 'korean': 'ko', 'japanese': 'ja', 
     'polish': 'pl', 'vietnamese': 'vi', 'thai': 'th', 'dutch': 'nl',
 
