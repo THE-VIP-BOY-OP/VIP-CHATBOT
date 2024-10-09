@@ -77,8 +77,15 @@ async def language_selection_callback(client: Client, callback_query):
 
 def get_chat_language(chat_id):
     chat_lang = lang_db.find_one({"chat_id": chat_id})
-    return chat_lang["language"] if chat_lang else "en"  # Default to English if not set
+    return chat_lang["language"] if chat_lang else "en" 
 
+@nexichat.on_message(filters.command("chatbot"))
+async def chaton(client: Client, message: Message):
+    await message.reply_text(
+        f"ᴄʜᴀᴛ: {message.chat.title}\n**ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴘᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**",
+        reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
+    )
+    
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_status = status_db.find_one({"chat_id": message.chat.id})
