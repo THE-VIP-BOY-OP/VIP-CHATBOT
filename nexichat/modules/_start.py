@@ -5,9 +5,20 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-
+from pyrogram import Client, filters
+from pyrogram.types import Message
+from nexichat import nexichat
+from nexichat.database.chats import get_served_chats
+from nexichat.database.users import get_served_users
 from config import OWNER_ID
 from nexichat import nexichat
+import asyncio
+import logging
+from pyrogram import filters
+from pyrogram.errors import FloodWait
+from nexichat import nexichat
+from nexichat.database.chats import get_served_chats
+from nexichat.database.users import get_served_users
 from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
 from nexichat.modules.helpers import (
@@ -20,10 +31,6 @@ from nexichat.modules.helpers import (
     START,
 )
 
-# ----------------IMG-------------#
-
-
-# Random Start Images
 IMG = [
     "https://graph.org/file/210751796ff48991b86a3.jpg",
     "https://graph.org/file/7b4924be4179f70abcf33.jpg",
@@ -41,28 +48,15 @@ IMG = [
     "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
 ]
 
+languages:
+{'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'arabic': 'ar', 'armenian': 'hy', 'assamese': 'as', 'aymara': 'ay', 'azerbaijani': 'az', 'bambara': 'bm', 'basque': 'eu', 'belarusian': 'be', 'bengali': 'bn', 'bhojpuri': 'bho', 'bosnian': 'bs', 'bulgarian': 'bg', 'catalan': 'ca', 'cebuano': 'ceb', 'chichewa': 'ny', 'chinese (simplified)': 'zh-CN', 'chinese (traditional)': 'zh-TW', 'corsican': 'co', 'croatian': 'hr', 'czech': 'cs', 'danish': 'da', 'dhivehi': 'dv', 'dogri': 'doi', 'dutch': 'nl', 'english': 'en', 'esperanto': 'eo', 'estonian': 'et', 'ewe': 'ee', 'filipino': 'tl', 'finnish': 'fi', 'french': 'fr', 'frisian': 'fy', 'galician': 'gl', 'georgian': 'ka', 'german': 'de', 'greek': 'el', 'guarani': 'gn', 'gujarati': 'gu', 'haitian creole': 'ht', 'hausa': 'ha', 'hawaiian': 'haw', 'hebrew': 'iw', 'hindi': 'hi', 'hmong': 'hmn', 'hungarian': 'hu', 'icelandic': 'is', 'igbo': 'ig', 'ilocano': 'ilo', 'indonesian': 'id', 'irish': 'ga', 'italian': 'it', 'japanese': 'ja', 'javanese': 'jw', 'kannada': 'kn', 'kazakh': 'kk', 'khmer': 'km', 'kinyarwanda': 'rw', 'konkani': 'gom', 'korean': 'ko', 'krio': 'kri', 'kurdish (kurmanji)': 'ku', 'kurdish (sorani)': 'ckb', 'kyrgyz': 'ky', 'lao': 'lo', 'latin': 'la', 'latvian': 'lv', 'lingala': 'ln', 'lithuanian': 'lt', 'luganda': 'lg', 'luxembourgish': 'lb', 'macedonian': 'mk', 'maithili': 'mai', 'malagasy': 'mg', 'malay': 'ms', 'malayalam': 'ml', 'maltese': 'mt', 'maori': 'mi', 'marathi': 'mr', 'meiteilon (manipuri)': 'mni-Mtei', 'mizo': 'lus', 'mongolian': 'mn', 'myanmar': 'my', 'nepali': 'ne', 'norwegian': 'no', 'odia (oriya)': 'or', 'oromo': 'om', 'pashto': 'ps', 'persian': 'fa', 'polish': 'pl', 'portuguese': 'pt', 'punjabi': 'pa', 'quechua': 'qu', 'romanian': 'ro', 'russian': 'ru', 'samoan': 'sm', 'sanskrit': 'sa', 'scots gaelic': 'gd', 'sepedi': 'nso', 'serbian': 'sr', 'sesotho': 'st', 'shona': 'sn', 'sindhi': 'sd', 'sinhala': 'si', 'slovak': 'sk', 'slovenian': 'sl', 'somali': 'so', 'spanish': 'es', 'sundanese': 'su', 'swahili': 'sw', 'swedish': 'sv', 'tajik': 'tg', 'tamil': 'ta', 'tatar': 'tt', 'telugu': 'te', 'thai': 'th', 'tigrinya': 'ti', 'tsonga': 'ts', 'turkish': 'tr', 'turkmen': 'tk', 'twi': 'ak', 'ukrainian': 'uk', 'urdu': 'ur', 'uyghur': 'ug', 'uzbek': 'uz', 'vietnamese': 'vi', 'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 'yoruba': 'yo', 'zulu': 'zu'}
 
-# ----------------IMG-------------#
-
-languages = {
-    "Hindi": "hi", "English": "en", "Spanish": "es", "French": "fr", "German": "de", 
-    "Chinese": "zh", "Arabic": "ar", "Russian": "ru", "Japanese": "ja", "Korean": "ko",
-    # Add as many languages as needed
-}
-
-# ---------------STICKERS---------------#
-
-# Random Stickers
 STICKER = [
     "CAACAgUAAx0CYlaJawABBy4vZaieO6T-Ayg3mD-JP-f0yxJngIkAAv0JAALVS_FWQY7kbQSaI-geBA",
     "CAACAgUAAx0CYlaJawABBy4rZaid77Tf70SV_CfjmbMgdJyVD8sAApwLAALGXCFXmCx8ZC5nlfQeBA",
     "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
 ]
 
-# ---------------STICKERS---------------#
-
-
-# ---------------EMOJIOS---------------#
 
 EMOJIOS = [
     "💣",
@@ -78,11 +72,27 @@ EMOJIOS = [
 ]
 
 
-# ---------------EMOJIOS---------------#
-def generate_language_buttons():
+
+def generate_language_buttons(page=1):
     buttons = []
-    for lang_name, lang_code in languages.items():
+    items_per_page = 10
+    lang_items = list(languages.items())
+    
+    start_index = (page - 1) * items_per_page
+    end_index = start_index + items_per_page
+
+    for lang_name, lang_code in lang_items[start_index:end_index]:
         buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
+
+    nav_buttons = []
+    if page > 1:
+        nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
+    if end_index < len(lang_items):
+        nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
+
+    if nav_buttons:
+        buttons.append(nav_buttons)
+
     return buttons
 
 
@@ -128,7 +138,6 @@ async def welcomejej(client, message: Message):
                 try:
                     owner_username = True
                     loggin.info(message.from_user.id)
-                    # If username exists, send the message to the username
                     if owner_username:
                         await nexichat.send_photo(
                             int(OWNER_ID),
@@ -146,7 +155,6 @@ async def welcomejej(client, message: Message):
                             ),
                         )
                     else:
-                        # If no username, fallback to sending to OWNER_ID
                         await nexichat.send_photo(
                             int(OWNER_ID),
                             photo=chat_photo,
@@ -164,7 +172,6 @@ async def welcomejej(client, message: Message):
                         )
                 except Exception as e:
                     logging.info(f"Error fetching owner username: {e}")
-                    # Fallback to sending to OWNER_ID in case of any errors
                     await nexichat.send_photo(
                         int(OWNER_ID),
                         photo=chat_photo,
@@ -252,10 +259,6 @@ from nexichat.database.chats import add_served_chat
 from nexichat.database.users import add_served_user
 from nexichat.modules.helpers import PNG_BTN
 
-# ----------------IMG-------------#
-
-
-# Random Start Images
 IMG = [
     "https://graph.org/file/210751796ff48991b86a3.jpg",
     "https://graph.org/file/7b4924be4179f70abcf33.jpg",
@@ -274,18 +277,11 @@ IMG = [
 ]
 
 
-# ----------------IMG-------------#
-
-# ---------------STICKERS---------------#
-
-# Random Stickers
 STICKER = [
     "CAACAgUAAx0CYlaJawABBy4vZaieO6T-Ayg3mD-JP-f0yxJngIkAAv0JAALVS_FWQY7kbQSaI-geBA",
     "CAACAgUAAx0CYlaJawABBy4rZaid77Tf70SV_CfjmbMgdJyVD8sAApwLAALGXCFXmCx8ZC5nlfQeBA",
     "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
 ]
-
-# ---------------STICKERS---------------#
 
 
 @nexichat.on_cmd("ping")
@@ -305,14 +301,6 @@ async def ping(_, message: Message):
         await add_served_user(message.from_user.id)
     else:
         await add_served_chat(message.chat.id)
-
-
-from pyrogram import Client, filters
-from pyrogram.types import Message
-
-from nexichat import nexichat
-from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users
 
 
 @nexichat.on_message(filters.command("stats"))
@@ -382,17 +370,6 @@ async def getid(client, message):
     )
 
 
-import asyncio
-import logging
-
-from pyrogram import filters
-from pyrogram.errors import FloodWait
-
-from nexichat import nexichat
-from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users
-
-# Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -422,7 +399,6 @@ async def broadcast_message(client, message):
                 f"**Error**: {eff}"
             )
         try:
-            # Determine broadcast content
             if message.reply_to_message:
                 broadcast_content = message.reply_to_message
                 broadcast_type = "reply"
@@ -445,7 +421,6 @@ async def broadcast_message(client, message):
                     "-user": "-user" in query,
                 }
 
-                # Remove flags from the query
                 for flag in flags:
                     query = query.replace(flag, "").strip()
 
@@ -461,7 +436,6 @@ async def broadcast_message(client, message):
 
             await message.reply_text("**Started broadcasting...**")
 
-            # Broadcast to chats
             if not flags.get("-nogroup", False):
                 sent = 0
                 pin_count = 0
@@ -473,7 +447,6 @@ async def broadcast_message(client, message):
                         continue
                     try:
                         if broadcast_type == "reply":
-                            # Fixed the typo and forwarding logic
                             m = await nexichat.forward_messages(
                                 chat_id, message.chat.id, [broadcast_content.id]
                             )
@@ -483,7 +456,6 @@ async def broadcast_message(client, message):
                             )
                         sent += 1
 
-                        # Handle pinning
                         if flags.get("-pin", False) or flags.get("-pinloud", False):
                             try:
                                 await m.pin(
@@ -514,7 +486,6 @@ async def broadcast_message(client, message):
                     f"**Broadcasted to {sent} chats and pinned in {pin_count} chats.**"
                 )
 
-            # Broadcast to users
             if flags.get("-user", False):
                 susr = 0
                 users = await get_served_users()
@@ -523,7 +494,6 @@ async def broadcast_message(client, message):
                     user_id = int(user["user_id"])
                     try:
                         if broadcast_type == "reply":
-                            # Fixed the typo and forwarding logic
                             m = await nexichat.forward_messages(
                                 user_id, message.chat.id, [broadcast_content.id]
                             )
