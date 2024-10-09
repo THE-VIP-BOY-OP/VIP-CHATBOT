@@ -118,7 +118,7 @@ async def language_selection_callback(client: Client, callback_query):
         
 def get_chat_language(chat_id):
     chat_lang = lang_db.find_one({"chat_id": chat_id})
-    return chat_lang["language"] 
+    return chat_lang["language"] if chat_lang and "language" in chat_lang else None
 
 @nexichat.on_message(filters.command("chatbot"))
 async def chaton(client: Client, message: Message):
