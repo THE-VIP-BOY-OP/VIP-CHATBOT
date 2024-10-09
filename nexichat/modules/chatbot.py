@@ -334,6 +334,9 @@ async def cb_handler(_, query: CallbackQuery):
             text=HELP_READ,
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
+
+
+    """
     elif query.data == "enable_chatbot" or "disable_chatbot":
         action = query.data
         if query.message.chat.type in ["group", "supergroup"]:
@@ -357,3 +360,22 @@ async def cb_handler(_, query: CallbackQuery):
         await query.edit_message_text(
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
         )
+
+"""
+
+
+@nexichat.on_callback_query(filters.regex("enable_chatbot|disable_chatbot"))
+def handle_callback_query(client, callback_query):
+    chat_id = callback_query.message.chat.id
+    action = callback_query.data
+
+    if action == "enable_chatbot":
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
+        await callback_query.answer("Chatbot has been enabled.")
+        await callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
+   
+    elif action == "disable_chatbot":
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
+        await callback_query.answer("Chatbot has been disabled.")
+        await callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
+   
