@@ -2,7 +2,7 @@ import random
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardButton, Callbackquery, InlineKeyboardMarkup, Message
 from deep_translator import GoogleTranslator 
 from config import MONGO_URL
 from nexichat import nexichat
