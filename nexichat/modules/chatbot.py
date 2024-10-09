@@ -29,13 +29,6 @@ def generate_language_buttons():
         buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
     return buttons
 
-# When the bot is added to a new group
-@nexichat.on_message(filters.new_chat_members)
-async def welcome_and_set_language(client: Client, message: Message):
-    await message.reply_text(
-        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
-    )
 
 # Command to manually set language using /setlang
 @nexichat.on_message(filters.command("setlang"))
