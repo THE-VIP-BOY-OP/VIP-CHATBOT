@@ -103,6 +103,13 @@ def get_chat_language(chat_id):
     return chat_lang["language"] if chat_lang and "language" in chat_lang else None
 
 
+@nexichat.on_message(filters.command(["lang", "language", "setlang"]))
+async def set_language(client: Client, message: Message):
+    await message.reply_text(
+        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
+        reply_markup=generate_language_buttons(languages))
+
+
 @nexichat.on_callback_query(filters.regex(r"setlang_"))
 async def language_selection_callback(client: Client, callback_query):
     lang_code = callback_query.data.split("_")[1]
