@@ -1,7 +1,8 @@
 import asyncio
 import logging
 import random
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, Callbackquery
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
