@@ -13,7 +13,7 @@ from nexichat.database.chats import get_served_chats
 from nexichat.database.users import get_served_users
 from config import OWNER_ID, MONGO_URL
 from nexichat import nexichat
-from nexichat.modules.helpers import START
+from nexichat.modules.helpers import START, START_BOT
 import asyncio
 import logging
 from pyrogram import filters
@@ -197,7 +197,7 @@ async def start(_, m: Message):
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
         await asyncio.sleep(1)
         await umm.delete()
-        await m.reply_photo(photo=BOT, caption=START, reply_markup=InlineKeyboardMarkup(HELP_START))
+        await m.reply_photo(photo=BOT, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
     else:
         await m.reply_photo(
