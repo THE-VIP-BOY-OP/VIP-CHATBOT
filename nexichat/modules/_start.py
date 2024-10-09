@@ -88,11 +88,11 @@ async def welcomejej(client, message: Message):
     await set_default_status(message.chat.id)
     try:
         for member in message.new_chat_members:
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
-            await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=reply_markup)
-            chat = message.chat   
             
             if member.id == nexichat.id:
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
+                await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=reply_markup)
+                chat = message.chat   
                 try:
                     invitelink = await nexichat.export_chat_invite_link(message.chat.id)
                     link = f"[ɢᴇᴛ ʟɪɴᴋ]({invitelink})"
