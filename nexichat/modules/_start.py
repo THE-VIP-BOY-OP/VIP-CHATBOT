@@ -141,20 +141,6 @@ async def set_language(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
-@nexichat.on_callback_query(filters.regex(r"setlang_"))
-async def language_selection_callback(client: Client, callback_query):
-    lang_code = callback_query.data.split("_")[1]
-    chat_id = callback_query.message.chat.id
-    chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
-    if chat_member.status in ["administrator", "creator"] and chat_member.can_change_info:
-        lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
-        await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
-    else:
-        await callback_query.answer("You do not have permission to change the language.", show_alert=True)
-
-
-
-
 
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
