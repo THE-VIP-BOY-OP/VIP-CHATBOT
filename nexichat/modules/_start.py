@@ -71,79 +71,6 @@ IMG = [
 
 
 
-languages = {
-    # Top 20 languages used on Telegram
-    'english': 'en', 'hindi': 'hi', 'Myanmar': 'my', 'russian': 'ru', 'spanish': 'es', 
-    'arabic': 'ar', 'turkish': 'tr', 'german': 'de', 'french': 'fr', 
-    'italian': 'it', 'persian': 'fa', 'indonesian': 'id', 'portuguese': 'pt',
-    'ukrainian': 'uk', 'filipino': 'tl', 'korean': 'ko', 'japanese': 'ja', 
-    'polish': 'pl', 'vietnamese': 'vi', 'thai': 'th', 'dutch': 'nl',
-
-    # Top languages spoken in Bihar
-    'bhojpuri': 'bho', 'maithili': 'mai', 'urdu': 'ur', 
-    'bengali': 'bn', 'magahi': 'mag', 'angika': 'anp', 'sanskrit': 'sa', 
-    'oriya': 'or', 'nepali': 'ne', 'santhali': 'sat', 'khortha': 'kht', 
-    'kurmali': 'kyu', 'ho': 'hoc', 'munda': 'unr', 'kharwar': 'kqw', 
-    'mundari': 'unr', 'sadri': 'sck', 'pali': 'pi', 'tamil': 'ta',
-
-    # Top languages spoken in India
-    'telugu': 'te', 'bengali': 'bn', 'marathi': 'mr', 'tamil': 'ta', 
-    'gujarati': 'gu', 'urdu': 'ur', 'kannada': 'kn', 'malayalam': 'ml', 
-    'odia': 'or', 'punjabi': 'pa', 'assamese': 'as', 'sanskrit': 'sa', 
-    'kashmiri': 'ks', 'konkani': 'gom', 'sindhi': 'sd', 'bodo': 'brx', 
-    'dogri': 'doi', 'santali': 'sat', 'meitei': 'mni', 'nepali': 'ne',
-
-    # Other language
-    'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'armenian': 'hy', 
-    'aymara': 'ay', 'azerbaijani': 'az', 'bambara': 'bm', 
-    'basque': 'eu', 'belarusian': 'be', 'bosnian': 'bs', 'bulgarian': 'bg', 
-    'catalan': 'ca', 'cebuano': 'ceb', 'chichewa': 'ny', 
-    'chinese (simplified)': 'zh-CN', 'chinese (traditional)': 'zh-TW', 
-    'corsican': 'co', 'croatian': 'hr', 'czech': 'cs', 'danish': 'da', 
-    'dhivehi': 'dv', 'esperanto': 'eo', 'estonian': 'et', 'ewe': 'ee', 
-    'finnish': 'fi', 'frisian': 'fy', 'galician': 'gl', 'georgian': 'ka', 
-    'greek': 'el', 'guarani': 'gn', 'haitian creole': 'ht', 'hausa': 'ha', 
-    'hawaiian': 'haw', 'hebrew': 'iw', 'hmong': 'hmn', 'hungarian': 'hu', 
-    'icelandic': 'is', 'igbo': 'ig', 'ilocano': 'ilo', 'irish': 'ga', 
-    'javanese': 'jw', 'kazakh': 'kk', 'khmer': 'km', 'kinyarwanda': 'rw', 
-    'krio': 'kri', 'kurdish (kurmanji)': 'ku', 'kurdish (sorani)': 'ckb', 
-    'kyrgyz': 'ky', 'lao': 'lo', 'latin': 'la', 'latvian': 'lv', 
-    'lingala': 'ln', 'lithuanian': 'lt', 'luganda': 'lg', 'luxembourgish': 'lb', 
-    'macedonian': 'mk', 'malagasy': 'mg', 'maltese': 'mt', 'maori': 'mi', 
-    'mizo': 'lus', 'mongolian': 'mn', 'myanmar': 'my', 'norwegian': 'no', 
-    'oromo': 'om', 'pashto': 'ps', 'quechua': 'qu', 'romanian': 'ro', 
-    'samoan': 'sm', 'scots gaelic': 'gd', 'sepedi': 'nso', 'serbian': 'sr', 
-    'sesotho': 'st', 'shona': 'sn', 'sinhala': 'si', 'slovak': 'sk', 
-    'slovenian': 'sl', 'somali': 'so', 'sundanese': 'su', 'swahili': 'sw', 
-    'swedish': 'sv', 'tajik': 'tg', 'tatar': 'tt', 'tigrinya': 'ti', 
-    'tsonga': 'ts', 'turkmen': 'tk', 'twi': 'ak', 'uyghur': 'ug', 
-    'uzbek': 'uz', 'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 
-    'yoruba': 'yo', 'zulu': 'zu'
-}
-
-def generate_language_buttons(languages):
-    buttons = []
-    current_row = []
-
-    for lang, code in languages.items():
-        current_row.append(InlineKeyboardButton(lang.capitalize(), callback_data=f'setlabf_{code}'))
-        
-        if len(current_row) == 4:  
-            buttons.append(current_row)
-            current_row = []  
-
-    if current_row:  
-        buttons.append(current_row)
-
-    return InlineKeyboardMarkup(buttons)
-
-
-@nexichat.on_message(filters.command(["lang", "language", "setlang"]))
-async def set_language(client: Client, message: Message):
-    await message.reply_text(
-        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
-    )
 
 
 @nexichat.on_message(filters.new_chat_members)
@@ -151,8 +78,8 @@ async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
     try:
         for member in message.new_chat_members:
-            await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=InlineKeyboardMarkup(generate_language_buttons()))
-            
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
+            await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=reply_markup)
             chat = message.chat   
             
             if member.id == nexichat.id:
