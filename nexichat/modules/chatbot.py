@@ -146,7 +146,7 @@ async def chatbot_response(client: Client, message: Message):
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
             
-            if not chat_lang or chat_lang == "en":
+            if not chat_lang:
                 translated_text = response_text  
             else:
                 translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
