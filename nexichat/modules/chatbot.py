@@ -85,7 +85,7 @@ languages = {
     'yoruba': 'yo', 'zulu': 'zu'
 }
 
-def create_language_keyboard(languages):
+def generate_language_buttons(languages):
     buttons = []
     current_row = []
 
@@ -101,16 +101,13 @@ def create_language_keyboard(languages):
 
     return InlineKeyboardMarkup(buttons)
 
-keyboard = create_language_keyboard(languages)
-
-await message.reply_text("**Choose Bot language for this chat**", reply_markup=keyboard)
 
 
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
     await message.reply_text(
         "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
+        reply_markup=generate_language_buttons()
     )
 
 @nexichat.on_message(filters.command(["resetlang", "nolang"]))
