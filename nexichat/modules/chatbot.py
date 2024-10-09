@@ -85,11 +85,12 @@ languages = {
     'yoruba': 'yo', 'zulu': 'zu'
 }
 
+
 def generate_language_buttons(languages):
     buttons = []
     current_row = []
     for lang, code in languages.items():
-        current_row.append(InlineKeyboardButton(lang.capitalize(), callback_data=f'setlabf_{code}'))
+        current_row.append(InlineKeyboardButton(lang.capitalize(), callback_data=f'setlang_{code}'))
         if len(current_row) == 4:  
             buttons.append(current_row)
             current_row = []  
@@ -97,28 +98,21 @@ def generate_language_buttons(languages):
         buttons.append(current_row)
     return InlineKeyboardMarkup(buttons)
 
-
 def get_chat_language(chat_id):
     chat_lang = lang_db.find_one({"chat_id": chat_id})
     return chat_lang["language"] if chat_lang and "language" in chat_lang else None
 
 
-@nexichat.on_message(filters.command(["lang", "language", "setlang"]))
-async def set_language(client: Client, message: Message):
-    await message.reply_text(
-        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=generate_language_buttons(languages))
-    
-
 @nexichat.on_callback_query(filters.regex(r"setlang_"))
 async def language_selection_callback(client: Client, callback_query):
     lang_code = callback_query.data.split("_")[1]
     chat_id = callback_query.message.chat.id
-    chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
-    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
-    await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.", show_alert=True)
-    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
-
+    if lang_code in languages.values():  # Ensure lang_code is valid
+        lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
+        await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.", show_alert=True)
+        await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
+    else:
+        await callback_query.answer("Invalid language selection.", show_alert=True)
 
 @nexichat.on_message(filters.command(["resetlang", "nolang"]))
 async def set_language(client: Client, message: Message):
