@@ -1,50 +1,88 @@
 import random
-
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
-from pyrogram.types import InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from googletrans import Translator
 
 from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON
 
+translator = Translator()
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
+lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
+# List of languages for buttons
+languages = {
+    "Hindi": "hi", "English": "en", "Spanish": "es", "French": "fr", "German": "de", 
+    "Chinese": "zh", "Arabic": "ar", "Russian": "ru", "Japanese": "ja", "Korean": "ko",
+    # Add as many languages as needed
+}
 
-@nexichat.on_message(filters.command("chatbot"))
-async def chaton(client: Client, message: Message):
+# Function to generate language buttons
+def generate_language_buttons():
+    buttons = []
+    for lang_name, lang_code in languages.items():
+        buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
+    return buttons
+
+# When the bot is added to a new group
+@nexichat.on_message(filters.new_chat_members)
+async def welcome_and_set_language(client: Client, message: Message):
     await message.reply_text(
-        f"ᴄʜᴀᴛ: {message.chat.title}\n**ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴘᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**",
-        reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
+        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
+        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
+# Command to manually set language using /setlang
+@nexichat.on_message(filters.command("setlang"))
+async def set_language(client: Client, message: Message):
+    await message.reply_text(
+        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
+        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
+    )
 
-@nexichat.on_message(
-    (filters.text | filters.sticker | filters.photo | filters.video | filters.audio)
-)
+# Callback handler for language selection
+@nexichat.on_callback_query(filters.regex(r"setlang_"))
+async def language_selection_callback(client: Client, callback_query):
+    lang_code = callback_query.data.split("_")[1]
+    chat_id = callback_query.message.chat.id
+    
+    # Save selected language for the chat
+    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
+    
+    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {callback_query.data.split('_')[1].title()}.")
+
+# Function to get the saved language for a chat
+def get_chat_language(chat_id):
+    chat_lang = lang_db.find_one({"chat_id": chat_id})
+    return chat_lang["language"] if chat_lang else "en"  # Default to English if not set
+
+# Modify chatbot response to translate based on chat's language
+@nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
         return
 
     if message.text:
-        if any(
-            message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]
-        ):
+        if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
             return
 
-    if (
-        message.reply_to_message
-        and message.reply_to_message.from_user.id == client.me.id
-    ) or not message.reply_to_message:
+    if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         reply_data = await get_reply(message.text if message.text else "")
 
         if reply_data:
+            response_text = reply_data["text"]
+            chat_lang = get_chat_language(message.chat.id)
+            if chat_lang != "en":
+                response_text = translator.translate(response_text, dest=chat_lang).text
+
             if reply_data["check"] == "sticker":
                 await message.reply_sticker(reply_data["text"])
             elif reply_data["check"] == "photo":
@@ -54,13 +92,14 @@ async def chatbot_response(client: Client, message: Message):
             elif reply_data["check"] == "audio":
                 await message.reply_audio(reply_data["text"])
             else:
-                await message.reply_text(reply_data["text"])
+                await message.reply_text(response_text)
         else:
             await message.reply_text("**what??**")
 
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
 
+# The save_reply and get_reply functions remain unchanged
 
 async def save_reply(original_message: Message, reply_message: Message):
     if reply_message.sticker:
