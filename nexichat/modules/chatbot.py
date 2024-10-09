@@ -29,7 +29,6 @@ def generate_language_buttons():
         buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
     return buttons
 
-
 # Command to manually set language using /setlang
 @nexichat.on_message(filters.command("setlang"))
 async def set_language(client: Client, message: Message):
@@ -47,14 +46,13 @@ async def language_selection_callback(client: Client, callback_query):
     # Save selected language for the chat
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
     
-    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {callback_query.data.split('_')[1].title()}.")
+    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
 
 # Function to get the saved language for a chat
 def get_chat_language(chat_id):
     chat_lang = lang_db.find_one({"chat_id": chat_id})
     return chat_lang["language"] if chat_lang else "en"  # Default to English if not set
 
-# Modify chatbot response to translate based on chat's language
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_status = status_db.find_one({"chat_id": message.chat.id})
@@ -68,14 +66,20 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
+        # Fetch the reply data from the database
         reply_data = await get_reply(message.text if message.text else "")
-
+        
         if reply_data:
             response_text = reply_data["text"]
+            # Get the chat's language code from the database
             chat_lang = get_chat_language(message.chat.id)
-            if chat_lang != "en":
-                response_text = translator.translate(response_text, target=chat_lang)
-
+            
+            # If chat_lang is not set, default to English
+            if not chat_lang or chat_lang == "en":
+                translated_text = response_text  # No translation needed
+            else:
+                translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
+            # Send the translated response
             if reply_data["check"] == "sticker":
                 await message.reply_sticker(reply_data["text"])
             elif reply_data["check"] == "photo":
@@ -85,13 +89,12 @@ async def chatbot_response(client: Client, message: Message):
             elif reply_data["check"] == "audio":
                 await message.reply_audio(reply_data["text"])
             else:
-                await message.reply_text(response_text)
+                await message.reply_text(translated_text)
         else:
             await message.reply_text("**what??**")
 
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
-
 # Example get_reply and save_reply functions (unchanged)
 async def save_reply(original_message: Message, reply_message: Message):
     if reply_message.sticker:
@@ -170,7 +173,6 @@ async def save_reply(original_message: Message, reply_message: Message):
                     "check": "none",
                 }
             )
-
 
 async def get_reply(word: str):
     is_chat = list(chatai.find({"word": word}))
