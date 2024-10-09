@@ -268,11 +268,11 @@ async def get_reply(word: str):
         return random_reply
     return None
 
-
+"""
 DAXXdb = MongoClient(config.MONGO_URL)
 DAXX = DAXXdb["DAXXDb"]["DAXX"]
 status_db = DAXXdb["ChatBotStatusDb"]["StatusCollection"]
-
+"""
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
@@ -329,6 +329,24 @@ async def cb_handler(_, query: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
 
+    elif query.data == "enable_chatbot":
+        chat_id = query.message.chat.id
+        action = query.data
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
+        await query.answer("Chatbot enabled ✅", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.**"
+        )
+
+    elif query.data == "disable_chatbot":
+        chat_id = query.message.chat.id
+        action = query.data
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
+        await query.answer("Chatbot disabled!", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
+        )
+    
 
     """
     elif query.data == "enable_chatbot" or "disable_chatbot":
@@ -355,7 +373,7 @@ async def cb_handler(_, query: CallbackQuery):
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ {'ᴇɴᴀʙʟᴇᴅ' if action == 'enable_chatbot' else 'ᴅɪsᴀʙʟᴇᴅ'}.**"
         )
 
-"""
+
 
 
 @nexichat.on_callback_query(filters.regex("enable_chatbot|disable_chatbot"))
@@ -373,3 +391,4 @@ def handle_callback_query(client, callback_query):
         callback_query.answer("Chatbot has been disabled.")
         callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
    
+"""
