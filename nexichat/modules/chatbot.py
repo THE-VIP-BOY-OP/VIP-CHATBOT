@@ -119,14 +119,14 @@ async def set_language(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
-@nexichat.on_message(filters.command("nolang"))
+@nexichat.on_message(filters.command(["resetlang", "nolang"))
 async def set_language(client: Client, message: Message):
     chat_id = message.chat.id
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": "nolang"}}, upsert=True)
     await message.reply_text(f"**Bot language has been reset in this chat, now mix language is using.**")
 
 
-@nexichat.on_callback_query(filters.regex(["resetlang", "nolang"]))
+@nexichat.on_callback_query(filters.regex("nolang"))
 async def language_selection_callback(client: Client, callback_query):
     chat_id = callback_query.message.chat.id
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": "nolang"}}, upsert=True)
