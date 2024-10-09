@@ -365,11 +365,11 @@ def handle_callback_query(client, callback_query):
 
     if action == "enable_chatbot":
         status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
-        await callback_query.answer("Chatbot has been enabled.")
-        await callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
+        callback_query.answer("Chatbot has been enabled.")
+        callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
    
     elif action == "disable_chatbot":
         status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
-        await callback_query.answer("Chatbot has been disabled.")
-        await callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
+        callback_query.answer("Chatbot has been disabled.")
+        callback_query.edit_message_text(f"**Chatbot has been disabled in **{callback_query.message.chat.title}")
    
