@@ -11,11 +11,12 @@ from pyrogram.types import Message
 from nexichat import nexichat
 from nexichat.database.chats import get_served_chats
 from nexichat.database.users import get_served_users
-from config import OWNER_ID
+from config import OWNER_ID, MONGO_URL
 from nexichat import nexichat
 import asyncio
 import logging
 from pyrogram import filters
+from pymongo import MongoClient
 from pyrogram.errors import FloodWait
 from nexichat import nexichat
 from nexichat.database.chats import get_served_chats
@@ -69,6 +70,7 @@ IMG = [
     "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
 ]
 
+chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 def set_default_status(chat_id):
     if not status_db.find_one({"chat_id": chat_id}):
