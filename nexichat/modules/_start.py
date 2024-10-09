@@ -121,31 +121,22 @@ languages = {
     'yoruba': 'yo', 'zulu': 'zu'
 }
 
-def generate_language_buttons(page=1):
+def generate_language_buttons(languages):
     buttons = []
-    items_per_page = 10
-    lang_items = list(languages.items())
-    
-    start_index = (page - 1) * items_per_page
-    end_index = start_index + items_per_page
+    current_row = []
 
-    for i in range(start_index, min(end_index, len(lang_items)), 2):
-        row = []
-        for j in range(i, min(i + 2, end_index)):  # 2 buttons per row
-            lang_name, lang_code = lang_items[j]
-            row.append(InlineKeyboardButton(lang_name.title(), callback_data=f"setlang_{lang_code}"))
-        buttons.append(row)
+    for lang, code in languages.items():
+        current_row.append(InlineKeyboardButton(lang.capitalize(), callback_data=f'setlabf_{code}'))
+        
+        if len(current_row) == 4:  
+            buttons.append(current_row)
+            current_row = []  
 
-    nav_buttons = []
-    if page > 1:
-        nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
-    if end_index < len(lang_items):
-        nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
+    if current_row:  
+        buttons.append(current_row)
 
-    if nav_buttons:
-        buttons.append(nav_buttons)
+    return InlineKeyboardMarkup(buttons)
 
-    return buttons
 
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
