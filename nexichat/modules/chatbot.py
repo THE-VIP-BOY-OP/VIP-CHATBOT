@@ -8,25 +8,58 @@ from deep_translator import GoogleTranslator  # Switched to deep-translator for 
 from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON
+from pymongo import MongoClient
+from pyrogram.enums import ChatMemberStatus as CMS
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 
-translator = GoogleTranslator()  # Initialize the translator
+import config
+from nexichat import LOGGER, nexichat
+from nexichat.modules.helpers import (
+    ABOUT_BTN,
+    ABOUT_READ,
+    ADMIN_READ,
+    BACK,
+    CHATBOT_BACK,
+    CHATBOT_READ,
+    DEV_OP,
+    HELP_BTN,
+    HELP_READ,
+    MUSIC_BACK_BTN,
+    SOURCE_READ,
+    START,
+    TOOLS_DATA_READ,
+)
+translator = GoogleTranslator()  
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
-# List of languages for buttons (Names in respective languages)
 languages:
 {'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'arabic': 'ar', 'armenian': 'hy', 'assamese': 'as', 'aymara': 'ay', 'azerbaijani': 'az', 'bambara': 'bm', 'basque': 'eu', 'belarusian': 'be', 'bengali': 'bn', 'bhojpuri': 'bho', 'bosnian': 'bs', 'bulgarian': 'bg', 'catalan': 'ca', 'cebuano': 'ceb', 'chichewa': 'ny', 'chinese (simplified)': 'zh-CN', 'chinese (traditional)': 'zh-TW', 'corsican': 'co', 'croatian': 'hr', 'czech': 'cs', 'danish': 'da', 'dhivehi': 'dv', 'dogri': 'doi', 'dutch': 'nl', 'english': 'en', 'esperanto': 'eo', 'estonian': 'et', 'ewe': 'ee', 'filipino': 'tl', 'finnish': 'fi', 'french': 'fr', 'frisian': 'fy', 'galician': 'gl', 'georgian': 'ka', 'german': 'de', 'greek': 'el', 'guarani': 'gn', 'gujarati': 'gu', 'haitian creole': 'ht', 'hausa': 'ha', 'hawaiian': 'haw', 'hebrew': 'iw', 'hindi': 'hi', 'hmong': 'hmn', 'hungarian': 'hu', 'icelandic': 'is', 'igbo': 'ig', 'ilocano': 'ilo', 'indonesian': 'id', 'irish': 'ga', 'italian': 'it', 'japanese': 'ja', 'javanese': 'jw', 'kannada': 'kn', 'kazakh': 'kk', 'khmer': 'km', 'kinyarwanda': 'rw', 'konkani': 'gom', 'korean': 'ko', 'krio': 'kri', 'kurdish (kurmanji)': 'ku', 'kurdish (sorani)': 'ckb', 'kyrgyz': 'ky', 'lao': 'lo', 'latin': 'la', 'latvian': 'lv', 'lingala': 'ln', 'lithuanian': 'lt', 'luganda': 'lg', 'luxembourgish': 'lb', 'macedonian': 'mk', 'maithili': 'mai', 'malagasy': 'mg', 'malay': 'ms', 'malayalam': 'ml', 'maltese': 'mt', 'maori': 'mi', 'marathi': 'mr', 'meiteilon (manipuri)': 'mni-Mtei', 'mizo': 'lus', 'mongolian': 'mn', 'myanmar': 'my', 'nepali': 'ne', 'norwegian': 'no', 'odia (oriya)': 'or', 'oromo': 'om', 'pashto': 'ps', 'persian': 'fa', 'polish': 'pl', 'portuguese': 'pt', 'punjabi': 'pa', 'quechua': 'qu', 'romanian': 'ro', 'russian': 'ru', 'samoan': 'sm', 'sanskrit': 'sa', 'scots gaelic': 'gd', 'sepedi': 'nso', 'serbian': 'sr', 'sesotho': 'st', 'shona': 'sn', 'sindhi': 'sd', 'sinhala': 'si', 'slovak': 'sk', 'slovenian': 'sl', 'somali': 'so', 'spanish': 'es', 'sundanese': 'su', 'swahili': 'sw', 'swedish': 'sv', 'tajik': 'tg', 'tamil': 'ta', 'tatar': 'tt', 'telugu': 'te', 'thai': 'th', 'tigrinya': 'ti', 'tsonga': 'ts', 'turkish': 'tr', 'turkmen': 'tk', 'twi': 'ak', 'ukrainian': 'uk', 'urdu': 'ur', 'uyghur': 'ug', 'uzbek': 'uz', 'vietnamese': 'vi', 'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 'yoruba': 'yo', 'zulu': 'zu'}
 
-# Function to generate language buttons
-def generate_language_buttons():
+def generate_language_buttons(page=1):
     buttons = []
-    for lang_name, lang_code in languages.items():
+    items_per_page = 10
+    lang_items = list(languages.items())
+    
+    start_index = (page - 1) * items_per_page
+    end_index = start_index + items_per_page
+
+    for lang_name, lang_code in lang_items[start_index:end_index]:
         buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
+
+    nav_buttons = []
+    if page > 1:
+        nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
+    if end_index < len(lang_items):
+        nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
+
+    if nav_buttons:
+        buttons.append(nav_buttons)
+
     return buttons
 
-# Command to manually set language using /setlang
 @nexichat.on_message(filters.command("setlang"))
 async def set_language(client: Client, message: Message):
     await message.reply_text(
@@ -34,18 +67,15 @@ async def set_language(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
-# Callback handler for language selection
 @nexichat.on_callback_query(filters.regex(r"setlang_"))
 async def language_selection_callback(client: Client, callback_query):
     lang_code = callback_query.data.split("_")[1]
     chat_id = callback_query.message.chat.id
     
-    # Save selected language for the chat
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
     
     await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
 
-# Function to get the saved language for a chat
 def get_chat_language(chat_id):
     chat_lang = lang_db.find_one({"chat_id": chat_id})
     return chat_lang["language"] if chat_lang else "en"  # Default to English if not set
@@ -63,20 +93,16 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        # Fetch the reply data from the database
         reply_data = await get_reply(message.text if message.text else "")
         
         if reply_data:
             response_text = reply_data["text"]
-            # Get the chat's language code from the database
             chat_lang = get_chat_language(message.chat.id)
             
-            # If chat_lang is not set, default to English
             if not chat_lang or chat_lang == "en":
-                translated_text = response_text  # No translation needed
+                translated_text = response_text  
             else:
                 translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
-            # Send the translated response
             if reply_data["check"] == "sticker":
                 await message.reply_sticker(reply_data["text"])
             elif reply_data["check"] == "photo":
@@ -92,7 +118,7 @@ async def chatbot_response(client: Client, message: Message):
 
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
-# Example get_reply and save_reply functions (unchanged)
+
 async def save_reply(original_message: Message, reply_message: Message):
     if reply_message.sticker:
         is_chat = chatai.find_one(
@@ -180,27 +206,6 @@ async def get_reply(word: str):
         return random_reply
     return None
 
-from pymongo import MongoClient
-from pyrogram.enums import ChatMemberStatus as CMS
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-
-import config
-from nexichat import LOGGER, nexichat
-from nexichat.modules.helpers import (
-    ABOUT_BTN,
-    ABOUT_READ,
-    ADMIN_READ,
-    BACK,
-    CHATBOT_BACK,
-    CHATBOT_READ,
-    DEV_OP,
-    HELP_BTN,
-    HELP_READ,
-    MUSIC_BACK_BTN,
-    SOURCE_READ,
-    START,
-    TOOLS_DATA_READ,
-)
 
 DAXXdb = MongoClient(config.MONGO_URL)
 DAXX = DAXXdb["DAXXDb"]["DAXX"]
