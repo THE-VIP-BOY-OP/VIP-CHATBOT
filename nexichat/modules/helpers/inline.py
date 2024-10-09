@@ -3,6 +3,24 @@ from pyrogram.types import InlineKeyboardButton
 from config import SUPPORT_GRP, UPDATE_CHNL
 from nexichat import OWNER, nexichat
 
+
+START_BOT = [
+    [
+        InlineKeyboardButton(
+            text="😍 ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ 😍",
+            url=f"https://t.me/{nexichat.username}?startgroup=true",
+        ),
+    ],
+    [
+        InlineKeyboardButton(text="🥀 ᴏᴡɴᴇʀ 🥀", user_id=OWNER),
+        InlineKeyboardButton(text="✨ ꜱᴜᴘᴘᴏʀᴛ ✨", url=f"https://t.me/{SUPPORT_GRP}"),
+    ],
+    [
+        InlineKeyboardButton(text="« ʜᴇʟᴘ »", callback_data="HELP"),
+    ],
+]
+
+
 DEV_OP = [
     [
         InlineKeyboardButton(text="🥀 ᴏᴡɴᴇʀ 🥀", user_id=OWNER),
