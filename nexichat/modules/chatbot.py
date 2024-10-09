@@ -119,7 +119,7 @@ async def set_language(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
-@nexichat.on_message(filters.command(["resetlang", "defaultlang", "nolang"]))
+@nexichat.on_message(filters.command("nolang"))
 async def set_language(client: Client, message: Message):
     chat_id = message.chat.id
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": "nolang"}}, upsert=True)
