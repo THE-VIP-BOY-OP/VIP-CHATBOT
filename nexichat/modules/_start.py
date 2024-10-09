@@ -106,28 +106,6 @@ EMOJIOS = [
 
 
 
-def generate_language_buttons(page=1):
-    buttons = []
-    items_per_page = 10
-    lang_items = list(languages.items())
-    
-    start_index = (page - 1) * items_per_page
-    end_index = start_index + items_per_page
-
-    for lang_name, lang_code in lang_items[start_index:end_index]:
-        buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
-
-    nav_buttons = []
-    if page > 1:
-        nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
-    if end_index < len(lang_items):
-        nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
-
-    if nav_buttons:
-        buttons.append(nav_buttons)
-
-    return buttons
-
 
 
 @nexichat.on_message(filters.new_chat_members)
