@@ -17,7 +17,7 @@ import asyncio
 import logging
 from pyrogram import filters
 from pymongo import MongoClient
-from pyrogram.errors import FloodWait
+from pyrogram.errors import FloodWait, ChatAdminRequired
 from nexichat import nexichat
 from nexichat.database.chats import get_served_chats
 from nexichat.database.users import get_served_users
