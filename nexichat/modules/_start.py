@@ -69,13 +69,16 @@ IMG = [
     "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
 ]
 
-
-
+status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
+def set_default_status(chat_id):
+    if not status_db.find_one({"chat_id": chat_id}):
+        status_db.insert_one({"chat_id": chat_id, "status": "enabled"})
 
 
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
+    await set_default_status(message.chat.id)
     try:
         for member in message.new_chat_members:
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
