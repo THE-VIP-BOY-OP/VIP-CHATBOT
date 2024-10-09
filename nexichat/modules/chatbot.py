@@ -84,11 +84,12 @@ languages = {
     'uzbek': 'uz', 'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 
     'yoruba': 'yo', 'zulu': 'zu'
 }
+
 def generate_language_buttons(page=1):
     buttons = []
     items_per_page = 10
     lang_items = list(languages.items())
-    
+
     start_index = (page - 1) * items_per_page
     end_index = start_index + items_per_page
 
@@ -104,11 +105,13 @@ def generate_language_buttons(page=1):
         nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
     if end_index < len(lang_items):
         nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
-
+ 
+ 
     if nav_buttons:
         buttons.append(nav_buttons)
 
     return buttons
+
 
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
@@ -117,13 +120,28 @@ async def set_language(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(generate_language_buttons())
     )
 
+@nexichat.on_message(filters.command(["resetlang", "defaultlang", "nolang"]))
+async def set_language(client: Client, message: Message):
+    chat_id = message.chat.id
+    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": "nolang"}}, upsert=True)
+    await message.reply_text(f"**Bot language has been reset in this chat, now mix language is using.**")
+
+
+@nexichat.on_callback_query(filters.regex(["resetlang", "nolang"]))
+async def language_selection_callback(client: Client, callback_query):
+    chat_id = callback_query.message.chat.id
+    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": "nolang"}}, upsert=True)
+    await callback_query.answer("Bot language has been reset in this chat, now mix language is using.", show_alert=True)
+    await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**")
+
+
 @nexichat.on_callback_query(filters.regex(r"setlang_"))
 async def language_selection_callback(client: Client, callback_query):
     lang_code = callback_query.data.split("_")[1]
     chat_id = callback_query.message.chat.id
     chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
     lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
-    await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
+    await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.", show_alert=True)
     await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
     
 def get_chat_language(chat_id):
@@ -155,8 +173,9 @@ async def chatbot_response(client: Client, message: Message):
         if reply_data:
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
+
             
-            if not chat_lang:
+            if not chat_lang or chat_lang == "nolang":
                 translated_text = response_text  
             else:
                 translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
