@@ -80,7 +80,7 @@ def set_default_status(chat_id):
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
-    await set_default_status(message.chat.id)
+    set_default_status(message.chat.id)
     try:
         for member in message.new_chat_members:
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
