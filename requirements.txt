@@ -9,6 +9,5 @@ asyncio
 python-dotenv
 lexica-api
 MukeshAPI
-googletrans==4.0.0-rc1
 deep-translator
 pycgi
