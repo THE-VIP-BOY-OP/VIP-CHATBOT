@@ -45,6 +45,11 @@ IMG = [
 
 # ----------------IMG-------------#
 
+languages = {
+    "Hindi": "hi", "English": "en", "Spanish": "es", "French": "fr", "German": "de", 
+    "Chinese": "zh", "Arabic": "ar", "Russian": "ru", "Japanese": "ja", "Korean": "ko",
+    # Add as many languages as needed
+}
 
 # ---------------STICKERS---------------#
 
