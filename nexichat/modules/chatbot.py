@@ -88,27 +88,37 @@ languages = {
 def generate_language_buttons(languages):
     buttons = []
     current_row = []
-
     for lang, code in languages.items():
         current_row.append(InlineKeyboardButton(lang.capitalize(), callback_data=f'setlabf_{code}'))
-        
         if len(current_row) == 4:  
             buttons.append(current_row)
             current_row = []  
-
     if current_row:  
         buttons.append(current_row)
-
     return InlineKeyboardMarkup(buttons)
 
+
+def get_chat_language(chat_id):
+    chat_lang = lang_db.find_one({"chat_id": chat_id})
+    return chat_lang["language"] if chat_lang and "language" in chat_lang else None
 
 
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
     await message.reply_text(
         "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=generate_language_buttons()
-    )
+        reply_markup=generate_language_buttons())
+    
+
+@nexichat.on_callback_query(filters.regex(r"setlang_"))
+async def language_selection_callback(client: Client, callback_query):
+    lang_code = callback_query.data.split("_")[1]
+    chat_id = callback_query.message.chat.id
+    chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
+    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
+    await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.", show_alert=True)
+    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
+
 
 @nexichat.on_message(filters.command(["resetlang", "nolang"]))
 async def set_language(client: Client, message: Message):
@@ -124,20 +134,12 @@ async def language_selection_callback(client: Client, callback_query):
     await callback_query.answer("Bot language has been reset in this chat, now mix language is using.", show_alert=True)
     await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**")
 
-
-@nexichat.on_callback_query(filters.regex(r"setlang_"))
+@nexichat.on_callback_query(filters.regex("select_lang"))
 async def language_selection_callback(client: Client, callback_query):
-    lang_code = callback_query.data.split("_")[1]
     chat_id = callback_query.message.chat.id
-    chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
-    lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
-    await callback_query.answer(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.", show_alert=True)
-    await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
+    await callback_query.answer("Choose chatbot language for this chat.", show_alert=True)
+    await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**", reply_markup=generate_language_buttons())
     
-def get_chat_language(chat_id):
-    chat_lang = lang_db.find_one({"chat_id": chat_id})
-    return chat_lang["language"] if chat_lang and "language" in chat_lang else None
-
 @nexichat.on_message(filters.command("chatbot"))
 async def chaton(client: Client, message: Message):
     await message.reply_text(
@@ -332,41 +334,6 @@ async def cb_handler(_, query: CallbackQuery):
             text=HELP_READ,
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
-    elif query.data == "addchat":
-        user_id = query.from_user.id
-        user_status = (await query.message.chat.get_member(user_id)).status
-        if user_status not in [CMS.OWNER, CMS.ADMINISTRATOR]:
-            return await query.answer(
-                "ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴇᴠᴇɴ ᴀɴ ᴀᴅᴍɪɴ, ᴅᴏɴ'ᴛ ᴛʀʏ ᴛʜɪs ᴇxᴘʟᴏsɪᴠᴇ sʜɪᴛ!",
-                show_alert=True,
-            )
-        else:
-            is_DAXX = DAXX.find_one({"chat_id": query.message.chat.id})
-            if not is_DAXX:
-                await query.edit_message_text(f"**ᴄʜᴀᴛ-ʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴇɴᴀʙʟᴇᴅ.**")
-            if is_DAXX:
-                DAXX.delete_one({"chat_id": query.message.chat.id})
-                await query.edit_message_text(
-                    f"**ᴄʜᴀᴛ-ʙᴏᴛ ᴇɴᴀʙʟᴇᴅ ʙʏ** {query.from_user.mention}."
-                )
-    elif query.data == "rmchat":
-        user_id = query.from_user.id
-        user_status = (await query.message.chat.get_member(user_id)).status
-        if user_status not in [CMS.OWNER, CMS.ADMINISTRATOR]:
-            await query.answer(
-                "ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴇᴠᴇɴ ᴀɴ ᴀᴅᴍɪɴ, ᴅᴏɴ'ᴛ ᴛʀʏ ᴛʜɪs ᴇxᴘʟᴏsɪᴠᴇ sʜɪᴛ!",
-                show_alert=True,
-            )
-            return
-        else:
-            is_DAXX = DAXX.find_one({"chat_id": query.message.chat.id})
-            if not is_DAXX:
-                DAXX.insert_one({"chat_id": query.message.chat.id})
-                await query.edit_message_text(
-                    f"**ᴄʜᴀᴛ-ʙᴏᴛ ᴅɪsᴀʙʟᴇᴅ ʙʏ** {query.from_user.mention}."
-                )
-            if is_DAXX:
-                await query.edit_message_text("**ᴄʜᴀᴛ-ʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ.**")
     elif query.data == "enable_chatbot" or "disable_chatbot":
         action = query.data
         if query.message.chat.type in ["group", "supergroup"]:
