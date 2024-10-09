@@ -135,7 +135,7 @@ async def language_selection_callback(client: Client, callback_query):
     await callback_query.answer("Bot language has been reset in this chat, now mix language is using.", show_alert=True)
     await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**")
 
-@nexichat.on_callback_query(filters.regex("select_lang"))
+@nexichat.on_callback_query(filters.regex("choose_lang"))
 async def language_selection_callback(client: Client, callback_query):
     chat_id = callback_query.message.chat.id
     await callback_query.answer("Choose chatbot language for this chat.", show_alert=True)
