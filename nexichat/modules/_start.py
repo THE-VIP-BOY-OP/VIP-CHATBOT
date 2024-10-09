@@ -70,17 +70,22 @@ IMG = [
     "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
 ]
 
+
+
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
-def set_default_status(chat_id):
-    if not status_db.find_one({"chat_id": chat_id}):
-        status_db.insert_one({"chat_id": chat_id, "status": "enabled"})
 
+async def set_default_status(chat_id):
+    try:
+        if not await status_db.find_one({"chat_id": chat_id}):
+            await status_db.insert_one({"chat_id": chat_id, "status": "enabled"})
+    except Exception as e:
+        print(f"Error setting default status for chat {chat_id}: {e}")
 
 @nexichat.on_message(filters.new_chat_members)
 async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
-    set_default_status(message.chat.id)
+    await set_default_status(message.chat.id)
     try:
         for member in message.new_chat_members:
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
