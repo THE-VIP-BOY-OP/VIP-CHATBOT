@@ -105,12 +105,11 @@ def generate_language_buttons(page=1):
         nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
     if end_index < len(lang_items):
         nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
- 
- 
+
     if nav_buttons:
         buttons.append(nav_buttons)
 
-    return buttons
+    return InlineKeyboardMarkup(buttons)
 
 
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
