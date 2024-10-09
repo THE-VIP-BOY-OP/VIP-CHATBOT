@@ -36,42 +36,54 @@ lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
 
 languages = {
-    'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'arabic': 'ar', 
-    'armenian': 'hy', 'assamese': 'as', 'aymara': 'ay', 'azerbaijani': 'az', 
-    'bambara': 'bm', 'basque': 'eu', 'belarusian': 'be', 'bengali': 'bn', 
-    'bhojpuri': 'bho', 'bosnian': 'bs', 'bulgarian': 'bg', 'catalan': 'ca', 
-    'cebuano': 'ceb', 'chichewa': 'ny', 'chinese (simplified)': 'zh-CN', 
-    'chinese (traditional)': 'zh-TW', 'corsican': 'co', 'croatian': 'hr', 
-    'czech': 'cs', 'danish': 'da', 'dhivehi': 'dv', 'dogri': 'doi', 
-    'dutch': 'nl', 'english': 'en', 'esperanto': 'eo', 'estonian': 'et', 
-    'ewe': 'ee', 'filipino': 'tl', 'finnish': 'fi', 'french': 'fr', 
-    'frisian': 'fy', 'galician': 'gl', 'georgian': 'ka', 'german': 'de', 
-    'greek': 'el', 'guarani': 'gn', 'gujarati': 'gu', 'haitian creole': 'ht', 
-    'hausa': 'ha', 'hawaiian': 'haw', 'hebrew': 'iw', 'hindi': 'hi', 
-    'hmong': 'hmn', 'hungarian': 'hu', 'icelandic': 'is', 'igbo': 'ig', 
-    'ilocano': 'ilo', 'indonesian': 'id', 'irish': 'ga', 'italian': 'it', 
-    'japanese': 'ja', 'javanese': 'jw', 'kannada': 'kn', 'kazakh': 'kk', 
-    'khmer': 'km', 'kinyarwanda': 'rw', 'konkani': 'gom', 'korean': 'ko', 
+    # Top 20 languages used on Telegram
+    'english': 'en', 'hindi': 'hi', 'russian': 'ru', 'spanish': 'es', 'portuguese': 'pt', 
+    'arabic': 'ar', 'turkish': 'tr', 'german': 'de', 'french': 'fr', 
+    'italian': 'it', 'persian': 'fa', 'indonesian': 'id', 
+    'ukrainian': 'uk', 'filipino': 'tl', 'korean': 'ko', 'japanese': 'ja', 
+    'polish': 'pl', 'vietnamese': 'vi', 'thai': 'th', 'dutch': 'nl',
+
+    # Top languages spoken in Bihar
+    'bhojpuri': 'bho', 'maithili': 'mai', 'urdu': 'ur', 
+    'bengali': 'bn', 'magahi': 'mag', 'angika': 'anp', 'sanskrit': 'sa', 
+    'oriya': 'or', 'nepali': 'ne', 'santhali': 'sat', 'khortha': 'kht', 
+    'kurmali': 'kyu', 'ho': 'hoc', 'munda': 'unr', 'kharwar': 'kqw', 
+    'mundari': 'unr', 'sadri': 'sck', 'pali': 'pi', 'tamil': 'ta',
+
+    # Top languages spoken in India
+    'telugu': 'te', 'bengali': 'bn', 'marathi': 'mr', 'tamil': 'ta', 
+    'gujarati': 'gu', 'urdu': 'ur', 'kannada': 'kn', 'malayalam': 'ml', 
+    'odia': 'or', 'punjabi': 'pa', 'assamese': 'as', 'sanskrit': 'sa', 
+    'kashmiri': 'ks', 'konkani': 'gom', 'sindhi': 'sd', 'bodo': 'brx', 
+    'dogri': 'doi', 'santali': 'sat', 'meitei': 'mni', 'nepali': 'ne',
+
+    # Other language
+    'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'armenian': 'hy', 
+    'aymara': 'ay', 'azerbaijani': 'az', 'bambara': 'bm', 
+    'basque': 'eu', 'belarusian': 'be', 'bosnian': 'bs', 'bulgarian': 'bg', 
+    'catalan': 'ca', 'cebuano': 'ceb', 'chichewa': 'ny', 
+    'chinese (simplified)': 'zh-CN', 'chinese (traditional)': 'zh-TW', 
+    'corsican': 'co', 'croatian': 'hr', 'czech': 'cs', 'danish': 'da', 
+    'dhivehi': 'dv', 'esperanto': 'eo', 'estonian': 'et', 'ewe': 'ee', 
+    'finnish': 'fi', 'frisian': 'fy', 'galician': 'gl', 'georgian': 'ka', 
+    'greek': 'el', 'guarani': 'gn', 'haitian creole': 'ht', 'hausa': 'ha', 
+    'hawaiian': 'haw', 'hebrew': 'iw', 'hmong': 'hmn', 'hungarian': 'hu', 
+    'icelandic': 'is', 'igbo': 'ig', 'ilocano': 'ilo', 'irish': 'ga', 
+    'javanese': 'jw', 'kazakh': 'kk', 'khmer': 'km', 'kinyarwanda': 'rw', 
     'krio': 'kri', 'kurdish (kurmanji)': 'ku', 'kurdish (sorani)': 'ckb', 
     'kyrgyz': 'ky', 'lao': 'lo', 'latin': 'la', 'latvian': 'lv', 
     'lingala': 'ln', 'lithuanian': 'lt', 'luganda': 'lg', 'luxembourgish': 'lb', 
-    'macedonian': 'mk', 'maithili': 'mai', 'malagasy': 'mg', 'malay': 'ms', 
-    'malayalam': 'ml', 'maltese': 'mt', 'maori': 'mi', 'marathi': 'mr', 
-    'meiteilon (manipuri)': 'mni-Mtei', 'mizo': 'lus', 'mongolian': 'mn', 
-    'myanmar': 'my', 'nepali': 'ne', 'norwegian': 'no', 'odia (oriya)': 'or', 
-    'oromo': 'om', 'pashto': 'ps', 'persian': 'fa', 'polish': 'pl', 
-    'portuguese': 'pt', 'punjabi': 'pa', 'quechua': 'qu', 'romanian': 'ro', 
-    'russian': 'ru', 'samoan': 'sm', 'sanskrit': 'sa', 'scots gaelic': 'gd', 
-    'sepedi': 'nso', 'serbian': 'sr', 'sesotho': 'st', 'shona': 'sn', 
-    'sindhi': 'sd', 'sinhala': 'si', 'slovak': 'sk', 'slovenian': 'sl', 
-    'somali': 'so', 'spanish': 'es', 'sundanese': 'su', 'swahili': 'sw', 
-    'swedish': 'sv', 'tajik': 'tg', 'tamil': 'ta', 'tatar': 'tt', 
-    'telugu': 'te', 'thai': 'th', 'tigrinya': 'ti', 'tsonga': 'ts', 
-    'turkish': 'tr', 'turkmen': 'tk', 'twi': 'ak', 'ukrainian': 'uk', 
-    'urdu': 'ur', 'uyghur': 'ug', 'uzbek': 'uz', 'vietnamese': 'vi', 
-    'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 'yoruba': 'yo', 'zulu': 'zu'
+    'macedonian': 'mk', 'malagasy': 'mg', 'maltese': 'mt', 'maori': 'mi', 
+    'mizo': 'lus', 'mongolian': 'mn', 'myanmar': 'my', 'norwegian': 'no', 
+    'oromo': 'om', 'pashto': 'ps', 'quechua': 'qu', 'romanian': 'ro', 
+    'samoan': 'sm', 'scots gaelic': 'gd', 'sepedi': 'nso', 'serbian': 'sr', 
+    'sesotho': 'st', 'shona': 'sn', 'sinhala': 'si', 'slovak': 'sk', 
+    'slovenian': 'sl', 'somali': 'so', 'sundanese': 'su', 'swahili': 'sw', 
+    'swedish': 'sv', 'tajik': 'tg', 'tatar': 'tt', 'tigrinya': 'ti', 
+    'tsonga': 'ts', 'turkmen': 'tk', 'twi': 'ak', 'uyghur': 'ug', 
+    'uzbek': 'uz', 'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 
+    'yoruba': 'yo', 'zulu': 'zu'
 }
-
 def generate_language_buttons(page=1):
     buttons = []
     items_per_page = 10
