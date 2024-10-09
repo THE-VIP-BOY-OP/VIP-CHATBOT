@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import random
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, Callbackquery
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -31,6 +31,26 @@ from nexichat.modules.helpers import (
     START,
 )
 
+STICKER = [
+    "CAACAgUAAx0CYlaJawABBy4vZaieO6T-Ayg3mD-JP-f0yxJngIkAAv0JAALVS_FWQY7kbQSaI-geBA",
+    "CAACAgUAAx0CYlaJawABBy4rZaid77Tf70SV_CfjmbMgdJyVD8sAApwLAALGXCFXmCx8ZC5nlfQeBA",
+    "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
+]
+
+
+EMOJIOS = [
+    "💣",
+    "💥",
+    "🪄",
+    "🧨",
+    "⚡",
+    "🤡",
+    "👻",
+    "🎃",
+    "🎩",
+    "🕊",
+]
+
 IMG = [
     "https://graph.org/file/210751796ff48991b86a3.jpg",
     "https://graph.org/file/7b4924be4179f70abcf33.jpg",
@@ -47,6 +67,8 @@ IMG = [
     "https://graph.org/file/814cd9a25dd78480d0ce1.jpg",
     "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
 ]
+
+
 
 languages = {
     'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'arabic': 'ar', 
@@ -84,25 +106,50 @@ languages = {
     'urdu': 'ur', 'uyghur': 'ug', 'uzbek': 'uz', 'vietnamese': 'vi', 
     'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 'yoruba': 'yo', 'zulu': 'zu'
 }
-STICKER = [
-    "CAACAgUAAx0CYlaJawABBy4vZaieO6T-Ayg3mD-JP-f0yxJngIkAAv0JAALVS_FWQY7kbQSaI-geBA",
-    "CAACAgUAAx0CYlaJawABBy4rZaid77Tf70SV_CfjmbMgdJyVD8sAApwLAALGXCFXmCx8ZC5nlfQeBA",
-    "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
-]
 
+def generate_language_buttons(page=1):
+    buttons = []
+    items_per_page = 10
+    lang_items = list(languages.items())
+    
+    start_index = (page - 1) * items_per_page
+    end_index = start_index + items_per_page
 
-EMOJIOS = [
-    "💣",
-    "💥",
-    "🪄",
-    "🧨",
-    "⚡",
-    "🤡",
-    "👻",
-    "🎃",
-    "🎩",
-    "🕊",
-]
+    for i in range(start_index, min(end_index, len(lang_items)), 2):
+        row = []
+        for j in range(i, min(i + 2, end_index)):  # 2 buttons per row
+            lang_name, lang_code = lang_items[j]
+            row.append(InlineKeyboardButton(lang_name.title(), callback_data=f"setlang_{lang_code}"))
+        buttons.append(row)
+
+    nav_buttons = []
+    if page > 1:
+        nav_buttons.append(InlineKeyboardButton("Back", callback_data=f"language_page_{page - 1}"))
+    if end_index < len(lang_items):
+        nav_buttons.append(InlineKeyboardButton("Next", callback_data=f"language_page_{page + 1}"))
+
+    if nav_buttons:
+        buttons.append(nav_buttons)
+
+    return buttons
+
+@nexichat.on_message(filters.command(["lang", "language", "setlang"]))
+async def set_language(client: Client, message: Message):
+    await message.reply_text(
+        "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
+        reply_markup=InlineKeyboardMarkup(generate_language_buttons())
+    )
+
+@nexichat.on_callback_query(filters.regex(r"setlang_"))
+async def language_selection_callback(client: Client, callback_query):
+    lang_code = callback_query.data.split("_")[1]
+    chat_id = callback_query.message.chat.id
+    chat_member = await client.get_chat_member(callback_query.message.chat.id, callback_query.from_user.id)
+    if chat_member.status in ["administrator", "creator"] and chat_member.can_change_info:
+        lang_db.update_one({"chat_id": chat_id}, {"$set": {"language": lang_code}}, upsert=True)
+        await callback_query.message.edit_text(f"ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ ʜᴀs ʙᴇᴇɴ sᴇᴛ ᴛᴏ {lang_code.title()}.")
+    else:
+        await callback_query.answer("You do not have permission to change the language.", show_alert=True)
 
 
 
