@@ -1,7 +1,8 @@
 import asyncio
 import logging
 import random
-
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from googletrans import Translator
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -74,6 +75,12 @@ EMOJIOS = [
 
 
 # ---------------EMOJIOS---------------#
+def generate_language_buttons():
+    buttons = []
+    for lang_name, lang_code in languages.items():
+        buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
+    return buttons
+
 
 
 @nexichat.on_message(filters.new_chat_members)
@@ -81,7 +88,7 @@ async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
     try:
         for member in message.new_chat_members:
-            await message.reply_photo(photo=random.choice(IMG), caption=START)
+            await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=InlineKeyboardMarkup(generate_language_buttons()))
             
             chat = message.chat   
             
