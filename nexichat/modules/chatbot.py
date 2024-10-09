@@ -3,23 +3,23 @@ from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from googletrans import Translator
+from deep_translator import GoogleTranslator  # Switched to deep-translator for translations
 
 from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON
 
-translator = Translator()
+translator = GoogleTranslator()  # Initialize the translator
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
-# List of languages for buttons
+# List of languages for buttons (Names in respective languages)
 languages = {
-    "Hindi": "hi", "English": "en", "Spanish": "es", "French": "fr", "German": "de", 
-    "Chinese": "zh", "Arabic": "ar", "Russian": "ru", "Japanese": "ja", "Korean": "ko",
-    # Add as many languages as needed
+    "हिंदी": "hi", "English": "en", "Español": "es", "Français": "fr", "Deutsch": "de",
+    "中文": "zh", "العربية": "ar", "Русский": "ru", "日本語": "ja", "한국어": "ko",
+    # Add more languages if needed
 }
 
 # Function to generate language buttons
@@ -81,7 +81,7 @@ async def chatbot_response(client: Client, message: Message):
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
             if chat_lang != "en":
-                response_text = translator.translate(response_text, dest=chat_lang).text
+                response_text = translator.translate(response_text, target=chat_lang)
 
             if reply_data["check"] == "sticker":
                 await message.reply_sticker(reply_data["text"])
@@ -99,8 +99,7 @@ async def chatbot_response(client: Client, message: Message):
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
 
-# The save_reply and get_reply functions remain unchanged
-
+# Example get_reply and save_reply functions (unchanged)
 async def save_reply(original_message: Message, reply_message: Message):
     if reply_message.sticker:
         is_chat = chatai.find_one(
@@ -188,7 +187,6 @@ async def get_reply(word: str):
         random_reply = random.choice(is_chat)
         return random_reply
     return None
-
 
 from pymongo import MongoClient
 from pyrogram.enums import ChatMemberStatus as CMS
