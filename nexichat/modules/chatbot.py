@@ -107,7 +107,7 @@ def get_chat_language(chat_id):
 async def set_language(client: Client, message: Message):
     await message.reply_text(
         "ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴄʜᴀᴛ ʟᴀɴɢᴜᴀɢᴇ:",
-        reply_markup=generate_language_buttons())
+        reply_markup=generate_language_buttons(languages))
     
 
 @nexichat.on_callback_query(filters.regex(r"setlang_"))
@@ -138,7 +138,7 @@ async def language_selection_callback(client: Client, callback_query):
 async def language_selection_callback(client: Client, callback_query):
     chat_id = callback_query.message.chat.id
     await callback_query.answer("Choose chatbot language for this chat.", show_alert=True)
-    await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**", reply_markup=generate_language_buttons())
+    await callback_query.message.edit_text(f"**Bot language has been reset in this chat, now mix language is using.**", reply_markup=generate_language_buttons(languages))
     
 @nexichat.on_message(filters.command("chatbot"))
 async def chaton(client: Client, message: Message):
