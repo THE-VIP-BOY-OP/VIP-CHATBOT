@@ -34,6 +34,7 @@ status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
+
 languages = {
     'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 'arabic': 'ar', 
     'armenian': 'hy', 'assamese': 'as', 'aymara': 'ay', 'azerbaijani': 'az', 
@@ -70,6 +71,7 @@ languages = {
     'urdu': 'ur', 'uyghur': 'ug', 'uzbek': 'uz', 'vietnamese': 'vi', 
     'welsh': 'cy', 'xhosa': 'xh', 'yiddish': 'yi', 'yoruba': 'yo', 'zulu': 'zu'
 }
+
 def generate_language_buttons(page=1):
     buttons = []
     items_per_page = 10
@@ -78,8 +80,12 @@ def generate_language_buttons(page=1):
     start_index = (page - 1) * items_per_page
     end_index = start_index + items_per_page
 
-    for lang_name, lang_code in lang_items[start_index:end_index]:
-        buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
+    for i in range(start_index, min(end_index, len(lang_items)), 2):
+        row = []
+        for j in range(i, min(i + 2, end_index)):  
+            lang_name, lang_code = lang_items[j]
+            row.append(InlineKeyboardButton(lang_name.title(), callback_data=f"setlang_{lang_code}"))
+        buttons.append(row)
 
     nav_buttons = []
     if page > 1:
