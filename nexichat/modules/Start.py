@@ -128,7 +128,7 @@ async def welcomejej(client, message: Message):
                                 [
                                     [
                                         InlineKeyboardButton(
-                                            f"{message.from_user.firat_name}",
+                                            f"{message.from_user.first_name}",
                                             user_id=message.from_user.id)]]))
                     else:
                         await nexichat.send_photo(
@@ -139,7 +139,7 @@ async def welcomejej(client, message: Message):
                                 [
                                     [
                                         InlineKeyboardButton(
-                                            f"{message.from_user.firat_name}",
+                                            f"{message.from_user.first_name}",
                                             user_id=message.from_user.id)]]))
                 except Exception as e:
                     logging.info(f"Error fetching owner username: {e}")
@@ -151,7 +151,7 @@ async def welcomejej(client, message: Message):
                             [
                                 [
                                     InlineKeyboardButton(
-                                        f"{message.from_user.firat_name}",
+                                        f"{message.from_user.first_name}",
                                         user_id=message.from_user.id)]]))
 
     except Exception as e:
