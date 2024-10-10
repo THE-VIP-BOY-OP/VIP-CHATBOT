@@ -128,13 +128,8 @@ async def welcomejej(client, message: Message):
                                 [
                                     [
                                         InlineKeyboardButton(
-                                            f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
-                                            url=f"tg://openmessage?user_id={message.from_user.id}",
-                                        )
-                                    ]
-                                ]
-                            ),
-                        )
+                                            f"{message.from_user.firat_name}",
+                                            user_id=message.from_user.id)]]))
                     else:
                         await nexichat.send_photo(
                             int(OWNER_ID),
@@ -144,13 +139,8 @@ async def welcomejej(client, message: Message):
                                 [
                                     [
                                         InlineKeyboardButton(
-                                            f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
-                                            url=f"tg://openmessage?user_id={message.from_user.id}",
-                                        )
-                                    ]
-                                ]
-                            ),
-                        )
+                                            f"{message.from_user.firat_name}",
+                                            user_id=message.from_user.id)]]))
                 except Exception as e:
                     logging.info(f"Error fetching owner username: {e}")
                     await nexichat.send_photo(
@@ -161,13 +151,8 @@ async def welcomejej(client, message: Message):
                             [
                                 [
                                     InlineKeyboardButton(
-                                        f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
-                                        url=f"tg://openmessage?user_id={message.from_user.id}",
-                                    )
-                                ]
-                            ]
-                        ),
-                    )
+                                        f"{message.from_user.firat_name}",
+                                        user_id=message.from_user.id)]]))
 
     except Exception as e:
         logging.info(f"Error: {e}")
@@ -223,7 +208,7 @@ async def start(_, m: Message):
         await m.reply_photo(photo=chat_photo, caption=START.format(nexichat.mention or "can't mention", chats, users), reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id=m.chat.id)]])
-        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** {m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :** {users}", reply_markup=keyboard)
+        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** @{m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :** {users}", reply_markup=keyboard)
         
     else:
         await m.reply_photo(
