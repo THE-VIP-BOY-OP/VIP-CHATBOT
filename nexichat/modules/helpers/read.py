@@ -4,7 +4,7 @@ from pyrogram import Client, filters
 
 
 
-START = f"""**
+START = """**
 {} ᴛʜᴇ ꜱᴜᴘᴇʀғᴀꜱᴛ ᴄʜᴀᴛʙᴏᴛ 💞
 
 ➪ ᴡʜᴀᴛ ɪ ᴄᴀɴ ᴅᴏ:
