@@ -84,7 +84,7 @@ async def welcomejej(client, message: Message):
                 users = len(await get_served_users())
                 chats = len(await get_served_chats())
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
-                await message.reply_photo(photo=random.choice(IMG), caption=["START"].format(nexichat.mention, chats, users), reply_markup=reply_markup)
+                await message.reply_photo(photo=random.choice(IMG), caption=START.format(nexichat.mention or "can't mention", chats, users), reply_markup=reply_markup)
                 chat = message.chat   
                 try:
                     invitelink = await nexichat.export_chat_invite_link(message.chat.id)
