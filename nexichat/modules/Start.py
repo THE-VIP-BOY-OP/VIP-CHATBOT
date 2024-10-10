@@ -101,6 +101,7 @@ async def welcomejej(client, message: Message):
                     chat_photo = "https://envs.sh/IL_.jpg"
                 
                 count = await nexichat.get_chat_members_count(chat.id)
+                chats = len(await get_served_chats())
                 username = chat.username if chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐆ʀᴏᴜᴘ"
                 msg = (
                     f"**📝𝐌ᴜsɪᴄ 𝐁ᴏᴛ 𝐀ᴅᴅᴇᴅ 𝐈ɴ 𝐀 #𝐍ᴇᴡ_𝐆ʀᴏᴜᴘ**\n\n"
@@ -110,6 +111,8 @@ async def welcomejej(client, message: Message):
                     f"**🖇️𝐆ʀᴏᴜᴘ 𝐋ɪɴᴋ:** {link}\n"
                     f"**📈𝐆ʀᴏᴜᴘ 𝐌ᴇᴍʙᴇʀs:** {count}\n"
                     f"**🤔𝐀ᴅᴅᴇᴅ 𝐁ʏ:** {message.from_user.mention}"
+
+                    f"**ᴛᴏᴛᴀʟ ᴄʜᴀᴛs :** {chats}"
                 )
 
                 try:
