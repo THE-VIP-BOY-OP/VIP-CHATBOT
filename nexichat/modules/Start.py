@@ -234,8 +234,22 @@ async def start(_, m: Message):
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
         await asyncio.sleep(1)
         await umm.delete()
-        await m.reply_photo(photo=BOT, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
+        if m.chat.photo:
+            userss_photo = await nexichat.download_media(m.chat.photo.big_file_id)
+        else:
+            userss_photo = BOT
+            if userss_photo:
+                chat_photo = userss_photo if userss_photo else BOT
+        except AttributeError:
+            chat_photo = BOT
+        await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
+        sender_id = m.from_user.id
+            sender_name = m.from_user.first_name
+            return await nexichat.send_message(
+                config.OWNER_ID,
+                f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
+            )
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
