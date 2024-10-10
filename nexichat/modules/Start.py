@@ -207,8 +207,11 @@ async def start(_, m: Message):
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ sтαятιи__**")
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg__**")
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
         await accha.delete()
         
@@ -225,9 +228,9 @@ async def start(_, m: Message):
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
         
-        sender_id = m.from_user.id
-        sender_name = m.from_user.first_name
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"{sender_name}", user_id=int({sender_id}))]])
+        sender_id = m.chat.id
+        sender_name = m.chat.first_name
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"{sender_name}", user_id={m.chat.id})]])
                                 
         return await nexichat.send_photo(
             int(OWNER_ID),
