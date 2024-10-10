@@ -11,8 +11,8 @@ START = f"""
 ➲ ᴀᴅᴠᴀɴᴄᴇ ʙʀᴏᴀᴅᴄᴀsᴛ ғᴇᴀᴛᴜʀᴇs
 ➲ Cʜᴀᴛʙᴏᴛ ᴇɴᴀʙʟᴇ ᴀɴᴅ ᴅɪsᴀʙʟᴇ ʙʏ /chatbot
 
-๏ Mʏ ʀᴇᴘᴏ ➪ ᴄʟɪᴄᴋ ʜᴇʀᴇ 💞
-๏ ᴍᴀᴅᴇ ʙʏ ➪ ᴠɪᴘ ✯ ʙᴏʏ 💞**
+๏ Mʏ ʀᴇᴘᴏ ➪ [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://github.com/THE-VIP-BOY-OP /VIP-CHATBOT) 💞
+๏ ᴍᴀᴅᴇ ʙʏ ➪ [ᴠɪᴘ ✯ ʙᴏʏ](https://t.me/the_vip_boy) 💞**
 """
 
 HELP_READ = f"""**
