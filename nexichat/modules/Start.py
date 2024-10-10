@@ -226,13 +226,9 @@ async def start(_, m: Message):
                 chat_photo = BOT  
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
-        """
-        sender_id = m.from_user.id
-        sender_name = m.from_user.first_name
-        return await nexichat.send_message(
-            config.OWNER_ID,
-            f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
-        )"""
+        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id={m.chat.id})]])
+        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.chat.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {m.chat.id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {m.chat.first_name}", reply_markup=InlineKeyboardMarkup(START_BOT))
+        
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
