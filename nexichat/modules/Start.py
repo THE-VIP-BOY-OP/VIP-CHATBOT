@@ -83,8 +83,6 @@ async def welcomejej(client, message: Message):
         for member in message.new_chat_members:
             
             if member.id == nexichat.id:
-                users = len(await get_served_users())
-                chats = len(await get_served_chats())
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
                 await message.reply_photo(photo=random.choice(IMG), caption=START.format(nexichat.mention or "can't mention", chats, users), reply_markup=reply_markup)
                 chat = message.chat   
@@ -162,6 +160,8 @@ async def welcomejej(client, message: Message):
 
 @nexichat.on_cmd(["start", "aistart"])
 async def start(_, m: Message):
+    users = len(await get_served_users())
+    chats = len(await get_served_chats())
     if m.chat.type == ChatType.PRIVATE:
         accha = await m.reply_text(
             text=random.choice(EMOJIOS),
