@@ -226,7 +226,7 @@ async def start(_, m: Message):
                 chat_photo = BOT  
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id={m.chat.id})]])
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id=int({m.chat.id}))]])
         await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {m.chat.id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {m.chat.first_name}", reply_markup=keyboard)
         
     else:
