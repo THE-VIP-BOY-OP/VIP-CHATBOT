@@ -2,7 +2,7 @@ from config import OWNER_USERNAME, SUPPORT_GRP
 from nexichat import nexichat
 
 START = f"""
-**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.mention}💞**
+**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.mention}💞
 
 ➲ Sᴜᴘᴇʀғᴀsᴛ ʀᴇᴘʟʏ ғᴏʀ ᴇᴠᴇʀʏ ʙᴏᴛ
 ➲ Sᴜᴘᴘᴏʀᴛ ᴛᴇxᴛ, sᴛɪᴄᴋᴇʀ, ᴘʜᴏᴛᴏ, ᴠɪᴅᴇᴏ, ᴀᴜᴅɪᴏ...
@@ -11,7 +11,8 @@ START = f"""
 ➲ ᴀᴅᴠᴀɴᴄᴇ ʙʀᴏᴀᴅᴄᴀsᴛ ғᴇᴀᴛᴜʀᴇs
 ➲ Cʜᴀᴛʙᴏᴛ ᴇɴᴀʙʟᴇ ᴀɴᴅ ᴅɪsᴀʙʟᴇ ʙʏ /chatbot
 
-► Rᴇᴘᴏ:- [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://github.com/THE-VIP-BOY-OP/VIP-CHATBOT)
+๏ Mʏ ʀᴇᴘᴏ ➪ ᴄʟɪᴄᴋ ʜᴇʀᴇ 💞
+๏ ᴍᴀᴅᴇ ʙʏ ➪ ᴠɪᴘ ✯ ʙᴏʏ 💞**
 """
 
 HELP_READ = f"""
@@ -37,7 +38,7 @@ TOOLS_DATA_READ = f"""**
 ──────────────
 ➻ ᴜsᴇ /repo ᴛᴏ ɢᴇᴛ ᴛʜᴇ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ᴏғ ᴛʜᴇ ʙᴏᴛ!
 ──────────────
-📡 ᴍᴀᴅᴇ ʙʏ ➪ [ᴠɪᴘ ✯ ʙᴏʏ](https://t.me/the_vip_boy) 💞**
+๏ ᴍᴀᴅᴇ ʙʏ ➪ [ᴠɪᴘ ✯ ʙᴏʏ](https://t.me/the_vip_boy) 💞**
 """
 
 CHATBOT_READ = f"""**
