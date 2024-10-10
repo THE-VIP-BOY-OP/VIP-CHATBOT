@@ -77,6 +77,8 @@ async def set_default_status(chat_id):
 async def welcomejej(client, message: Message):
     await add_served_chat(message.chat.id)
     await set_default_status(message.chat.id)
+    users = len(await get_served_users())
+    chats = len(await get_served_chats())
     try:
         for member in message.new_chat_members:
             
