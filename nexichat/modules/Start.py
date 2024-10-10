@@ -213,7 +213,7 @@ async def start(_, m: Message):
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
-            caption=START,
+            caption=START.format(nexichat.mention or "can't mention", chats, users),
             reply_markup=InlineKeyboardMarkup(HELP_START),
         )
         await add_served_chat(m.chat.id)
