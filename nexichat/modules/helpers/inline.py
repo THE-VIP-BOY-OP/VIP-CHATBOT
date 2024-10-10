@@ -7,7 +7,7 @@ from nexichat import OWNER, nexichat
 START_BOT = [
     [
         InlineKeyboardButton(
-            text="😍 ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ 😍",
+            text="😍 ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ 😍",
             url=f"https://t.me/{nexichat.username}?startgroup=true",
         ),
     ],
@@ -16,7 +16,7 @@ START_BOT = [
         InlineKeyboardButton(text="✨ ꜱᴜᴘᴘᴏʀᴛ ✨", url=f"https://t.me/{SUPPORT_GRP}"),
     ],
     [
-        InlineKeyboardButton(text="« ʜᴇʟᴘ »", callback_data="HELP"),
+        InlineKeyboardButton(text="« ғᴇᴀᴛᴜʀᴇs »", callback_data="HELP"),
     ],
 ]
 
