@@ -206,32 +206,33 @@ async def start(_, m: Message):
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ sтαятιи__**")
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg__**")
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
+        await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
         await accha.delete()
         
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
-        await asyncio.sleep(1)
-        await umm.delete()
-
         chat_photo = BOT  
         if m.chat.photo:
             try:
                 userss_photo = await nexichat.download_media(m.chat.photo.big_file_id)
+                await umm.delete()
                 if userss_photo:
                     chat_photo = userss_photo
             except AttributeError:
                 chat_photo = BOT  
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
-        
+        """
         sender_id = m.from_user.id
         sender_name = m.from_user.first_name
         return await nexichat.send_message(
             config.OWNER_ID,
             f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
-        )
+        )"""
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
