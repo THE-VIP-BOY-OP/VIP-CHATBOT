@@ -1,18 +1,33 @@
 from config import OWNER_USERNAME, SUPPORT_GRP
 from nexichat import nexichat
+from pyrogram import Client, filters
+from nexichat.database.chats import get_served_chats
+from nexichat.database.users import get_served_users
+users = len(await get_served_users())
+chats = len(await get_served_chats())
 
 START = f"""
-**๏ ʜᴇʏ, ɪ ᴀᴍ {nexichat.mention}💞
+╔═══════❖•ೋ° °ೋ•❖═══════╗
+          {nexichat.mention}
+      💞 ᴛʜᴇ ꜱᴜᴘᴇʀғᴀꜱᴛ ᴄʜᴀᴛʙᴏᴛ 💞
+╚═══════❖•ೋ° °ೋ•❖═══════╝
 
-➲ Sᴜᴘᴇʀғᴀsᴛ ʀᴇᴘʟʏ ғᴏʀ ᴇᴠᴇʀʏ ʙᴏᴛ
-➲ Sᴜᴘᴘᴏʀᴛ ᴛᴇxᴛ, sᴛɪᴄᴋᴇʀ, ᴘʜᴏᴛᴏ, ᴠɪᴅᴇᴏ, ᴀᴜᴅɪᴏ...
-➲ Sᴜᴘᴘᴏʀᴛ ᴍᴜʟᴛɪ-ʟᴀɴɢ ғᴏʀ ᴇᴀᴄʜ ᴄʜᴀᴛ /lang
-➲ Yᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ /stats ᴏғ ʙᴏᴛs
-➲ ᴀᴅᴠᴀɴᴄᴇ ʙʀᴏᴀᴅᴄᴀsᴛ ғᴇᴀᴛᴜʀᴇs
-➲ Cʜᴀᴛʙᴏᴛ ᴇɴᴀʙʟᴇ ᴀɴᴅ ᴅɪsᴀʙʟᴇ ʙʏ /chatbot
+➪ ᴡʜᴀᴛ ɪ ᴄᴀɴ ᴅᴏ:
+┏━━━━━━━━━━━━━━━━━━━━━┓
+┃ ➤ ꜱᴜᴘᴘᴏʀᴛꜱ ᴛᴇxᴛ, ꜱᴛɪᴄᴋᴇʀ, ᴘʜᴏᴛᴏ, ᴠɪᴅᴇᴏ...
+┃ ➤ ᴍᴜʟᴛɪ-ʟᴀɴɢ ꜱᴜᴘᴘᴏʀᴛ ғᴏʀ ᴇᴀᴄʜ ᴄʜᴀᴛ /lang
+┃ ➤ ᴄʜᴀᴛʙᴏᴛ ᴄᴀɴ ʙᴇ ᴇɴᴀʙʟᴇᴅ/ᴅɪꜱᴀʙʟᴇᴅ /chatbot
+┗━━━━━━━━━━━━━━━━━━━━━┛
 
-๏ Mʏ ʀᴇᴘᴏ ➪ [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://github.com/THE-VIP-BOY-OP /VIP-CHATBOT) 💞
-๏ ᴍᴀᴅᴇ ʙʏ ➪ [ᴠɪᴘ ✯ ʙᴏʏ](https://t.me/the_vip_boy) 💞**
+┏━━━━━━•❃°•°❀•━━━━━━┓
+┣⪼ ᴛᴏᴛᴀʟ ᴜꜱᴇʀꜱ : {chats}
+┣⪼ ᴛᴏᴛᴀʟ ᴄʜᴀᴛꜱ : {users}
+┗━━━━━━•❃°•°❀•━━━━━━┛
+
+╔════════════════╗
+ 📌 **ᴍʏ ʀᴇᴘᴏ** ➪ [ᴄʟɪᴄᴋ ʜᴇʀᴇ](https://github.com/THE-VIP-BOY-OP/VIP-CHATBOT)
+ 💖 **ᴄʀᴇᴀᴛᴏʀ** ➪ [ᴠɪᴘ ✯ ʙᴏʏ](https://t.me/the_vip_boy)
+╚════════════════╝
 """
 
 HELP_READ = f"""**
