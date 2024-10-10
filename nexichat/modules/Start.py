@@ -1,37 +1,26 @@
 import asyncio
 import logging
 import random
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-from pyrogram import filters
-from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from pyrogram import Client, filters
-from pyrogram.types import Message
 from nexichat import nexichat
-from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users
-from config import OWNER_ID, MONGO_URL
-from nexichat import nexichat
-from nexichat.modules.helpers import START, START_BOT
-import asyncio
-import logging
-from pyrogram import filters
+from datetime import datetime
 from pymongo import MongoClient
+from pyrogram.enums import ChatType
+from pyrogram import Client, filters
+from config import OWNER_ID, MONGO_URL, OWNER_USERNAME
 from pyrogram.errors import FloodWait, ChatAdminRequired
-from nexichat import nexichat
-from nexichat.database.chats import get_served_chats
-from nexichat.database.users import get_served_users
-from nexichat.database.chats import add_served_chat
-from nexichat.database.users import add_served_user
+from nexichat.database.chats import get_served_chats, add_served_chat
+from nexichat.database.users import get_served_users, add_served_user
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from nexichat.modules.helpers import (
+    START,
+    START_BOT,
+    PNG_BTN,
     CLOSE_BTN,
     HELP_BTN,
     HELP_BUTN,
     HELP_READ,
     HELP_START,
     SOURCE_READ,
-    START,
 )
 
 STICKER = [
@@ -226,8 +215,9 @@ async def start(_, m: Message):
                 chat_photo = BOT  
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
+        total_users = len(await get_served_users())
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id=m.chat.id)]])
-        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {m.chat.id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {m.chat.first_name}", reply_markup=keyboard)
+        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** {m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :**{total_users}", reply_markup=keyboard)
         
     else:
         await m.reply_photo(
@@ -265,41 +255,6 @@ async def repo(_, m: Message):
     )
 
 
-import random
-from datetime import datetime
-
-from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardMarkup, Message
-
-from config import OWNER_USERNAME
-from nexichat import nexichat
-from nexichat.database.chats import add_served_chat
-from nexichat.database.users import add_served_user
-from nexichat.modules.helpers import PNG_BTN
-
-IMG = [
-    "https://graph.org/file/210751796ff48991b86a3.jpg",
-    "https://graph.org/file/7b4924be4179f70abcf33.jpg",
-    "https://graph.org/file/f6d8e64246bddc26b4f66.jpg",
-    "https://graph.org/file/63d3ec1ca2c965d6ef210.jpg",
-    "https://graph.org/file/9f12dc2a668d40875deb5.jpg",
-    "https://graph.org/file/0f89cd8d55fd9bb5130e1.jpg",
-    "https://graph.org/file/e5eb7673737ada9679b47.jpg",
-    "https://graph.org/file/2e4dfe1fa5185c7ff1bfd.jpg",
-    "https://graph.org/file/36af423228372b8899f20.jpg",
-    "https://graph.org/file/c698fa9b221772c2a4f3a.jpg",
-    "https://graph.org/file/61b08f41855afd9bed0ab.jpg",
-    "https://graph.org/file/744b1a83aac76cb3779eb.jpg",
-    "https://graph.org/file/814cd9a25dd78480d0ce1.jpg",
-    "https://graph.org/file/e8b472bcfa6680f6c6a5d.jpg",
-]
-
-
-STICKER = [
-    "CAACAgUAAx0CYlaJawABBy4vZaieO6T-Ayg3mD-JP-f0yxJngIkAAv0JAALVS_FWQY7kbQSaI-geBA",
-    "CAACAgUAAx0CYlaJawABBy4rZaid77Tf70SV_CfjmbMgdJyVD8sAApwLAALGXCFXmCx8ZC5nlfQeBA",
-    "CAACAgUAAx0CYlaJawABBy4jZaidvIXNPYnpAjNnKgzaHmh3cvoAAiwIAAIda2lVNdNI2QABHuVVHgQ",
-]
 
 
 @nexichat.on_cmd("ping")
