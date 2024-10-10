@@ -187,69 +187,51 @@ async def start(_, m: Message):
             text=random.choice(EMOJIOS),
         )
         await asyncio.sleep(0.5)
-       
+        
         await accha.edit("**__ᴅ__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅι__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιи__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅ__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσ__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσи__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕ__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sт__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтα__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαя__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαят__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ sтαятι__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ sтαятιи__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ︎ ѕтαятιиg.__**")
-        #await asyncio.sleep(0.1)
         await accha.edit("**__ᴅιиg ᴅσиg ꨄ sтαятιиg.....__**")
-        #await asyncio.sleep(0.1)
         await accha.delete()
+        
         umm = await m.reply_sticker(sticker=random.choice(STICKER))
         await asyncio.sleep(1)
         await umm.delete()
+
+        chat_photo = BOT  
         if m.chat.photo:
-            userss_photo = await nexichat.download_media(m.chat.photo.big_file_id)
-        else:
-            userss_photo = BOT
-            if userss_photo:
-                chat_photo = userss_photo if userss_photo else BOT
-        except AttributeError:
-            chat_photo = BOT
+            try:
+                userss_photo = await nexichat.download_media(m.chat.photo.big_file_id)
+                if userss_photo:
+                    chat_photo = userss_photo
+            except AttributeError:
+                chat_photo = BOT  
         await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
+        
         sender_id = m.from_user.id
-            sender_name = m.from_user.first_name
-            return await nexichat.send_message(
-                config.OWNER_ID,
-                f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
-            )
+        sender_name = m.from_user.first_name
+        return await nexichat.send_message(
+            config.OWNER_ID,
+            f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
+        )
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
