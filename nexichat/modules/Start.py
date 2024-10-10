@@ -230,7 +230,7 @@ async def start(_, m: Message):
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"{sender_name}", user_id=int({sender_id}))]])
                                 
         return await nexichat.send_photo(
-            config.OWNER_ID,
+            int(config.OWNER_ID),
             photo=chat_photo,
             caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
             reply_markup=reply_markup
