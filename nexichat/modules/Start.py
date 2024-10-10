@@ -81,8 +81,10 @@ async def welcomejej(client, message: Message):
         for member in message.new_chat_members:
             
             if member.id == nexichat.id:
+                users = len(await get_served_users())
+                chats = len(await get_served_chats())
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"sᴇʟᴇᴄᴛ ʟᴀɴɢᴜᴀɢᴇ", callback_data="choose_lang")]])    
-                await message.reply_photo(photo=random.choice(IMG), caption=START, reply_markup=reply_markup)
+                await message.reply_photo(photo=random.choice(IMG), caption=START.format(nexichat.mention, chats, users), reply_markup=reply_markup)
                 chat = message.chat   
                 try:
                     invitelink = await nexichat.export_chat_invite_link(message.chat.id)
@@ -215,11 +217,13 @@ async def start(_, m: Message):
                     chat_photo = userss_photo
             except AttributeError:
                 chat_photo = BOT  
-        await m.reply_photo(photo=chat_photo, caption=START, reply_markup=InlineKeyboardMarkup(START_BOT))
+
+        users = len(await get_served_users())
+        chats = len(await get_served_chats())
+        await m.reply_photo(photo=chat_photo, caption=START.format(nexichat.mention, chats, users), reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
-        total_users = len(await get_served_users())
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id=m.chat.id)]])
-        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** {m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :** {total_users}", reply_markup=keyboard)
+        await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** {m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :** {users}", reply_markup=keyboard)
         
     else:
         await m.reply_photo(
