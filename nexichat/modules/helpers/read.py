@@ -3,8 +3,8 @@ from nexichat import nexichat
 from pyrogram import Client, filters
 from nexichat.database.chats import get_served_chats
 from nexichat.database.users import get_served_users
-users = len(await get_served_users())
-chats = len(await get_served_chats())
+users = len(get_served_users())
+chats = len(get_served_chats())
 
 START = f"""
 ╔═══════❖•ೋ° °ೋ•❖═══════╗
