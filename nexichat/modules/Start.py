@@ -227,16 +227,8 @@ async def start(_, m: Message):
         
         sender_id = m.from_user.id
         sender_name = m.from_user.first_name
-        reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            f"😍𝐀ᴅᴅᴇᴅ 𝐁ʏ😍",
-                                            url=f"tg://openmessage?user_id={message.from_user.id}",
-                                        )
-                                    ]
-                                ]
-        )
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"{sender_name}", user_id=int({sender_id}))]])
+                                
         return await nexichat.send_photo(
             config.OWNER_ID,
             photo=chat_photo
