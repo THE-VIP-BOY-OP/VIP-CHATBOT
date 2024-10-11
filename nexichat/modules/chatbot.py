@@ -201,20 +201,10 @@ async def chatbot_response(client: Client, message: Message):
 
         if message.text:
             content = message.text
-        elif message.sticker:
-            content = message.sticker
-        elif message.photo:
-            content = message.photo
-        elif message.video:
-            content = message.video
-        elif message.audio:
-            content = message.audio
-        elif hasattr(message, 'gif'):
-            content = message.gif
         else:
-            content = "what??"
+            content = "hello"
 
-        reply_data = await get_reply(message.text)
+        reply_data = await get_reply(content)
         
         if reply_data:
             response_text = reply_data["text"]
