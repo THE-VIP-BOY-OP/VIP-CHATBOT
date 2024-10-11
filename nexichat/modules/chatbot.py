@@ -201,12 +201,14 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
+        reply_data_text = await get_reply(message.text)                  # Text ke liye
         reply_data_sticker = await get_reply(message.text, content_type="sticker")  # Sticker ke liye
-        reply_data_photo = await get_reply(message.text, content_type="photo")      # Photo ke liye
-        reply_data_video = await get_reply(message.text, content_type="video")      # Video ke liye
-        reply_data_audio = await get_reply(message.text, content_type="audio")      # Audio ke liye
-        reply_data_gif = await get_reply(message.text, content_type="gif")          # GIF ke liye
-        
+        reply_data_photo = await get_reply(message.text, content_type="photo")        # Photo ke liye
+        reply_data_video = await get_reply(message.text, content_type="video")        # Video ke liye
+        reply_data_audio = await get_reply(message.text, content_type="audio")        # Audio ke liye
+        reply_data_gif = await get_reply(message.text, content_type="gif")            # GIF ke liye
+
+        reply_data = reply_data_text or reply_data_sticker or reply_data_photo or reply_data_video or reply_data_audio or reply_data_gif
         if reply_data:
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
@@ -224,10 +226,12 @@ async def chatbot_response(client: Client, message: Message):
                 await message.reply_video(reply_data["text"])
             elif reply_data["check"] == "audio":
                 await message.reply_audio(reply_data["text"])
+            elif reply_data["check"] == "gif":
+                await message.reply_document(reply_data["text"])  # GIFs sent as documents
             else:
                 await message.reply_text(translated_text)
         else:
-            await message.reply_text("**what??**")
+            await message.reply_text("**what??**")  # Handle no response case
 
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
