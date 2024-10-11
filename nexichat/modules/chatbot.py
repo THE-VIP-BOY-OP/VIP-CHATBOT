@@ -214,7 +214,7 @@ async def chatbot_response(client: Client, message: Message):
         else:
             content = "what??"
 
-        reply_data = await get_reply(content)
+        reply_data = await get_reply(message.text)
         
         if reply_data:
             response_text = reply_data["text"]
