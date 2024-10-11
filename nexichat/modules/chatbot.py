@@ -165,17 +165,19 @@ async def gemini_api_call(user_input: str):
     except requests.exceptions.RequestException:
         return None 
 
-async def get_reply(word: str):
-   
-    is_chat = list(chatai.find({"word": word}))
+async def get_reply(word: str, content_type: str = None):
+    query = {"word": word}
     
+    if content_type:
+        query["check"] = content_type  # content_type ko set karte hain, jaise "sticker", "photo", "video", "audio", "gif"
     
+    is_chat = list(chatai.find(query))
+
     if not is_chat:
         ai_response = await gemini_api_call(word)
         if ai_response:
             return {"text": ai_response, "check": "none"}  
         else:
-            
             all_responses = list(chatai.find())
             if all_responses:
                 random_reply = random.choice(all_responses)
@@ -199,12 +201,11 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        if message.text:
-            content = message.text
-        else:
-            content = "hello"
-
-        reply_data = await get_reply(content)
+        reply_data_sticker = await get_reply(message.text, content_type="sticker")  # Sticker ke liye
+        reply_data_photo = await get_reply(message.text, content_type="photo")      # Photo ke liye
+        reply_data_video = await get_reply(message.text, content_type="video")      # Video ke liye
+        reply_data_audio = await get_reply(message.text, content_type="audio")      # Audio ke liye
+        reply_data_gif = await get_reply(message.text, content_type="gif")          # GIF ke liye
         
         if reply_data:
             response_text = reply_data["text"]
