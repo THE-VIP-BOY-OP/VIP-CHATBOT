@@ -199,7 +199,22 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        reply_data = await get_reply(message.text if message.text else "")
+        if message.text:
+            content = message.text
+        elif message.sticker:
+            content = message.sticker
+        elif message.photo:
+            content = message.photo
+        elif message.video:
+            content = message.video
+        elif message.audio:
+            content = message.audio
+        elif hasattr(message, 'gif'):
+            content = message.gif
+        else:
+            content = "what??"
+
+        reply_data = await get_reply(content)
         
         if reply_data:
             response_text = reply_data["text"]
