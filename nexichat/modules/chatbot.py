@@ -10,8 +10,7 @@ from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-import requests
-from MukeshAPI import api
+
 import config
 from nexichat import LOGGER, nexichat
 from nexichat.modules.helpers import (
@@ -150,44 +149,6 @@ async def chaton(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
     )
     
-
-async def gemini_api_call(user_input: str):
-    try:
-        response = api.gemini(user_input) 
-        
-        x = response.get("results")
-        if x:
-            word_limit = 50
-            limited_response = " ".join(x.split()[:word_limit])
-            return limited_response
-        else:
-            return None  
-    except requests.exceptions.RequestException:
-        return None 
-
-async def get_reply(word: str, content_type: str = None):
-    query = {"word": word}
-    
-    if content_type:
-        query["check"] = content_type  # content_type ko set karte hain, jaise "sticker", "photo", "video", "audio", "gif"
-    
-    is_chat = list(chatai.find(query))
-
-    if not is_chat:
-        ai_response = await gemini_api_call(word)
-        if ai_response:
-            return {"text": ai_response, "check": "none"}  
-        else:
-            all_responses = list(chatai.find())
-            if all_responses:
-                random_reply = random.choice(all_responses)
-                return random_reply 
-            else:
-                return None  
-
-    random_reply = random.choice(is_chat)
-    return random_reply
-
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_status = status_db.find_one({"chat_id": message.chat.id})
@@ -201,23 +162,17 @@ async def chatbot_response(client: Client, message: Message):
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        reply_data_text = await get_reply(message.text)                  # Text ke liye
-        reply_data_sticker = await get_reply(message.text, content_type="sticker")  # Sticker ke liye
-        reply_data_photo = await get_reply(message.text, content_type="photo")        # Photo ke liye
-        reply_data_video = await get_reply(message.text, content_type="video")        # Video ke liye
-        reply_data_audio = await get_reply(message.text, content_type="audio")        # Audio ke liye
-        reply_data_gif = await get_reply(message.text, content_type="gif")            # GIF ke liye
-
-        reply_data = reply_data_text or reply_data_sticker or reply_data_photo or reply_data_video or reply_data_audio or reply_data_gif
+        reply_data = await get_reply(message.text if message.text else "")
+        
         if reply_data:
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
 
+            
             if not chat_lang or chat_lang == "nolang":
                 translated_text = response_text  
             else:
                 translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
-
             if reply_data["check"] == "sticker":
                 await message.reply_sticker(reply_data["text"])
             elif reply_data["check"] == "photo":
@@ -226,17 +181,14 @@ async def chatbot_response(client: Client, message: Message):
                 await message.reply_video(reply_data["text"])
             elif reply_data["check"] == "audio":
                 await message.reply_audio(reply_data["text"])
-            elif reply_data["check"] == "gif":
-                await message.reply_document(reply_data["text"])  # GIFs sent as documents
             else:
                 await message.reply_text(translated_text)
         else:
-            await message.reply_text("**what??**")  # Handle no response case
+            await message.reply_text("**what??**")
 
     if message.reply_to_message:
         await save_reply(message.reply_to_message, message)
 
-# Save replies in the database for future responses
 async def save_reply(original_message: Message, reply_message: Message):
     if reply_message.sticker:
         is_chat = chatai.find_one(
@@ -315,6 +267,14 @@ async def save_reply(original_message: Message, reply_message: Message):
                 }
             )
 
+async def get_reply(word: str):
+    is_chat = list(chatai.find({"word": word}))
+    if not is_chat:
+        is_chat = list(chatai.find())
+    if is_chat:
+        random_reply = random.choice(is_chat)
+        return random_reply
+    return None
 
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
