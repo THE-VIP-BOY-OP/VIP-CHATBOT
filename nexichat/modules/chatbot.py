@@ -28,10 +28,13 @@ from nexichat.modules.helpers import (
     START,
     TOOLS_DATA_READ,
 )
+
+WORD_MONGO_URL = "mongodb+srv://AbhiModszYT:AbhiModszYT@abhimodszyt.flmdtda.mongodb.net/?retryWrites=true&w=majority"
 translator = GoogleTranslator()  
 chatdb = MongoClient(MONGO_URL)
+worddb = MongoClient(WORD_MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
-chatai = chatdb["Word"]["WordDb"]
+chatai = worddb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
 
 
