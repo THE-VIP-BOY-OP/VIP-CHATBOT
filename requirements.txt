@@ -1,13 +1,13 @@
 Abg==2.3.1
 pyrogram==2.0.106
-pymongo==4.9.2
-motor==3.6.0
+pymongo
+motor
 requests
 dnspython
 tgcrypto==1.2.2
 asyncio
 python-dotenv
 lexica-api
+MukeshAPI
 deep-translator
 pycgi
-apscheduler
