@@ -12,3 +12,5 @@ MukeshAPI
 deep-translator
 pycgi
 apscheduler
+lexica-api
+git+https://github.com/Vivekkumar-IN/TheApi@main
