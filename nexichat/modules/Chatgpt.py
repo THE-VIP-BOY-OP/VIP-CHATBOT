@@ -22,35 +22,13 @@ async def chatgpt_chat(bot, message):
         )
         return
 
-    # Get the user input
     if message.reply_to_message and message.reply_to_message.text:
         user_input = message.reply_to_message.text
     else:
         user_input = " ".join(message.command[1:])
 
-    # Show typing action
     await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
 
     try:
-        # Call to API
         results = api.chatgpt(user_input)
-    except Exception as e:
-        await message.reply_text(f"Error communicating with AI: {str(e)}")
-        return
-
-    # Get chat language from DB
-    chat_lang = get_chat_language(message.chat.id)
-
-    # Check if the result is too long to translate (over 5000 characters)
-    if chat_lang and chat_lang != "nolang" and len(results) <= 5000:
-        try:
-            translated_text = translator.translate(results, target=chat_lang)
-        except Exception as e:
-            await message.reply_text(f"Error translating response: {str(e)}")
-            return
-    else:
-        # If result is too long or no translation is needed, send original result
-        translated_text = results
-
-    # Send the response
-    await message.reply_text(results)
+        await message.reply_text(results)
