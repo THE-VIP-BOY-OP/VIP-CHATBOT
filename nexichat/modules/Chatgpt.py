@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.enums import ChatAction
-from MukeshAPI import api
+from TheApi import api
 from nexichat import nexichat
 from deep_translator import GoogleTranslator
 from pymongo import MongoClient
