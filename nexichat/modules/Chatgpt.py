@@ -41,14 +41,15 @@ async def chatgpt_chat(bot, message):
     # Get chat language from DB
     chat_lang = get_chat_language(message.chat.id)
 
-    # Translate results if language is set
-    if chat_lang and chat_lang != "nolang":
+    # Check if the result is too long to translate (over 5000 characters)
+    if chat_lang and chat_lang != "nolang" and len(results) <= 5000:
         try:
             translated_text = translator.translate(results, target=chat_lang)
         except Exception as e:
             await message.reply_text(f"Error translating response: {str(e)}")
             return
     else:
+        # If result is too long or no translation is needed, send original result
         translated_text = results
 
     # Send the response
