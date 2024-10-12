@@ -6,14 +6,6 @@ from deep_translator import GoogleTranslator
 from pymongo import MongoClient
 from config import MONGO_URL
 
-translator = GoogleTranslator()  
-chatdb = MongoClient(MONGO_URL)
-lang_db = chatdb["ChatLangDb"]["LangCollection"]
-
-def get_chat_language(chat_id):
-    chat_lang = lang_db.find_one({"chat_id": chat_id})
-    return chat_lang["language"] if chat_lang and "language" in chat_lang else None
-
 @nexichat.on_message(filters.command(["chatgpt", "ai", "ask"]))
 async def chatgpt_chat(bot, message):
     if len(message.command) < 2 and not message.reply_to_message:
@@ -31,4 +23,10 @@ async def chatgpt_chat(bot, message):
 
     try:
         results = api.chatgpt(user_input)
-        await message.reply_text(results)
+        if results:
+            await message.reply_text(results)
+        else:
+            await message.reply_text("Sorry, I couldn't find a good response.")
+    except Exception as e:
+        print(f"Error in chatgpt_chat: {e}")
+        await message.reply_text("An error occurred while processing your request.")
