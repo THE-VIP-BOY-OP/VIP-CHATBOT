@@ -1,7 +1,7 @@
 Abg==2.3.1
 pyrogram==2.0.106
-pymongo==3.12.0
-motor
+pymongo==4.9.2
+motor==3.6.0
 requests
 dnspython
 tgcrypto==1.2.2
