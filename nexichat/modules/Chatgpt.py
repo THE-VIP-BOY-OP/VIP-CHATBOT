@@ -53,4 +53,4 @@ async def chatgpt_chat(bot, message):
         translated_text = results
 
     # Send the response
-    await message.reply_text(translated_text)
+    await message.reply_text(results)
