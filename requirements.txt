@@ -13,4 +13,5 @@ deep-translator
 pycgi
 apscheduler
 lexica-api
+openai
 git+https://github.com/Vivekkumar-IN/TheApi@main
