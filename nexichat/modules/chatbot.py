@@ -1,7 +1,4 @@
 import random
-from pyrogram.enums import ChatType
-from nexichat.database.chats import get_served_chats, add_served_chat
-from nexichat.database.users import get_served_users, add_served_user
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
@@ -160,19 +157,18 @@ async def chatbot_response(client: Client, message: Message):
     if chat_status and chat_status.get("status") == "disabled":
         return
 
-
     if message.text:
         if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
             return
 
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await asyncio.sleep(0.1)
         reply_data = await get_reply(message.text if message.text else "")
         
         if reply_data:
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
-
 
             
             if not chat_lang or chat_lang == "nolang":
