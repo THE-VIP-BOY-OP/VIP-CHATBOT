@@ -31,9 +31,9 @@ from nexichat.modules.helpers import (
 )
 
 translator = GoogleTranslator()  
-status_db = db["ChatBotStatusDb"]["StatusCollection"]
-chatai = db["Word"]["WordDb"]
-lang_db = db["ChatLangDb"]["LangCollection"]
+status_db = mongo["ChatBotStatusDb"]["StatusCollection"]
+chatai = mongo["Word"]["WordDb"]
+lang_db = mongo["ChatLangDb"]["LangCollection"]
 
 
 
