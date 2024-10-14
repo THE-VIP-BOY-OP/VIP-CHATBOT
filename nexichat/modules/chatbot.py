@@ -10,7 +10,7 @@ from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
-
+import asyncio
 import config
 from nexichat import LOGGER, nexichat
 from nexichat.modules.helpers import (
@@ -164,7 +164,7 @@ async def chatbot_response(client: Client, message: Message):
 
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-
+        await asyncio.sleep(0.1)
         reply_data = await get_reply(message.text if message.text else "")
         
         if reply_data:
