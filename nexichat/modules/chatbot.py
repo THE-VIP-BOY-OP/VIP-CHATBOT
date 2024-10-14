@@ -276,7 +276,7 @@ async def get_reply(word: str):
         return random_reply
     return None
 
-@nexichat.on_callback_query()
+   @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
     LOGGER.info(query.data)
     if query.data == "HELP":
@@ -348,6 +348,3 @@ async def cb_handler(_, query: CallbackQuery):
         await query.edit_message_text(
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
         )
-    
-
-    
