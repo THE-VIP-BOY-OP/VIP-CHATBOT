@@ -157,10 +157,10 @@ async def chaton(client: Client, message: Message):
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
     chat_type = message.chat.type
-    if chat_type in ['group', 'supergroup']:
-        await add_served_chats(message.chat.id)
+    if chat_type in [ChatType.GROUP, ChatType.SUPERGROUP]:
+        await add_served_chat(message.chat.id)
     elif chat_type == ChatType.PRIVATE:
-        await add_served_users(message.from_user.id)
+        await add_served_user(message.from_user.id)
                               
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
