@@ -8,6 +8,7 @@ from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
+from nexichat import mongo
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 import asyncio
@@ -28,11 +29,13 @@ from nexichat.modules.helpers import (
     START,
     TOOLS_DATA_READ,
 )
+
 translator = GoogleTranslator()  
 chatdb = MongoClient(MONGO_URL)
 status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
+
 
 
 languages = {
@@ -161,7 +164,7 @@ async def chatbot_response(client: Client, message: Message):
 
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-
+        await asyncio.sleep(0.1)
         reply_data = await get_reply(message.text if message.text else "")
         
         if reply_data:
@@ -276,7 +279,6 @@ async def get_reply(word: str):
         return random_reply
     return None
 
-   
 @nexichat.on_callback_query()
 async def cb_handler(_, query: CallbackQuery):
     LOGGER.info(query.data)
@@ -349,3 +351,4 @@ async def cb_handler(_, query: CallbackQuery):
         await query.edit_message_text(
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
         )
+    
