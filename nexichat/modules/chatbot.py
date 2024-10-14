@@ -159,7 +159,7 @@ async def chatbot_response(client: Client, message: Message):
     if message.chat.type == ChatType.PRIVATE:
         await add_served_user(message.chat.id)
     else:
-        await add_served_chat(message.from_user.id)
+        await add_served_chat(message.chat.id)
                               
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
