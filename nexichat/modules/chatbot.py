@@ -156,14 +156,17 @@ async def chaton(client: Client, message: Message):
     
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
-    if message.chat.type == ChatType.PRIVATE:
-        await add_served_user(message.chat.id)
-    else:
-        await add_served_chat(message.chat.id)
-                              
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
         return
+
+    try:
+        if message.chat.type == "private":
+            await add_served_user(message.from_user.id)
+        else:
+            await add_served_chat(message.chat.id)
+    except Exception as e:
+        print(f"Error in serving user/chat: {e}")
 
     if message.text:
         if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
@@ -171,7 +174,6 @@ async def chatbot_response(client: Client, message: Message):
 
     if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-        await asyncio.sleep(0.1)
         reply_data = await get_reply(message.text if message.text else "")
         
         if reply_data:
