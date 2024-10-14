@@ -161,8 +161,8 @@ async def chatbot_response(client: Client, message: Message):
         return
 
     try:
-        if message.chat.type == "private":
-            await add_served_user(message.from_user.id)
+        if message.chat.type == ChatType.PRIVATE:
+            await add_served_user(message.chat.id)
         else:
             await add_served_chat(message.chat.id)
     except Exception as e:
