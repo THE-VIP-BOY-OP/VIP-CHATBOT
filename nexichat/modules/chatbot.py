@@ -1,4 +1,7 @@
 import random
+from pyrogram.enums import ChatType
+from nexichat.database.chats import get_served_chats, add_served_chat
+from nexichat.database.users import get_served_users, add_served_user
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
@@ -156,9 +159,7 @@ async def chatbot_response(client: Client, message: Message):
     chat_type = message.chat.type
     if chat_type in ['group', 'supergroup']:
         await add_served_chats(message.chat.id)
-
-    elif chat_type == 'private':
-        
+    elif chat_type == ChatType.PRIVATE:
         await add_served_users(message.from_user.id)
                               
     chat_status = status_db.find_one({"chat_id": message.chat.id})
