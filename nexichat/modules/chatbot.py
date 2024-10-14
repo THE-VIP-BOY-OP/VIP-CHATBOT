@@ -8,7 +8,7 @@ from config import MONGO_URL
 from nexichat import nexichat
 from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
-from nexichat import mongo
+from nexichat import mongo, db
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 import asyncio
