@@ -156,11 +156,10 @@ async def chaton(client: Client, message: Message):
     
 @nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
 async def chatbot_response(client: Client, message: Message):
-    chat_type = message.chat.type
-    if chat_type in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        await add_served_chat(message.chat.id)
-    elif chat_type == ChatType.PRIVATE:
-        await add_served_user(message.from_user.id)
+    if message.chat.type == ChatType.PRIVATE:
+        await add_served_user(message.chat.id)
+    else:
+        await add_served_chat(message.from_user.id)
                               
     chat_status = status_db.find_one({"chat_id": message.chat.id})
     if chat_status and chat_status.get("status") == "disabled":
@@ -178,6 +177,7 @@ async def chatbot_response(client: Client, message: Message):
         if reply_data:
             response_text = reply_data["text"]
             chat_lang = get_chat_language(message.chat.id)
+
 
             
             if not chat_lang or chat_lang == "nolang":
