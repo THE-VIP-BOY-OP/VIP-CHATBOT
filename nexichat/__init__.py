@@ -1,7 +1,8 @@
 import logging
 import time
-from pymongo import MongoClient
+
 from Abg import patch
+from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 
@@ -17,8 +18,8 @@ logging.basicConfig(
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
 boot = time.time()
-mongo = MongoClient(config.MONGO_URL)
-db = mongo.VIPBOY
+mongo = MongoCli(config.MONGO_URL)
+db = mongo.Anonymous
 OWNER = config.OWNER_ID
 
 
