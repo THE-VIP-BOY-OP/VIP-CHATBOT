@@ -160,13 +160,6 @@ async def chatbot_response(client: Client, message: Message):
     if chat_status and chat_status.get("status") == "disabled":
         return
 
-    try:
-        if message.chat.type == ChatType.PRIVATE:
-            await add_served_user(message.chat.id)
-        else:
-            await add_served_chat(message.chat.id)
-    except Exception as e:
-        print(f"Error in serving user/chat: {e}")
 
     if message.text:
         if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
