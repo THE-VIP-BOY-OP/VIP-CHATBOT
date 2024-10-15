@@ -354,4 +354,21 @@ async def cb_handler(_, query: CallbackQuery):
         await query.edit_message_text(
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
         )
-    
+
+
+
+@nexichat.on_message(filters.command("status"))
+async def status_command(client: Client, message: Message):
+    chat_id = message.chat.id
+
+    # Retrieve the status for the given chat_id
+    chat_status = status_db.find_one({"chat_id": chat_id})
+
+    # Check if a status was found
+    if chat_status:
+        current_status = chat_status.get("status", "not found")
+        await message.reply(f"Chatbot status for this chat: **{current_status}**")
+    else:
+        await message.reply("No status found for this chat.")
+
+# Example usage of Client
