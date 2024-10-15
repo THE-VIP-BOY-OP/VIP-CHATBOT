@@ -6,6 +6,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from deep_translator import GoogleTranslator 
 from config import MONGO_URL
 from nexichat import nexichat
+from pyrogram.types import Message
 from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
 from nexichat import mongo
