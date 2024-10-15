@@ -33,10 +33,10 @@ from nexichat.modules.helpers import (
 
 translator = GoogleTranslator()  
 chatdb = MongoClient(MONGO_URL)
-status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
+#status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = chatdb["Word"]["WordDb"]
 lang_db = chatdb["ChatLangDb"]["LangCollection"]
-
+status_db = chatdb.chatbot_status_db.status
 
 @nexichat.on_message(filters.command("status"))
 async def status_command(client: Client, message: Message):
@@ -223,6 +223,24 @@ async def cb_handler(_, query: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
 
+
+    elif query.data == "enable_chatbot":
+        chat_id = query.message.chat.id
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}}, upsert=True)  # Add upsert=True to insert if not exists
+        await query.answer("Chatbot enabled ✅", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.**"
+        )
+
+    elif query.data == "disable_chatbot":
+        chat_id = query.message.chat.id
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}}, upsert=True)  # Add upsert=True to insert if not exists
+        await query.answer("Chatbot disabled!", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
+        )
+
+    """
     elif query.data == "enable_chatbot":
         chat_id = query.message.chat.id
         action = query.data
@@ -242,7 +260,7 @@ async def cb_handler(_, query: CallbackQuery):
         )
 
 
-
+"""
 
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
