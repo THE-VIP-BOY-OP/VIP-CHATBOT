@@ -12,3 +12,4 @@ MukeshAPI
 deep-translator
 pycgi
 apscheduler
+Flask
