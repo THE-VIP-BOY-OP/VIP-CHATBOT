@@ -167,7 +167,83 @@ async def chaton(client: Client, message: Message):
         f"ᴄʜᴀᴛ: {message.chat.title}\n**ᴄʜᴏᴏsᴇ ᴀɴ ᴏᴘᴛɪᴏɴ ᴛᴏ ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴄʜᴀᴛʙᴏᴛ.**",
         reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
     )
-    
+
+@nexichat.on_callback_query()
+async def cb_handler(_, query: CallbackQuery):
+    LOGGER.info(query.data)
+    if query.data == "HELP":
+        await query.message.edit_text(
+            text=HELP_READ,
+            reply_markup=InlineKeyboardMarkup(HELP_BTN),
+            disable_web_page_preview=True,
+        )
+    elif query.data == "CLOSE":
+        await query.message.delete()
+        await query.answer("ᴄʟᴏsᴇᴅ ᴍᴇɴᴜ!", show_alert=True)
+    elif query.data == "BACK":
+        await query.message.edit(
+            text=START,
+            reply_markup=InlineKeyboardMarkup(DEV_OP),
+        )
+    elif query.data == "SOURCE":
+        await query.message.edit(
+            text=SOURCE_READ,
+            reply_markup=InlineKeyboardMarkup(BACK),
+            disable_web_page_preview=True,
+        )
+    elif query.data == "ABOUT":
+        await query.message.edit(
+            text=ABOUT_READ,
+            reply_markup=InlineKeyboardMarkup(ABOUT_BTN),
+            disable_web_page_preview=True,
+        )
+    elif query.data == "ADMINS":
+        await query.message.edit(
+            text=ADMIN_READ,
+            reply_markup=InlineKeyboardMarkup(MUSIC_BACK_BTN),
+        )
+    elif query.data == "TOOLS_DATA":
+        await query.message.edit(
+            text=TOOLS_DATA_READ,
+            reply_markup=InlineKeyboardMarkup(CHATBOT_BACK),
+        )
+    elif query.data == "BACK_HELP":
+        await query.message.edit(
+            text=HELP_READ,
+            reply_markup=InlineKeyboardMarkup(HELP_BTN),
+        )
+    elif query.data == "CHATBOT_CMD":
+        await query.message.edit(
+            text=CHATBOT_READ,
+            reply_markup=InlineKeyboardMarkup(CHATBOT_BACK),
+        )
+    elif query.data == "CHATBOT_BACK":
+        await query.message.edit(
+            text=HELP_READ,
+            reply_markup=InlineKeyboardMarkup(HELP_BTN),
+        )
+
+    elif query.data == "enable_chatbot":
+        chat_id = query.message.chat.id
+        action = query.data
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
+        await query.answer("Chatbot enabled ✅", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.**"
+        )
+
+    elif query.data == "disable_chatbot":
+        chat_id = query.message.chat.id
+        action = query.data
+        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
+        await query.answer("Chatbot disabled!", show_alert=True)
+        await query.edit_message_text(
+            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
+        )
+
+
+
+
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
     chat_id = message.chat.id
@@ -296,79 +372,4 @@ async def get_reply(word: str):
         random_reply = random.choice(is_chat)
         return random_reply
     return None
-
-@nexichat.on_callback_query()
-async def cb_handler(_, query: CallbackQuery):
-    LOGGER.info(query.data)
-    if query.data == "HELP":
-        await query.message.edit_text(
-            text=HELP_READ,
-            reply_markup=InlineKeyboardMarkup(HELP_BTN),
-            disable_web_page_preview=True,
-        )
-    elif query.data == "CLOSE":
-        await query.message.delete()
-        await query.answer("ᴄʟᴏsᴇᴅ ᴍᴇɴᴜ!", show_alert=True)
-    elif query.data == "BACK":
-        await query.message.edit(
-            text=START,
-            reply_markup=InlineKeyboardMarkup(DEV_OP),
-        )
-    elif query.data == "SOURCE":
-        await query.message.edit(
-            text=SOURCE_READ,
-            reply_markup=InlineKeyboardMarkup(BACK),
-            disable_web_page_preview=True,
-        )
-    elif query.data == "ABOUT":
-        await query.message.edit(
-            text=ABOUT_READ,
-            reply_markup=InlineKeyboardMarkup(ABOUT_BTN),
-            disable_web_page_preview=True,
-        )
-    elif query.data == "ADMINS":
-        await query.message.edit(
-            text=ADMIN_READ,
-            reply_markup=InlineKeyboardMarkup(MUSIC_BACK_BTN),
-        )
-    elif query.data == "TOOLS_DATA":
-        await query.message.edit(
-            text=TOOLS_DATA_READ,
-            reply_markup=InlineKeyboardMarkup(CHATBOT_BACK),
-        )
-    elif query.data == "BACK_HELP":
-        await query.message.edit(
-            text=HELP_READ,
-            reply_markup=InlineKeyboardMarkup(HELP_BTN),
-        )
-    elif query.data == "CHATBOT_CMD":
-        await query.message.edit(
-            text=CHATBOT_READ,
-            reply_markup=InlineKeyboardMarkup(CHATBOT_BACK),
-        )
-    elif query.data == "CHATBOT_BACK":
-        await query.message.edit(
-            text=HELP_READ,
-            reply_markup=InlineKeyboardMarkup(HELP_BTN),
-        )
-
-    elif query.data == "enable_chatbot":
-        chat_id = query.message.chat.id
-        action = query.data
-        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
-        await query.answer("Chatbot enabled ✅", show_alert=True)
-        await query.edit_message_text(
-            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.**"
-        )
-
-    elif query.data == "disable_chatbot":
-        chat_id = query.message.chat.id
-        action = query.data
-        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
-        await query.answer("Chatbot disabled!", show_alert=True)
-        await query.edit_message_text(
-            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
-        )
-
-
 
