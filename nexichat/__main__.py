@@ -1,6 +1,7 @@
 import asyncio
 import importlib
-
+from flask import Flask
+import threading
 from pyrogram import idle
 from pyrogram.types import BotCommand
 from config import OWNER_ID
@@ -53,3 +54,16 @@ async def anony_boot():
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(anony_boot())
     LOGGER.info("Stopping nexichat Bot...")
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running"
+
+def run():
+    app.run(host="0.0.0.0", port=8000)
+
+# Start Flask server in a new thread
+t = threading.Thread(target=run)
+t.start()
