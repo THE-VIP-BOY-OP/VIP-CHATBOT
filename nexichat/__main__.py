@@ -32,6 +32,7 @@ async def anony_boot():
                 BotCommand("stats", "Check bot stats"),
                 BotCommand("gcast", "Broadcast any message to groups/users"),
                 BotCommand("chatbot", "Enable or disable chatbot"),
+                BotCommand("status", "Check chatbot enable or disable in chat"),
                 BotCommand("shayri", "Get random shayri for love"),
                 BotCommand("repo", "Get chatbot source code"),
             ]
