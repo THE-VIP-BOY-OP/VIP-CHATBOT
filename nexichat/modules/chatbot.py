@@ -152,11 +152,13 @@ async def chaton(client: Client, message: Message):
         reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
     )
     
-@nexichat.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.audio))
+@nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
-    chat_status = status_db.find_one({"chat_id": message.chat.id})
+    chat_id = message.chat.id
+    chat_status = status_db.find_one({"chat_id": chat_id})
+    
     if chat_status and chat_status.get("status") == "disabled":
-        return
+        return 
 
     if message.text:
         if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
