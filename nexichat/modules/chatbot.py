@@ -223,7 +223,6 @@ async def cb_handler(_, query: CallbackQuery):
             reply_markup=InlineKeyboardMarkup(HELP_BTN),
         )
 
-
     elif query.data == "enable_chatbot":
         chat_id = query.message.chat.id
         status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}}, upsert=True)  # Add upsert=True to insert if not exists
@@ -240,28 +239,7 @@ async def cb_handler(_, query: CallbackQuery):
             f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
         )
 
-    """
-    elif query.data == "enable_chatbot":
-        chat_id = query.message.chat.id
-        action = query.data
-        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}})
-        await query.answer("Chatbot enabled ✅", show_alert=True)
-        await query.edit_message_text(
-            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.**"
-        )
-
-    elif query.data == "disable_chatbot":
-        chat_id = query.message.chat.id
-        action = query.data
-        status_db.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}})
-        await query.answer("Chatbot disabled!", show_alert=True)
-        await query.edit_message_text(
-            f"ᴄʜᴀᴛ: {query.message.chat.title}\n**ᴄʜᴀᴛʙᴏᴛ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**"
-        )
-
-
-"""
-
+    
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
     chat_id = message.chat.id
