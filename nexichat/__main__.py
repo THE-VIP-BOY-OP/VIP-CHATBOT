@@ -1,3 +1,4 @@
+import sys
 import asyncio
 import importlib
 from flask import Flask
@@ -14,7 +15,7 @@ async def anony_boot():
         await nexichat.start()
     except Exception as ex:
         LOGGER.error(ex)
-        quit(1)
+        sys.exit(1)
 
     for all_module in ALL_MODULES:
         importlib.import_module("nexichat.modules." + all_module)
@@ -51,19 +52,21 @@ async def anony_boot():
     await idle()
 
 
-if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(anony_boot())
-    LOGGER.info("Stopping nexichat Bot...")
-
+# Flask Server Code for Health Check
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return "Bot is running"
 
-def run():
+def run_flask():
     app.run(host="0.0.0.0", port=8000)
 
-# Start Flask server in a new thread
-t = threading.Thread(target=run)
-t.start()
+if __name__ == "__main__":
+    # Start Flask server in a new thread
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.start()
+
+    # Start the bot asynchronously
+    asyncio.get_event_loop().run_until_complete(anony_boot())
+    LOGGER.info("Stopping nexichat Bot...")
