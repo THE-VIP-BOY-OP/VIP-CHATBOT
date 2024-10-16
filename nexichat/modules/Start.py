@@ -63,8 +63,12 @@ IMG = [
 
 
 
-#chatdb = MongoClient(MONGO_URL)
-status_db = mongo["ChatBotStatusDb"]["StatusCollection"]
+from nexichat import db
+
+# Simplified access to each collection in a consistent way
+chatai = db.Word.WordDb
+lang_db = db.ChatLangDb.LangCollection
+status_db = db.ChatBotStatusDb.StatusCollection
 
 async def set_default_status(chat_id):
     try:
