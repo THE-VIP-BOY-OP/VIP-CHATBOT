@@ -366,7 +366,7 @@ async def save_reply(original_message: Message, reply_message: Message):
                     "check": "none",
                 }
             )
-
+"""
 async def get_reply(word: str):
     is_chat = list(chatai.find({"word": word}))
     if not is_chat:
@@ -376,3 +376,22 @@ async def get_reply(word: str):
         return random_reply
     return None
 
+"""
+
+                    
+import random
+
+async def get_reply(word: str):
+    # Convert the cursor to a list asynchronously
+    is_chat = await chatai.find({"word": word}).to_list(length=None)
+    
+    # Check if is_chat is empty, if so, fetch all documents
+    if not is_chat:
+        is_chat = await chatai.find().to_list(length=None)
+    
+    # If there are any results, choose a random reply
+    if is_chat:
+        random_reply = random.choice(is_chat)
+        return random_reply
+    
+    return None
