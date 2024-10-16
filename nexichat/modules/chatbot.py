@@ -5,7 +5,7 @@ from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from deep_translator import GoogleTranslator 
 from config import MONGO_URL
-from nexichat import nexichat, mongo
+from nexichat import nexichat, mongo, db
 from pyrogram.types import Message
 from nexichat.modules.helpers import CHATBOT_ON
 from pymongo import MongoClient
@@ -32,11 +32,18 @@ from nexichat.modules.helpers import (
 )
 
 translator = GoogleTranslator()  
-#chatdb = MongoClient(MONGO_URL)
+"""#chatdb = MongoClient(MONGO_URL)
 #status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
 chatai = mongo["Word"]["WordDb"]
 lang_db = mongo["ChatLangDb"]["LangCollection"]
 status_db = mongo.chatbot_status_db.status
+"""
+from nexichat import db
+
+# Simplified access to each collection in a consistent way
+chatai = db.Word.WordDb
+lang_db = db.ChatLangDb.LangCollection
+status_db = db.chatbot_status_db.status
 
 @nexichat.on_message(filters.command("status"))
 async def status_command(client: Client, message: Message):
