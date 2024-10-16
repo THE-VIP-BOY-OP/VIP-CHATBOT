@@ -308,128 +308,143 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
 
 
+
+        
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
-    chat_id = message.chat.id
-    # Awaiting the async operation to fetch chat status
-    chat_status = await status_db.find_one({"chat_id": chat_id})
+    try:
+        chat_id = message.chat.id
+        chat_status = await status_db.find_one({"chat_id": chat_id})
+        
+        if chat_status and chat_status.get("status") == "disabled":
+            return
 
-    # Check if chatbot is disabled for this chat
-    if chat_status and chat_status.get("status") == "disabled":
-        return
+        if message.text and any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
+            return
+        
+        if (message.reply_to_message and message.reply_to_message.from_user.id == nexichat.id) or not message.reply_to_message:
+            await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+            reply_data = await get_reply(message.text)
 
-    # Ensure message is text and not a command or other symbol-prefixed message
-    if message.text and any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
-        return
-        # Send typing action
-    if (message.reply_to_message and message.reply_to_message.from_user.id == nexichat.id) or not message.reply_to_message:
-        await client.send_chat_action(message.chat.id, ChatAction.TYPING)    
-        reply_data = await get_reply(message.text)
+            if reply_data:
+                response_text = reply_data["text"]
+                chat_lang = await get_chat_language(chat_id)
 
-        if reply_data:
-            response_text = reply_data["text"]
-            chat_lang = await get_chat_language(chat_id)
-
-            # Translate the response text if a language is set, otherwise use original text
-            if not chat_lang or chat_lang == "nolang":
-                translated_text = response_text
+                if not chat_lang or chat_lang == "nolang":
+                    translated_text = response_text
+                else:
+                    translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
+                
+                if reply_data["check"] == "sticker":
+                    await message.reply_sticker(reply_data["text"])
+                elif reply_data["check"] == "photo":
+                    await message.reply_photo(reply_data["text"])
+                elif reply_data["check"] == "video":
+                    await message.reply_video(reply_data["text"])
+                elif reply_data["check"] == "audio":
+                    await message.reply_audio(reply_data["text"])
+                elif reply_data["check"] == "gif":
+                    await message.reply_animation(reply_data["text"]) 
+                else:
+                    await message.reply_text(translated_text)
             else:
-                translated_text = GoogleTranslator(source='auto', target=chat_lang).translate(response_text)
-            
-            # Check the type of response and reply accordingly
-            if reply_data["check"] == "sticker":
-                await message.reply_sticker(reply_data["text"])
-            elif reply_data["check"] == "photo":
-                await message.reply_photo(reply_data["text"])
-            elif reply_data["check"] == "video":
-                await message.reply_video(reply_data["text"])
-            elif reply_data["check"] == "audio":
-                await message.reply_audio(reply_data["text"])
-            else:
-                await message.reply_text(translated_text)
-        else:
-            await message.reply_text("I don't understand.")  # Fallback message if no reply found
+                await message.reply_text("I don't understand.")
+        
+        if message.reply_to_message:
+            await save_reply(message.reply_to_message, message)
 
-    # If the message is a reply, save the reply for future use
-    if message.reply_to_message:
-        await save_reply(message.reply_to_message, message)
-
+    except Exception as e:
+        print(f"Error in chatbot_response: {e}")
 
 async def save_reply(original_message: Message, reply_message: Message):
-    # Check if the reply is a sticker
-    if reply_message.sticker:
-        is_chat = await chatai.find_one({
-            "word": original_message.text,
-            "text": reply_message.sticker.file_id,
-            "check": "sticker",
-        })
-        if not is_chat:
-            await chatai.insert_one({
+    try:
+        if reply_message.sticker:
+            is_chat = await chatai.find_one({
                 "word": original_message.text,
                 "text": reply_message.sticker.file_id,
                 "check": "sticker",
             })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.sticker.file_id,
+                    "check": "sticker",
+                })
 
-    # Check if the reply is a photo
-    elif reply_message.photo:
-        is_chat = await chatai.find_one({
-            "word": original_message.text,
-            "text": reply_message.photo.file_id,
-            "check": "photo",
-        })
-        if not is_chat:
-            await chatai.insert_one({
+        elif reply_message.photo:
+            is_chat = await chatai.find_one({
                 "word": original_message.text,
                 "text": reply_message.photo.file_id,
                 "check": "photo",
             })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.photo.file_id,
+                    "check": "photo",
+                })
 
-    # Check if the reply is a video
-    elif reply_message.video:
-        is_chat = await chatai.find_one({
-            "word": original_message.text,
-            "text": reply_message.video.file_id,
-            "check": "video",
-        })
-        if not is_chat:
-            await chatai.insert_one({
+        elif reply_message.video:
+            is_chat = await chatai.find_one({
                 "word": original_message.text,
                 "text": reply_message.video.file_id,
                 "check": "video",
             })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.video.file_id,
+                    "check": "video",
+                })
 
-    # Check if the reply is an audio
-    elif reply_message.audio:
-        is_chat = await chatai.find_one({
-            "word": original_message.text,
-            "text": reply_message.audio.file_id,
-            "check": "audio",
-        })
-        if not is_chat:
-            await chatai.insert_one({
+        elif reply_message.audio:
+            is_chat = await chatai.find_one({
                 "word": original_message.text,
                 "text": reply_message.audio.file_id,
                 "check": "audio",
             })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.audio.file_id,
+                    "check": "audio",
+                })
 
-    # Check if the reply is text
-    elif reply_message.text:
-        is_chat = await chatai.find_one({
-            "word": original_message.text,
-            "text": reply_message.text,
-            "check": "none",
-        })
-        if not is_chat:
-            await chatai.insert_one({
+        elif reply_message.animation:  
+            is_chat = await chatai.find_one({
+                "word": original_message.text,
+                "text": reply_message.animation.file_id,
+                "check": "gif",
+            })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.animation.file_id,
+                    "check": "gif",
+                })
+
+        elif reply_message.text:
+            is_chat = await chatai.find_one({
                 "word": original_message.text,
                 "text": reply_message.text,
                 "check": "none",
             })
+            if not is_chat:
+                await chatai.insert_one({
+                    "word": original_message.text,
+                    "text": reply_message.text,
+                    "check": "none",
+                })
 
-
+    except Exception as e:
+        print(f"Error in save_reply: {e}")
 
 async def get_reply(word: str):
-    is_chat = await chatai.find({"word": word}).to_list(length=None)
-    if not is_chat:
-        is_chat = await chatai.find().to_list(length=None)
-    return random.choice(is_chat) if is_chat else None
+    try:
+        is_chat = await chatai.find({"word": word}).to_list(length=None)
+        if not is_chat:
+            is_chat = await chatai.find().to_list(length=None)
+        return random.choice(is_chat) if is_chat else None
+    except Exception as e:
+        print(f"Error in get_reply: {e}")
+        return None
