@@ -319,10 +319,11 @@ async def chatbot_response(client: Client, message: Message):
         return
 
     # Ensure message is text and not a command or other symbol-prefixed message
-    if message.text and not any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
+    if message.text and any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
+        return
         # Send typing action
-        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-        
+    if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
+        await client.send_chat_action(message.chat.id, ChatAction.TYPING)    
         reply_data = await get_reply(message.text)
 
         if reply_data:
