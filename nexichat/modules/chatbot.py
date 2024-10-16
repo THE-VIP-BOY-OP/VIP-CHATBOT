@@ -125,10 +125,11 @@ def generate_language_buttons(languages):
         buttons.append(current_row)
     return InlineKeyboardMarkup(buttons)
 
-def get_chat_language(chat_id):
-    chat_lang = lang_db.find_one({"chat_id": chat_id})
+async def get_chat_language(chat_id):
+    # Await the async call to find_one
+    chat_lang = await lang_db.find_one({"chat_id": chat_id})
     return chat_lang["language"] if chat_lang and "language" in chat_lang else None
-
+    
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
     await message.reply_text(
@@ -375,7 +376,7 @@ async def chatbot_response(client: Client, message: Message):
 
         if reply_data:
             response_text = reply_data["text"]
-            chat_lang = get_chat_language(chat_id)
+            chat_lang = await get_chat_language(chat_id)
 
             # Translate the response text if a language is set, otherwise use original text
             if not chat_lang or chat_lang == "nolang":
