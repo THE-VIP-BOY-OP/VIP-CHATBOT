@@ -50,11 +50,11 @@ async def status_command(client: Client, message: Message):
     chat_id = message.chat.id
 
     # Retrieve the status for the given chat_id
-    chat_status = status_db.find_one({"chat_id": chat_id})
+    chat_status = await status_db.find_one({"chat_id": chat_id})
 
     # Check if a status was found
     if chat_status:
-        current_status = chat_status.get("status", "not found")
+        current_status = await chat_status.get("status", "not found")
         await message.reply(f"Chatbot status for this chat: **{current_status}**")
     else:
         await message.reply("No status found for this chat.")
@@ -187,53 +187,6 @@ async def chatbot_command(client: Client, message: Message):
         f"Chat: {message.chat.title}\n**Choose an option to enable/disable the chatbot.**",
         reply_markup=InlineKeyboardMarkup(CHATBOT_ON),
     )
-
-"""
-@nexichat.on_message(filters.command(["help"]))
-async def help_command(client: Client, message: Message):
-    await message.reply_text(
-        text=HELP_READ,
-        reply_markup=InlineKeyboardMarkup(HELP_BTN),
-        disable_web_page_preview=True,
-    )
-
-
-@nexichat.on_message(filters.command(["about"]))
-async def about_command(client: Client, message: Message):
-    await message.reply_text(
-        text=ABOUT_READ,
-        reply_markup=InlineKeyboardMarkup(ABOUT_BTN),
-        disable_web_page_preview=True,
-    )
-
-
-@nexichat.on_message(filters.command(["source"]))
-async def source_command(client: Client, message: Message):
-    await message.reply_text(
-        text=SOURCE_READ,
-        reply_markup=InlineKeyboardMarkup(BACK),
-        disable_web_page_preview=True,
-    )
-
-
-@nexichat.on_message(filters.command(["admins"]))
-async def admins_command(client: Client, message: Message):
-    await message.reply_text(
-        text=ADMIN_READ,
-        reply_markup=InlineKeyboardMarkup(MUSIC_BACK_BTN),
-    )
-
-
-@nexichat.on_message(filters.command(["tools"]))
-async def tools_command(client: Client, message: Message):
-    await message.reply_text(
-        text=TOOLS_DATA_READ,
-        reply_markup=InlineKeyboardMarkup(CHATBOT_BACK),
-    )
-
-
-
-"""
 
 @nexichat.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
@@ -369,9 +322,7 @@ async def chatbot_response(client: Client, message: Message):
     if message.text and not any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
         # Send typing action
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-        await asyncio.sleep(0.1)  # Short delay to simulate typing
-
-        # Retrieve a reply from the database
+        
         reply_data = await get_reply(message.text)
 
         if reply_data:
@@ -473,6 +424,9 @@ async def save_reply(original_message: Message, reply_message: Message):
                 "text": reply_message.text,
                 "check": "none",
             })
+
+
+
 async def get_reply(word: str):
     is_chat = await chatai.find({"word": word}).to_list(length=None)
     if not is_chat:
