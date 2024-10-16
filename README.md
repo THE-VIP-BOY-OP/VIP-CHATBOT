@@ -16,3 +16,5 @@
 <p align="center"><a href="https://dashboard.heroku.com/new?template=https://github.com/THE-VIP-BOY-OP/VIP-CHATBOT"> <img src="https://img.shields.io/badge/Deploy%20On%20Heroku-green?style=for-the-badge&logo=heroku" width="320" height="138.45"/></a></p>
 
   
+
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=vip-chatbot&type=git&repository=THE-VIP-BOY-OP%2FVIP-CHATBOT&branch=main&builder=dockerfile&env%5BBOT_TOKEN%5D=&env%5BMONGO_URL%5D=&env%5BOWNER_ID%5D=&ports=8000%3Bhttp%3B%2F)
