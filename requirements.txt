@@ -13,3 +13,4 @@ deep-translator
 pycgi
 apscheduler
 Flask
+uvloop
