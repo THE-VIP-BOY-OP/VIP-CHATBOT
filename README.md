@@ -29,3 +29,13 @@
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=vip-chatbot&type=git&repository=THE-VIP-BOY-OP%2FVIP-CHATBOT&branch=main&builder=dockerfile&env%5BBOT_TOKEN%5D=&env%5BMONGO_URL%5D=&env%5BOWNER_ID%5D=&ports=8000%3Bhttp%3B%2F)
 
 </h3>
+
+
+### Contact:
+<a href="https://t.me/THE_VIP_BOY_OP">
+    <img title="Telegram" src="https://img.shields.io/badge/Telegram-%23000000.svg?&style=for-the-badge&logo=telegram&logoColor=61DAFB">
+</a>
+<a href="https://instagram.com/the.vip.boy">
+    <img title="Instagram" src="https://img.shields.io/badge/instagram-%23E4405F.svg?&style=for-the-badge&logo=instagram&logoColor=white">
+</a>
+
