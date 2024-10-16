@@ -250,10 +250,10 @@ async def cb_handler(_, query: CallbackQuery):
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
     chat_id = message.chat.id
-    chat_status = status_db.find_one({"chat_id": chat_id})
+    chat_status = await status_db.find_one({"chat_id": chat_id})  # Await here if status_db is asynchronous
     
     if chat_status and chat_status.get("status") == "disabled":
-        return 
+        return
 
     if message.text:
         if any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
