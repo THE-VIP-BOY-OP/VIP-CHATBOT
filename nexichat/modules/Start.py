@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import random
-from nexichat import nexichat
+from nexichat import nexichat, mongo
 from datetime import datetime
 from pymongo import MongoClient
 from pyrogram.enums import ChatType
@@ -63,8 +63,8 @@ IMG = [
 
 
 
-chatdb = MongoClient(MONGO_URL)
-status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
+#chatdb = MongoClient(MONGO_URL)
+status_db = mongo["ChatBotStatusDb"]["StatusCollection"]
 
 async def set_default_status(chat_id):
     try:
