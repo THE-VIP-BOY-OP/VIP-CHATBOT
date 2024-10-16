@@ -54,7 +54,7 @@ async def status_command(client: Client, message: Message):
 
     # Check if a status was found
     if chat_status:
-        current_status = await chat_status.get("status", "not found")
+        current_status = chat_status.get("status", "not found")
         await message.reply(f"Chatbot status for this chat: **{current_status}**")
     else:
         await message.reply("No status found for this chat.")
@@ -322,7 +322,7 @@ async def chatbot_response(client: Client, message: Message):
     if message.text and any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
         return
         # Send typing action
-    if (message.reply_to_message and message.reply_to_message.from_user.id == client.me.id) or not message.reply_to_message:
+    if (message.reply_to_message and message.reply_to_message.from_user.id == nexichat.id) or not message.reply_to_message:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)    
         reply_data = await get_reply(message.text)
 
