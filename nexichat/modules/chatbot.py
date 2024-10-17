@@ -4,6 +4,8 @@ from pyrogram import Client, filters
 from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from deep_translator import GoogleTranslator 
+from nexichat.database.chats import add_served_chat
+from nexichat.database.users import add_served_user
 from config import MONGO_URL
 from nexichat import nexichat, mongo, db
 from pyrogram.types import Message
@@ -320,7 +322,10 @@ async def chatbot_response(client: Client, message: Message):
             return
 
         if message.text and any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
-            return
+            if message.chat.type == "group" or message.chat.type == "supergroup":
+                return await add_served_chat(message.chat.id)
+            else:
+                return await add_served_user(message.chat.id)
         
         if (message.reply_to_message and message.reply_to_message.from_user.id == nexichat.id) or not message.reply_to_message:
             await client.send_chat_action(message.chat.id, ChatAction.TYPING)
