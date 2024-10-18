@@ -472,9 +472,10 @@ async def load_words_cache():
     words_cache = await chatai.find().to_list(length=None)  # Load all data from DB to cache
     
 # Function to refresh cache every 2 minutes
-async def refresh_words_cache():  # Interval is 120 seconds (2 minutes)
+async def refresh_words_cache(interval: int = 120):  # Interval is 120 seconds (2 minutes)
     while True:
         await load_words_cache()  # Refresh cache from DB
+        await asyncio.sleep(interval)  # Wait for the next interval
         
 
 # Start cache refreshing in the background when the bot starts
