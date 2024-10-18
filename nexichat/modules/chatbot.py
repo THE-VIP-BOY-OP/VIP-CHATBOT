@@ -577,11 +577,12 @@ async def chatbot_response(client: Client, message: Message):
         # If the message is a reply to the bot, save the reply
         if message.reply_to_message:
             await save_reply(message.reply_to_message, message)
-
+            await start_cache_refresh()  # Start refreshing the cache when the bot starts
+            
     except Exception as e:
         print(f"Error in chatbot_response: {e}")
 
 # Start the cache refresh process when the bot starts
-@nexichat.on_startup
-async def on_startup():
-    await start_cache_refresh()  # Start refreshing the cache when the bot starts
+"""@nexichat.on_startup
+async def on_startup():"""
+    
