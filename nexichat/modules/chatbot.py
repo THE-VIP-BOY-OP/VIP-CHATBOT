@@ -34,12 +34,6 @@ from nexichat.modules.helpers import (
 )
 
 translator = GoogleTranslator()  
-"""#chatdb = MongoClient(MONGO_URL)
-#status_db = chatdb["ChatBotStatusDb"]["StatusCollection"]
-chatai = mongo["Word"]["WordDb"]
-lang_db = mongo["ChatLangDb"]["LangCollection"]
-status_db = mongo.chatbot_status_db.status
-"""
 from nexichat import db
 
 # Simplified access to each collection in a consistent way
@@ -310,7 +304,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
 
 
-
+"""
         
 @nexichat.on_message(filters.incoming)
 async def chatbot_response(client: Client, message: Message):
@@ -453,3 +447,141 @@ async def get_reply(word: str):
     except Exception as e:
         print(f"Error in get_reply: {e}")
         return None
+
+"""
+
+
+import random
+import asyncio
+from pymongo import MongoClient
+from pyrogram import Client, filters
+from pyrogram.enums import ChatAction
+from pyrogram.types import Message
+from nexichat import nexichat, db
+
+# MongoDB collections
+chatai = db.Word.WordDb
+status_db = db.chatbot_status_db.status
+
+# Cache for storing words in memory
+words_cache = []
+
+# Function to load replies into the cache from the database
+async def load_words_cache():
+    global words_cache
+    words_cache = await chatai.find().to_list(length=None)  # Load all data from DB to cache
+    print("Words cache updated.")
+
+# Function to refresh cache every 2 minutes
+async def refresh_words_cache(interval: int = 120):  # Interval is 120 seconds (2 minutes)
+    while True:
+        await load_words_cache()  # Refresh cache from DB
+        await asyncio.sleep(interval)  # Wait for the next interval
+
+# Start cache refreshing in the background when the bot starts
+async def start_cache_refresh():
+    asyncio.create_task(refresh_words_cache())  # Run the cache refresh in the background
+
+# Function to get a reply from the cache
+async def get_reply_from_cache(word: str):
+    global words_cache
+    relevant_replies = [entry for entry in words_cache if entry['word'] == word]
+    if not relevant_replies:
+        return random.choice(words_cache) if words_cache else None
+    return random.choice(relevant_replies)
+
+# Function to save a new reply to the database
+async def save_reply(original_message: Message, reply_message: Message):
+    try:
+        new_reply = None
+        if reply_message.sticker:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.sticker.file_id,
+                "check": "sticker",
+            }
+        elif reply_message.photo:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.photo.file_id,
+                "check": "photo",
+            }
+        elif reply_message.video:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.video.file_id,
+                "check": "video",
+            }
+        elif reply_message.audio:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.audio.file_id,
+                "check": "audio",
+            }
+        elif reply_message.animation:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.animation.file_id,
+                "check": "gif",
+            }
+        elif reply_message.text:
+            new_reply = {
+                "word": original_message.text,
+                "text": reply_message.text,
+                "check": "none",
+            }
+
+        if new_reply:
+            is_chat = await chatai.find_one(new_reply)
+            if not is_chat:
+                await chatai.insert_one(new_reply)  # Save the new reply to the database
+
+    except Exception as e:
+        print(f"Error in save_reply: {e}")
+
+# Chatbot response handler - fetches reply from cache
+@nexichat.on_message(filters.incoming)
+async def chatbot_response(client: Client, message: Message):
+    try:
+        chat_id = message.chat.id
+        chat_status = await status_db.find_one({"chat_id": chat_id})
+
+        # Check if chatbot is disabled for this chat
+        if chat_status and chat_status.get("status") == "disabled":
+            return
+
+        # Only respond if message is not a command and not replied to another bot
+        if message.text and not any(message.text.startswith(prefix) for prefix in ["!", "/", ".", "?", "@", "#"]):
+            await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+
+            # Fetch the reply from the in-memory cache
+            reply_data = await get_reply_from_cache(message.text)
+
+            if reply_data:
+                # Reply based on the type of the response
+                if reply_data["check"] == "sticker":
+                    await message.reply_sticker(reply_data["text"])
+                elif reply_data["check"] == "photo":
+                    await message.reply_photo(reply_data["text"])
+                elif reply_data["check"] == "video":
+                    await message.reply_video(reply_data["text"])
+                elif reply_data["check"] == "audio":
+                    await message.reply_audio(reply_data["text"])
+                elif reply_data["check"] == "gif":
+                    await message.reply_animation(reply_data["text"])
+                else:
+                    await message.reply_text(reply_data["text"])
+            else:
+                await message.reply_text("I don't understand.")
+
+        # If the message is a reply to the bot, save the reply
+        if message.reply_to_message:
+            await save_reply(message.reply_to_message, message)
+
+    except Exception as e:
+        print(f"Error in chatbot_response: {e}")
+
+# Start the cache refresh process when the bot starts
+@nexichat.on_startup
+async def on_startup():
+    await start_cache_refresh()  # Start refreshing the cache when the bot starts
