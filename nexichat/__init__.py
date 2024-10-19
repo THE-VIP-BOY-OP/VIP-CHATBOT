@@ -7,6 +7,7 @@ from pyrogram import Client
 from pyrogram.enums import ParseMode
 import config
 import uvloop
+import time
 
 uvloop.install()
 
@@ -24,7 +25,7 @@ mongodb = MongoCli(config.MONGO_URL)
 db = mongodb.Anonymous
 mongo = MongoClient(config.MONGO_URL)
 OWNER = config.OWNER_ID
-
+_boot_ = time.time()
 
 class nexichat(Client):
     def __init__(self):
