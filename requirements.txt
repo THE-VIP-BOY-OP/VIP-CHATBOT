@@ -14,3 +14,4 @@ pycgi
 apscheduler
 Flask
 uvloop
+psutil
