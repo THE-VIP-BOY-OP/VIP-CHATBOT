@@ -246,7 +246,8 @@ async def start(_, m: Message):
 
         users = len(await get_served_users())
         chats = len(await get_served_chats())
-        await m.reply_photo(photo=chat_photo, caption=START.format(nexichat.mention or "can't mention", users, chats), reply_markup=InlineKeyboardMarkup(START_BOT))
+        UP, CPU, RAM, DISK = await bot_sys_stats()
+        await m.reply_photo(photo=chat_photo, caption=START.format(nexichat.mention or "can't mention", users, chats, UP), reply_markup=InlineKeyboardMarkup(START_BOT))
         await add_served_user(m.chat.id)
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{m.chat.first_name}", user_id=m.chat.id)]])
         await nexichat.send_photo(int(OWNER_ID), photo=chat_photo, caption=f"{m.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ɴᴀᴍᴇ :** {m.chat.first_name}\n**ᴜsᴇʀɴᴀᴍᴇ :** @{m.chat.username}\n**ɪᴅ :** {m.chat.id}\n\n**ᴛᴏᴛᴀʟ ᴜsᴇʀs :** {users}", reply_markup=keyboard)
@@ -254,7 +255,7 @@ async def start(_, m: Message):
     else:
         await m.reply_photo(
             photo=random.choice(IMG),
-            caption=START.format(nexichat.mention or "can't mention", users, chats),
+            caption=START.format(nexichat.mention or "can't mention", users, chats, UP),
             reply_markup=InlineKeyboardMarkup(HELP_START),
         )
         await add_served_chat(m.chat.id)
@@ -292,6 +293,7 @@ async def repo(_, m: Message):
 @nexichat.on_cmd("ping")
 async def ping(_, message: Message):
     start = datetime.now()
+    UP, CPU, RAM, DISK = await bot_sys_stats()
     loda = await message.reply_photo(
         photo=random.choice(IMG),
         caption="ᴘɪɴɢɪɴɢ...",
@@ -299,7 +301,7 @@ async def ping(_, message: Message):
 
     ms = (datetime.now() - start).microseconds / 1000
     await loda.edit_text(
-        text=f"нey вαву!!\n{nexichat.name} ᴄʜᴀᴛʙᴏᴛ ιѕ alιve 🥀 αnd worĸιng ғιne wιтн a pιng oғ\n➥ `{ms}` ms\n\n<b>|| мαdє ωιтн ❣️ ву [ᴠɪᴘ ʙᴏʏ](https://t.me/{OWNER_USERNAME}) ||</b>",
+        text=f"нey вαву!!\n{nexichat.name} ᴄʜᴀᴛʙᴏᴛ ιѕ alιve 🥀 αnd worĸιng ғιne wιтн a pιng oғ\n➥ `{ms}` ms\n๏ ʀᴜɴɴɪɴɢ ғʀᴏᴍ » {UP}\n\n<b>|| мαdє ωιтн ❣️ ву [ᴠɪᴘ ʙᴏʏ](https://t.me/{OWNER_USERNAME}) ||</b>",
         reply_markup=InlineKeyboardMarkup(PNG_BTN),
     )
     if message.chat.type == ChatType.PRIVATE:
