@@ -1,6 +1,7 @@
 import random
 from pymongo import MongoClient
 from pyrogram import Client, filters
+from pyrogram.errors import MessageEmpty
 from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from deep_translator import GoogleTranslator 
