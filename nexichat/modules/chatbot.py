@@ -124,7 +124,7 @@ def generate_language_buttons(languages):
 async def get_chat_language(chat_id):
     # Await the async call to find_one
     chat_lang = await lang_db.find_one({"chat_id": chat_id})
-    return chat_lang["language"] if chat_lang and "language" in chat_lang else None
+    return chat_lang["language"] if chat_lang and "language" in chat_lang else "en"
     
 @nexichat.on_message(filters.command(["lang", "language", "setlang"]))
 async def set_language(client: Client, message: Message):
