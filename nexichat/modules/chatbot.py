@@ -347,11 +347,12 @@ async def chatbot_response(client: Client, message: Message):
                 else:
                     await message.reply_text(translated_text)
             else:
-                await message.reply_text("I don't understand.")
+                await message.reply_text("**I don't understand. what are you saying??**")
         
         if message.reply_to_message:
             await save_reply(message.reply_to_message, message)
-
+    except MessageEmpty as e:
+        return await message.reply_text("🙄🙄")
     except Exception as e:
         return
 
