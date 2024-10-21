@@ -353,7 +353,7 @@ async def chatbot_response(client: Client, message: Message):
             await save_reply(message.reply_to_message, message)
 
     except Exception as e:
-        print(f"Error in chatbot_response: {e}")
+        return
 
 async def save_reply(original_message: Message, reply_message: Message):
     try:
